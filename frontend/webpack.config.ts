@@ -34,7 +34,9 @@ const config: Configuration = {
     },
     devtool: "inline-source-map",
     devServer: {
-        contentBase: path.join(__dirname, 'static'),
+        static: {
+            directory: path.resolve(__dirname, 'static'),
+          },
         open: true,
         port: 3000,
     },
