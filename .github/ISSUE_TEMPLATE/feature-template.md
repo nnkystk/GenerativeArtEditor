@@ -16,6 +16,11 @@ assignees: nnkystk
 - [ ] criteria 3
 
 
+## Proposed Method
+- method 1
+- method 2
+
+
 ## Reference
 - reference1
 - reference2
