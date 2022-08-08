@@ -12,7 +12,7 @@ type Props = {
   sampleProp ?: any;
 }
 
-export const FCTemplate : React.FC <Props> = ({ sampleProp }) => {
+export const FCTemplate : React.FC<Props> = ({ sampleProp }) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
