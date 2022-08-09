@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 /**
- * Outline	: XXXするComponent
+ * Summary	: XXXするComponent
  * Logic		: - AAAをBBBにする
  *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
  * View			: - KKKをリスト表示する
  */
 
 // Type Declaration of Props
-type Props = {
+interface Props {
   sampleProp ?: any;
 }
 
@@ -21,8 +21,8 @@ export const FCTemplate : React.FC<Props> = ({ sampleProp }) => {
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
+  const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value
     setSampleState(newValue);
   };
 
@@ -36,7 +36,7 @@ export const FCTemplate : React.FC<Props> = ({ sampleProp }) => {
     setSampleState(initialVal);
   }
 
-  return (
+  return(
     <div>
       <h2>{ FCTemplate.name }</h2>
       <h2>{ sampleProp }</h2>
