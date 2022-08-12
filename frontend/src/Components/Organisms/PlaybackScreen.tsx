@@ -10,60 +10,89 @@ import * as THREE from 'three';
  */
 
 interface Props {
-  sampleProp ?: any;
+  sampleProp ?: any
+  threeMeshList ?: any
 }
 
-export const PlaybackScreen: React.FC<Props> = ({ sampleProp }) => {
+export const PlaybackScreen: React.FC<Props> = (props: Props) => {
+
+  const FOV: number = 50;
 
   type ScreenSize = { width: number, height: number }
 
   // ___ state ___ ___ ___ ___ ___
-  const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
-  const [ screenSize,   setScreenSize ]   = useState<ScreenSize>({ width: 960, height: 540});
+  const [ sampleState,    setSampleState ]    = useState<string>('This is SampleState');
+  const [ screenSize,     setScreenSize ]     = useState<ScreenSize>({ width: 960, height: 540 });
+  const [ threeRenderer,  setThreeRenderer]   = useState<THREE.WebGLRenderer>(new THREE.WebGLRenderer());
+  const [ threeScene,     setThreeScene ]     = useState<THREE.Scene>(new THREE.Scene());
+  const [ threeCamera,    setThreeCamera ]    = useState<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
 
   // ___ use ref ___ ___ ___ ___ ___
-  const canvasRef: any | null = useRef(null);
+  const canvasRef:    any | null = useRef(null);
+  const reqAnmIdRef:  any | null = useRef(null);    // cancelAnimationFrame実行用にIDを保持する レンダリングを起こさないためにRefを使用
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
-  useEffect( () => { render() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるため、useEffectにフックする
-  
+  useEffect( () => { initializeThree() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるためuseEffectにフックする
+  useEffect( () => { return () => { stopThree() } }, [ ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
+
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
   };
 
   // ___ method ___ ___ ___ ___ ___
-  const test = () => {
-    console.log('test');
-  }
 
+  const initializeThree = () => {
+   /**
+    * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
+    */
 
-  const render = () => {
-
-    const renderer: any = new THREE.WebGLRenderer({
+    const renderer = new THREE.WebGLRenderer({
       canvas: document.querySelector("#canvas") as HTMLCanvasElement
     });
+    const scene   = new THREE.Scene();
+    const camera  = new THREE.PerspectiveCamera(FOV, screenSize.width / screenSize.height);
+    camera.position.set(0, 0, +1000);
+
+    // レンダラーをセットアップする
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(screenSize.width, screenSize.height);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, screenSize.width / screenSize.height);
-    camera.position.set(0, 0, +1000);
-    const geometry = new THREE.BoxGeometry(400, 400, 400);
-    const material = new THREE.MeshNormalMaterial();
-    const box = new THREE.Mesh(geometry, material);
-
-    scene.add(box);
-
-    const tick = () => {
-      box.rotation.y += 0.01;
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    }
-
-    tick();
+    setThreeRenderer(renderer);
+    setThreeScene(scene);
+    setThreeCamera(camera);
     
   };
+
+
+  // TODO: 多重実行を防止する
+  const playBackThree = () => {
+    /**
+    * ジェネラティブアート作品を再生する
+    * @param arg
+    * @return 
+    */
+
+    props.threeMeshList.forEach( (mesh: THREE.Mesh) => {
+
+      threeScene.add(mesh);   // 3Dオブジェクトをレンダー対象に設定する
+
+      // アニメーションを登録する
+      const tick = () => {
+        mesh.rotation.y += 0.01;
+        threeRenderer.render(threeScene, threeCamera);
+        reqAnmIdRef.current = requestAnimationFrame(tick);
+        console.log(reqAnmIdRef);
+      }
+      tick();
+
+    })
+  }
+
+
+  const stopThree = () => {
+    cancelAnimationFrame(reqAnmIdRef.current);
+  }
+
 
   return (
     <div>
@@ -71,6 +100,8 @@ export const PlaybackScreen: React.FC<Props> = ({ sampleProp }) => {
         id = 'canvas'
         ref = { canvasRef }
       />
+      <button onClick={ playBackThree }>PlayBack</button>
+      <button onClick={ stopThree }>Stop</button>
     </div>
   );
 
