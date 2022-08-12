@@ -21,9 +21,12 @@ export const PlaybackScreen: React.FC<Props> = ({ sampleProp }) => {
   const [ sampleState,  setSampleState ]  = useState<string>('This is SampleState');
   const [ screenSize,   setScreenSize ]   = useState<ScreenSize>({ width: 960, height: 540});
 
+  // ___ use ref ___ ___ ___ ___ ___
+  const canvasRef: any | null = useRef(null);
+
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
-  useEffect( () => { render() }, [] );    // DOMの描画後（canvas要素が生成後）にThree.jsのレンダリングを行う必要があるため、useEffectに
+  useEffect( () => { render() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるため、useEffectにフックする
   
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +36,7 @@ export const PlaybackScreen: React.FC<Props> = ({ sampleProp }) => {
   const test = () => {
     console.log('test');
   }
+
 
   const render = () => {
 
@@ -63,7 +67,10 @@ export const PlaybackScreen: React.FC<Props> = ({ sampleProp }) => {
 
   return (
     <div>
-      <canvas id='canvas' />
+      <canvas
+        id = 'canvas'
+        ref = { canvasRef }
+      />
     </div>
   );
 
