@@ -12,9 +12,14 @@ type Props = {
 
 export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
+  const INDEX_EDIT_PANEL    = "EDIT";
+  const INDEX_WORKS_PANEL   = "WORK";
+  const INDEX_PREVIEW_PANEL = "PREVIRW";
+
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
-  const [ GeneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
+  const [ geneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
+  const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_PREVIEW_PANEL);  // 表示する対象パネルのキー
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
@@ -37,39 +42,53 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     const box       = new THREE.Mesh(geometry, material);
 
     const geneModel = new GeneModel(box);
-    const _GeneModelList = [ ...GeneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
+    const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
     setGeneModelList(_GeneModelList);
 
   }
 
+
+  const decidePanelToShow = (index: string) =>{
+    let panelToShow;
+    if(index == INDEX_WORKS_PANEL){
+      panelToShow = <h2> WIP </h2>
+    }else if(index == INDEX_EDIT_PANEL){
+      panelToShow = <CodingScreenDev geneModelList = { geneModelList } />
+      // panelToShow = <CodingScreen geneModelList = { geneModelList } />
+    }else if(index == INDEX_PREVIEW_PANEL){
+      panelToShow = <PlaybackScreen geneModelList = { geneModelList } />
+    }
+    return panelToShow;
+  }
+
+
+  const onClickEditButton = () => {
+    setPanelToShowIndex(INDEX_EDIT_PANEL);
+  }
+  const onClickWorksButton = () => {
+    setPanelToShowIndex(INDEX_WORKS_PANEL);
+  }
+  const onClickPreviewButton = () => {
+    setPanelToShowIndex(INDEX_PREVIEW_PANEL);
+  }
+
+
   return(
     <div>
-      <SwitchPanel />
+      <div className="SwitchPanel">
+      <button onClick = { onClickWorksButton }> WORKS </button>
+        <button onClick = { onClickEditButton }> EDIT </button>
+        <button onClick = { onClickPreviewButton }> PREVIEW </button>
+      </div>
 
-      <PlaybackScreen geneModelList = { GeneModelList } />
+      { decidePanelToShow(panelToShowIndex) }
 
-      { /** <CodingScreen /> */}
-      <CodingScreenDev geneModelList = { GeneModelList } />
     </div>
   );
 };
 
 
 export default EditorPage
-
-
-const SwitchPanel = () => {
-  
-  return(
-    <div>
-      <button>Works</button>
-      <button>Edit</button>
-      <button>Preview</button>
-    </div>
-  )
-
-}
-
 
 
 

@@ -9,11 +9,10 @@ import React, { useEffect, useState } from "react";
 
 // Type Declaration of Props
 interface Props {
-  sampleProp ?: any
-  geneModelList: Array<any>
+  sampleProp ?: any;
 }
 
-export const CodingScreenDev: React.FC<Props> = (props: Props) => {
+export const CodingScreen: React.FC<Props> = ({ sampleProp }) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
@@ -30,37 +29,11 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-  const meshView = (mesh: THREE.Mesh) => {
-
-    console.log(mesh)
-
-  }
-
   return(
     <div>
-      
-        <h2> Models </h2>
-
-          { props.geneModelList.map( (geneModel) => (
-
-            <div key = { geneModel.id }>
-              <span> ___ ___ ___ </span>
-              <div> ID: { geneModel.id } </div>
-              { geneModel.effectList.map( (effect: any) => (
-                <div key = { geneModel.id + '_' + effect }>
-                  <div> Effect: { effect } </div>
-                </div> ))
-              }
-              <span> ___ ___ ___ </span>
-            </div>
-            
-            ))
-          }
-
-      <h2> Interactions </h2>
-
+      <h2>{ CodingScreen.name }</h2>
     </div>
   );
 };
 
-export default CodingScreenDev
+export default CodingScreen
