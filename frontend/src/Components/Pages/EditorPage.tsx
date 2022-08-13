@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import * as THREE from 'three';
+import GeneModel from '../Utilities/GeneModel'
 import { PlaybackScreen } from '../Organisms/PlaybackScreen'
 import { CodingScreen } from '../Organisms/CodingScreen'
 import { CodingScreenDev } from '../Organisms/CodingScreenDev'
@@ -13,7 +14,7 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
-  const [ threeMeshList, setThreeMeshList ] = useState<Array<THREE.Mesh>>([]);
+  const [ GeneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
@@ -31,12 +32,13 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
   const initializeThree = () => {
     
     // 3Dオブジェクトのサンプルを生成
-    const geometry = new THREE.BoxGeometry(400, 400, 400);
-    const material = new THREE.MeshNormalMaterial();
-    const box = new THREE.Mesh(geometry, material);
+    const geometry  = new THREE.BoxGeometry(400, 400, 400);
+    const material  = new THREE.MeshNormalMaterial();
+    const box       = new THREE.Mesh(geometry, material);
 
-    const _threeMeshList = [ ...threeMeshList, box ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
-    setThreeMeshList(_threeMeshList);
+    const geneModel = new GeneModel(box);
+    const _GeneModelList = [ ...GeneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
+    setGeneModelList(_GeneModelList);
 
   }
 
@@ -44,10 +46,10 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     <div>
       <SwitchPanel />
 
-      <PlaybackScreen threeMeshList = { threeMeshList } />
+      <PlaybackScreen geneModelList = { GeneModelList } />
 
-      <CodingScreen />
-      <CodingScreenDev threeMeshList = { threeMeshList } />
+      { /** <CodingScreen /> */}
+      <CodingScreenDev geneModelList = { GeneModelList } />
     </div>
   );
 };

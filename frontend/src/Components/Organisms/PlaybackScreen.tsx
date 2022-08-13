@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import * as THREE from 'three';
+import GeneModel from '../Utilities/GeneModel' 
 
 /**
  * Summary	: ジェネラティブアート作品を再生するComponent
@@ -11,7 +12,7 @@ import * as THREE from 'three';
 
 interface Props {
   sampleProp ?: any
-  threeMeshList ?: any
+  geneModelList: Array<GeneModel>
 }
 
 export const PlaybackScreen: React.FC<Props> = (props: Props) => {
@@ -72,16 +73,15 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
     * @return 
     */
 
-    props.threeMeshList.forEach( (mesh: THREE.Mesh) => {
+    props.geneModelList.forEach( (geneModel: any) => {
 
-      threeScene.add(mesh);   // 3Dオブジェクトをレンダー対象に設定する
+      threeScene.add(geneModel.mesh);   // 3Dオブジェクトをレンダー対象に設定する
 
       // アニメーションを登録する
       const tick = () => {
-        mesh.rotation.y += 0.01;
+        geneModel.mesh.rotation.y += 0.01;
         threeRenderer.render(threeScene, threeCamera);
         reqAnmIdRef.current = requestAnimationFrame(tick);
-        console.log(reqAnmIdRef);
       }
       tick();
 
