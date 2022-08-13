@@ -19,7 +19,7 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
   const [ geneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
-  const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_PREVIEW_PANEL);  // 表示する対象パネルのキー
+  const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_PREVIEW_PANEL);  // 表示する対象パネルを指定するキー
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
@@ -34,17 +34,29 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     console.log('test');
   }
 
-  const initializeThree = () => {
-    
-    // 3Dオブジェクトのサンプルを生成
-    const geometry  = new THREE.BoxGeometry(400, 400, 400);
-    const material  = new THREE.MeshNormalMaterial();
-    const box       = new THREE.Mesh(geometry, material);
 
-    const geneModel = new GeneModel(box);
+  const initializeThree = () => {
+    const mesh       = generateMesh();
+    const geneModel = generateGeneModel(mesh.id, mesh);
     const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
     setGeneModelList(_GeneModelList);
 
+  }
+
+
+  // MEMO: 外部クラスメソッド化する
+  const generateMesh = () => {
+    const geometry  = new THREE.BoxGeometry(100, 100, 100);
+    const material  = new THREE.MeshNormalMaterial();
+    const box       = new THREE.Mesh(geometry, material);
+    return box
+  }
+
+
+  const generateGeneModel = (id: number, mesh: THREE.Mesh) => {
+    const name      = "sample"
+    const geneModel = new GeneModel(id, mesh, name);
+    return geneModel
   }
 
 
@@ -53,7 +65,10 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     if(index == INDEX_WORKS_PANEL){
       panelToShow = <h2> WIP </h2>
     }else if(index == INDEX_EDIT_PANEL){
-      panelToShow = <CodingScreenDev geneModelList = { geneModelList } />
+      panelToShow = <CodingScreenDev
+        geneModelList = { geneModelList }
+        onClickAddButton = { onClickAddButton }
+      />
       // panelToShow = <CodingScreen geneModelList = { geneModelList } />
     }else if(index == INDEX_PREVIEW_PANEL){
       panelToShow = <PlaybackScreen geneModelList = { geneModelList } />
@@ -70,6 +85,12 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
   }
   const onClickPreviewButton = () => {
     setPanelToShowIndex(INDEX_PREVIEW_PANEL);
+  }
+  const onClickAddButton = () => {
+    const mesh      = generateMesh();
+    const geneModel = generateGeneModel(mesh.id, mesh);
+    const _GeneModelList = [ ...geneModelList, geneModel ];
+    setGeneModelList(_GeneModelList);
   }
 
 

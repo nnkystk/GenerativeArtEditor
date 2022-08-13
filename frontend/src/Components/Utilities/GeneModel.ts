@@ -3,13 +3,15 @@ import GeneEffect from './GeneEffect'
 
 class GeneModel{
 
-  public id: number;
-  public mesh: THREE.Mesh;
-  public effectList: Array<GeneEffect>;
+  public id         : number;
+  public name       : string | undefined;
+  public mesh       : THREE.Mesh;
+  public effectList : Array<GeneEffect>;
 
-  constructor(mesh: THREE.Mesh) {
-    this.id = mesh.id;    // MEMO: Three.jsへの依存性が高いため注意
+  constructor(id:number, mesh: THREE.Mesh, name?: string) {
+    this.id   = id;
     this.mesh = mesh;
+    this.name = name;
     this.effectList = [ "sample1", "sample2", "sample3" ];
   }
 

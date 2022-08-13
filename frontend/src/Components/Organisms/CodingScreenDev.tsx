@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 interface Props {
   sampleProp ?: any
   geneModelList: Array<any>
+  onClickAddButton(): void
 }
 
 export const CodingScreenDev: React.FC<Props> = (props: Props) => {
@@ -40,19 +41,17 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     <div>
       
         <h2> Models </h2>
+        <button onClick = { props.onClickAddButton }> Add </button>
 
           { props.geneModelList.map( (geneModel) => (
 
-            <div key = { geneModel.id }>
-              <span> ___ ___ ___ </span>
-              <div> ID: { geneModel.id } </div>
-              { geneModel.effectList.map( (effect: any) => (
-                <div key = { geneModel.id + '_' + effect }>
-                  <div> Effect: { effect } </div>
-                </div> ))
-              }
-              <span> ___ ___ ___ </span>
-            </div>
+            <details key = { geneModel.id }>
+              <summary> Name: { geneModel.name }</summary>
+                  <div> ID: { geneModel.id }</div>
+                { geneModel.effectList.map( (effect: any) => (
+                  <li key = { geneModel.id + '_' + effect } > Effect: { effect } </li> ))
+                }
+            </details>
             
             ))
           }
