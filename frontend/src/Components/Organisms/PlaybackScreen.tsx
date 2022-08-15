@@ -24,6 +24,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState,    setSampleState ]    = useState<string>('This is SampleState');
   const [ screenSize,     setScreenSize ]     = useState<ScreenSize>({ width: 960, height: 540 });
+  const [ isPlayingFlg,   setIsPlayingFlg ]   = useState<Boolean>(false);
   const [ threeRenderer,  setThreeRenderer]   = useState<THREE.WebGLRenderer>(new THREE.WebGLRenderer());
   const [ threeScene,     setThreeScene ]     = useState<THREE.Scene>(new THREE.Scene());
   const [ threeCamera,    setThreeCamera ]    = useState<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
@@ -86,31 +87,34 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
   }
 
 
-  // TODO: 多重実行を防止する
   const playBackThree = () => {
     /**
     * ジェネラティブアート作品を再生する
     * @param arg
     * @return 
     */
+      if(isPlayingFlg == false){
+        const tick = () => {
+          
+          // 効果を発火
+          props.geneModelList.forEach( (geneModel: any) => {
+              geneModel.mesh.rotation.y += 0.01;
+          })
 
-      const tick = () => {
-        
-        // 効果を発火
-        props.geneModelList.forEach( (geneModel: any) => {
-            geneModel.mesh.rotation.y += 0.01;
-        })
+          threeRenderer.render(threeScene, threeCamera);
+          reqAnmIdRef.current = requestAnimationFrame(tick);
+        }
 
-        threeRenderer.render(threeScene, threeCamera);
-        reqAnmIdRef.current = requestAnimationFrame(tick);
+        tick();
+        setIsPlayingFlg(true);
       }
-      tick();
     }
 
 
 
   const stopThree = () => {
     cancelAnimationFrame(reqAnmIdRef.current);
+    setIsPlayingFlg(false);
   }
 
 
@@ -120,8 +124,10 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
         id = 'canvas'
         ref = { canvasRef }
       />
-      <button onClick={ playBackThree }>PlayBack</button>
-      <button onClick={ stopThree }>Stop</button>
+      <div>
+        <button onClick={ playBackThree }>PlayBack</button>
+        <button onClick={ stopThree }>Stop</button>
+      </div>
     </div>
   );
 
