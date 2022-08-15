@@ -4,6 +4,7 @@ import GeneModel from '../Utilities/GeneModel'
 import { PlaybackScreen } from '../Organisms/PlaybackScreen'
 import { CodingScreen } from '../Organisms/CodingScreen'
 import { CodingScreenDev } from '../Organisms/CodingScreenDev'
+import { Grid } from "@material-ui/core";
 
 
 type Props = {
@@ -12,14 +13,13 @@ type Props = {
 
 export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
-  const INDEX_EDIT_PANEL    = "EDIT";
-  const INDEX_WORKS_PANEL   = "WORK";
-  const INDEX_PREVIEW_PANEL = "PREVIRW";
+  const INDEX_SAMPLE_PANEL  = "SAMPLE";
+  const INDEX_CODING_PANEL  = "CODING";
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
   const [ geneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
-  const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_PREVIEW_PANEL);  // 表示する対象パネルを指定するキー
+  const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_CODING_PANEL);  // 表示する対象パネルを指定するキー
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
@@ -59,50 +59,51 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
   }
 
 
-  const decidePanelToShow = (index: string) =>{
+  const decideGuidePanelToShow = (index: string) =>{
     let panelToShow;
-    if(index == INDEX_WORKS_PANEL){
-      panelToShow = <h2> WIP </h2>
-    }else if(index == INDEX_EDIT_PANEL){
+    if(index == INDEX_SAMPLE_PANEL){
+      panelToShow = <h2> SAMPLE </h2>
+    }else if(index == INDEX_CODING_PANEL){
+      // panelToShow = <CodingScreen geneModelList = { geneModelList } />
       panelToShow = <CodingScreenDev
         geneModelList = { geneModelList }
         onClickAddButton = { onClickAddButton }
       />
-      // panelToShow = <CodingScreen geneModelList = { geneModelList } />
-    }else if(index == INDEX_PREVIEW_PANEL){
-      panelToShow = <PlaybackScreen geneModelList = { geneModelList } />
     }
     return panelToShow;
   }
 
 
-  const onClickEditButton = () => {
-    setPanelToShowIndex(INDEX_EDIT_PANEL);
-  }
-  const onClickWorksButton = () => {
-    setPanelToShowIndex(INDEX_WORKS_PANEL);
-  }
-  const onClickPreviewButton = () => {
-    setPanelToShowIndex(INDEX_PREVIEW_PANEL);
-  }
   const onClickAddButton = () => {
     const mesh      = generateMesh();
     const geneModel = generateGeneModel(mesh.id, mesh);
     const _GeneModelList = [ ...geneModelList, geneModel ];
     setGeneModelList(_GeneModelList);
   }
+  const onClickCodingButton = () => {
+    setPanelToShowIndex(INDEX_CODING_PANEL);
+  }
+  const onClickSampleButton = () => {
+    setPanelToShowIndex(INDEX_SAMPLE_PANEL);
+  }
 
 
   return(
     <div>
-      <div className="SwitchPanel">
-      <button onClick = { onClickWorksButton }> WORKS </button>
-        <button onClick = { onClickEditButton }> EDIT </button>
-        <button onClick = { onClickPreviewButton }> PREVIEW </button>
-      </div>
-
-      { decidePanelToShow(panelToShowIndex) }
-      
+      <Grid container>
+        <Grid item xs = { 10 }>
+          <PlaybackScreen geneModelList = { geneModelList } />
+        </Grid>
+        <Grid item xs = { 2 }>
+          <div className = "SwitchGuidePanel">
+            <button onClick = { onClickCodingButton }> CODE </button>
+            <button onClick = { onClickSampleButton }> SAMPLE </button>
+          </div>
+          <div className = "GuidePanel">
+            { decideGuidePanelToShow(panelToShowIndex) }
+          </div>
+        </Grid>
+      </Grid>
     </div>
   );
 };

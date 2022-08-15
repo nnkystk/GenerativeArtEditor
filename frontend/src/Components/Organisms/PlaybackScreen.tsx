@@ -94,6 +94,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
     * @return 
     */
       if(isPlayingFlg == false){
+
         const tick = () => {
           
           // 効果を発火
@@ -111,7 +112,6 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
     }
 
 
-
   const stopThree = () => {
     cancelAnimationFrame(reqAnmIdRef.current);
     setIsPlayingFlg(false);
@@ -119,19 +119,20 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
 
 
   return (
-    <div>
+    <div className="PlayBackScreen" style = { { backgroundColor : "silver" } }>
       <canvas
         id = 'canvas'
         ref = { canvasRef }
       />
       <div>
-        <button onClick={ playBackThree }>PlayBack</button>
+        <button onClick={ () => { updateSceneThree(); playBackThree(); } }>PlayBack</button> { }
         <button onClick={ stopThree }>Stop</button>
       </div>
     </div>
   );
 
 };
+
 
 export default PlaybackScreen
 

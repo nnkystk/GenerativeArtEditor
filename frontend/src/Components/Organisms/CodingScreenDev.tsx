@@ -39,24 +39,24 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
 
   return(
     <div>
-      
-        <h2> Models </h2>
+
+        <h2> MODEL </h2>
         <button onClick = { props.onClickAddButton }> Add </button>
 
-          { props.geneModelList.map( (geneModel) => (
+        { props.geneModelList.map( (geneModel) => (
 
-            <details key = { geneModel.id }>
-              <summary> Name: { geneModel.name }</summary>
-                  <div> ID: { geneModel.id }</div>
-                { geneModel.effectList.map( (effect: any) => (
-                  <li key = { geneModel.id + '_' + effect } > Effect: { effect } </li> ))
-                }
-            </details>
-            
-            ))
-          }
+          <details key = { geneModel.id }>
+            <summary> Name: { geneModel.name }</summary>
+              <div> ID: { geneModel.id }</div>
+              { geneModel.effectList.map( (effect: any) => (
+                <li key = { geneModel.id + '_' + effect } > Effect: { effect } </li> ))
+              }
+          </details>
+          
+          ))
+        }
 
-      <h2> Interactions </h2>
+      <h2> INTERACTIONS </h2>
 
     </div>
   );

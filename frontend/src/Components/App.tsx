@@ -12,7 +12,7 @@ const App : React.FunctionComponent = () => {
     <BrowserRouter>
       <Grid container>
 
-        <Grid item xs = { 2 }>
+        <Grid item xs = { 1 }>
           <div className = 'Navigation'>
             <Grid item  xs = { 3 } sm = { 1 }>
               <Link to='/editor' style={ { textDecoration: 'none' , fontWeight: 'bold' } }>
@@ -32,7 +32,7 @@ const App : React.FunctionComponent = () => {
           </div>
         </Grid>
 
-        <Grid item xs = { 9 }>
+        <Grid item xs = { 10 }>
           <div className = 'Main'>  { /** URLに応じて表示内容を変更する */ }
               <Routes>
                 <Route path = '/'        element = { <EditorPage />} />
