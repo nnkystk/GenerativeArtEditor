@@ -40,7 +40,6 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     const geneModel = generateGeneModel(mesh.id, mesh);
     const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
     setGeneModelList(_GeneModelList);
-
   }
 
 
@@ -103,7 +102,7 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
       </div>
 
       { decidePanelToShow(panelToShowIndex) }
-
+      
     </div>
   );
 };
