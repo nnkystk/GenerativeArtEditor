@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import * as THREE from 'three';
 import GeneModel from '../Utilities/GeneModel' 
+import GeneEffectPlayer from '../Utilities/GeneEffectPlayer'
 
 /**
  * Summary	: ジェネラティブアート作品を再生するComponent
@@ -11,8 +12,9 @@ import GeneModel from '../Utilities/GeneModel'
  */
 
 interface Props {
-  sampleProp ?: any
-  geneModelList: Array<GeneModel>
+  sampleProp         ?: any
+  geneModelList       : Array<GeneModel>
+  setGeneModelList    : any
 }
 
 export const PlaybackScreen: React.FC<Props> = (props: Props) => {
@@ -22,7 +24,6 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
   type ScreenSize = { width: number, height: number }
 
   // ___ state ___ ___ ___ ___ ___
-  const [ sampleState,    setSampleState ]    = useState<string>('This is SampleState');
   const [ screenSize,     setScreenSize ]     = useState<ScreenSize>({ width: 960, height: 540 });
   const [ isPlayingFlg,   setIsPlayingFlg ]   = useState<Boolean>(false);
   const [ threeRenderer,  setThreeRenderer]   = useState<THREE.WebGLRenderer>(new THREE.WebGLRenderer());
@@ -97,9 +98,9 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
 
         const tick = () => {
           
-          // 効果を発火
-          props.geneModelList.forEach( (geneModel: any) => {
-              geneModel.mesh.rotation.y += 0.01;
+          // Effectを発火
+          props.geneModelList.forEach( (geneModel: GeneModel) => {
+              GeneEffectPlayer.play(geneModel);
           })
 
           threeRenderer.render(threeScene, threeCamera);

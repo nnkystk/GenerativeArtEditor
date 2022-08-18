@@ -49,7 +49,7 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
             <summary> Name: { geneModel.name }</summary>
               <div> ID: { geneModel.id }</div>
               { geneModel.effectList.map( (effect: any) => (
-                <li key = { geneModel.id + '_' + effect } > Effect: { effect } </li> ))
+                <li key = { geneModel.id + '_' + effect.id } > Effect: { effect.id } </li> ))
               }
           </details>
           

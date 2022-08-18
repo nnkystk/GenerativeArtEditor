@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import * as THREE from 'three';
 import GeneModel from '../Utilities/GeneModel'
+import GeneEffectRoll from '../Utilities/GeneEffects/GeneEffectRoll'
 import { PlaybackScreen } from '../Organisms/PlaybackScreen'
 import { CodingScreen } from '../Organisms/CodingScreen'
 import { CodingScreenDev } from '../Organisms/CodingScreenDev'
@@ -36,8 +37,13 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
 
   const initializeThree = () => {
-    const mesh       = generateMesh();
-    const geneModel = generateGeneModel(mesh.id, mesh);
+
+    const createSampleGeneModel = () => {
+      const mesh = generateMesh();
+      return generateGeneModel(mesh.id, mesh);
+    }
+
+    const geneModel = createSampleGeneModel();
     const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
     setGeneModelList(_GeneModelList);
   }
@@ -47,14 +53,15 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
   const generateMesh = () => {
     const geometry  = new THREE.BoxGeometry(100, 100, 100);
     const material  = new THREE.MeshNormalMaterial();
-    const box       = new THREE.Mesh(geometry, material);
+    const box       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
     return box
   }
 
 
   const generateGeneModel = (id: number, mesh: THREE.Mesh) => {
-    const name      = "sample"
-    const geneModel = new GeneModel(id, mesh, name);
+    const name        = "sample"
+    const effectList  = [ new GeneEffectRoll({ x: 0, y: 0.01, z: 0 }) ]
+    const geneModel   = new GeneModel(id, mesh, effectList, name);
     return geneModel
   }
 
@@ -92,7 +99,7 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     <div>
       <Grid container>
         <Grid item xs = { 10 }>
-          <PlaybackScreen geneModelList = { geneModelList } />
+          <PlaybackScreen geneModelList = { geneModelList } setGeneModelList = { setGeneModelList } />
         </Grid>
         <Grid item xs = { 2 }>
           <div className = "SwitchGuidePanel">
