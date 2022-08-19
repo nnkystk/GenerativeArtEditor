@@ -11,6 +11,9 @@ import { Grid } from "@material-ui/core";
 type Props = {
   sampleProp ?: any;
 }
+type Vector = {
+  x: number, y: number, z: number
+}
 
 export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
@@ -58,11 +61,21 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
   }
 
 
+  // MEMO: 外部クラスメソッド化する
   const generateGeneModel = (id: number, mesh: THREE.Mesh) => {
     const name        = "sample"
-    const effectList  = [ new GeneEffectRoll({ x: 0, y: 0.01, z: 0 }) ]
-    const geneModel   = new GeneModel(id, mesh, effectList, name);
+    const effectList  = [ new GeneEffectRoll({ x: 0, y: 0.01, z: 0 }) ]   // !!! 仮置きでROLLEffectを生成 !!!
+    const geneModel   = new GeneModel(id, mesh, effectList, { name: name });
     return geneModel
+  }
+
+
+  // MEMO: 外部クラスメソッド化する
+  const setGeneModelPosition = (geneModel: GeneModel, position: Vector) => {
+    geneModel.mesh.position.set(position.x, position.y, position.z);  // THREE.jsへ変更を反映
+    // geneModel.position = position
+    const _geneModelList = [ ...geneModelList ]                 // UIに変更を反映（THREE.jsへの変更反映とUIへの変更反映がそれぞれ必要）
+    setGeneModelList(_geneModelList);
   }
 
 
@@ -73,20 +86,23 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     }else if(index == INDEX_CODING_PANEL){
       // panelToShow = <CodingScreen geneModelList = { geneModelList } />
       panelToShow = <CodingScreenDev
-        geneModelList = { geneModelList }
-        onClickAddButton = { onClickAddButton }
+        geneModelList         = { geneModelList }
+        onClickAddModelButton = { addGeneModel }
+        setPosition           = { setGeneModelPosition }
       />
     }
     return panelToShow;
   }
 
 
-  const onClickAddButton = () => {
+  const addGeneModel = () => {
     const mesh      = generateMesh();
     const geneModel = generateGeneModel(mesh.id, mesh);
     const _GeneModelList = [ ...geneModelList, geneModel ];
     setGeneModelList(_GeneModelList);
   }
+
+
   const onClickCodingButton = () => {
     setPanelToShowIndex(INDEX_CODING_PANEL);
   }

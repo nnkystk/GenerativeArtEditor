@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { PositionInputForm } from '../Molecules/PositionInputForm'
+import GeneModel from '../Utilities/GeneModel'
+
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -8,11 +11,16 @@ import React, { useEffect, useState } from "react";
  */
 
 // Type Declaration of Props
-interface Props {
-  sampleProp ?: any
-  geneModelList: Array<any>
-  onClickAddButton(): void
+interface Props{
+  sampleProp             ?: any
+  geneModelList           : Array<any>
+  onClickAddModelButton   : any
+  setPosition(geneModel: GeneModel, vector: Vector) : void
 }
+type Vector = {
+  x: number, y: number, z: number
+}
+
 
 export const CodingScreenDev: React.FC<Props> = (props: Props) => {
 
@@ -31,35 +39,37 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-  const meshView = (mesh: THREE.Mesh) => {
-
-    console.log(mesh)
-
-  }
 
   return(
     <div>
 
-        <h2> MODEL </h2>
-        <button onClick = { props.onClickAddButton }> Add </button>
+        <h2> CODING </h2>
+        <button onClick = { props.onClickAddModelButton }> ADD MODEL </button>
 
         { props.geneModelList.map( (geneModel) => (
 
           <details key = { geneModel.id }>
-            <summary> Name: { geneModel.name }</summary>
-              <div> ID: { geneModel.id }</div>
+            <summary> ID: { geneModel.id }</summary>
+              <div> NAME: { geneModel.name }</div>
+
+              <PositionInputForm
+                geneModel   = { geneModel }
+                setPosition = { props.setPosition }
+              />
+
               { geneModel.effectList.map( (effect: any) => (
                 <li key = { geneModel.id + '_' + effect.id } > Effect: { effect.id } </li> ))
               }
+
+
           </details>
           
           ))
         }
 
-      <h2> INTERACTIONS </h2>
-
     </div>
   );
 };
+
 
 export default CodingScreenDev
