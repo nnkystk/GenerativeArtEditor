@@ -9,13 +9,15 @@ import { Grid } from "@material-ui/core";
 
 
 type Props = {
-  sampleProp ?: any;
+  sampleProp         ?: any;
+  temporaryStorage    : any;
+  setTemporaryStorage : any;
 }
 type Vector = {
   x: number, y: number, z: number
 }
 
-export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
+export const EditorPage : React.FC<Props> = (props: Props) => {
 
   const INDEX_SAMPLE_PANEL  = "SAMPLE";
   const INDEX_CODING_PANEL  = "CODING";
@@ -41,14 +43,18 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
   const initializeThree = () => {
 
-    const createSampleGeneModel = () => {
-      const mesh = generateMesh();
-      return generateGeneModel(mesh.id, mesh);
+    // 一時保存された作品情報がある場合、その情報を読み込む
+    // ない場合、新規にサンプルモデルを生成する
+    if(props.temporaryStorage){
+      setGeneModelList(props.temporaryStorage);
+    }else{
+      // サンプルモデルを生成
+      const mesh      = generateMesh();
+      const geneModel = generateGeneModel(mesh.id, mesh);
+      const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
+      setGeneModelList(_GeneModelList);
     }
 
-    const geneModel = createSampleGeneModel();
-    const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
-    setGeneModelList(_GeneModelList);
   }
 
 
@@ -63,19 +69,20 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
 
   // MEMO: 外部クラスメソッド化する
   const generateGeneModel = (id: number, mesh: THREE.Mesh) => {
-    const name        = "sample"
-    const effectList  = [ new GeneEffectRoll({ x: 0, y: 0.01, z: 0 }) ]   // !!! 仮置きでROLLEffectを生成 !!!
+    const name        = "sample";
+    const effectList  = [ new GeneEffectRoll({ x: 0, y: 0.01, z: 0 }) ];   // !!! 仮置きでROLLEffectを生成 !!!
     const geneModel   = new GeneModel(id, mesh, effectList, { name: name });
     return geneModel
   }
 
-
+  
   // MEMO: 外部クラスメソッド化する
   const setGeneModelPosition = (geneModel: GeneModel, position: Vector) => {
     geneModel.mesh.position.set(position.x, position.y, position.z);  // THREE.jsへ変更を反映
     // geneModel.position = position
-    const _geneModelList = [ ...geneModelList ]                 // UIに変更を反映（THREE.jsへの変更反映とUIへの変更反映がそれぞれ必要）
+    const _geneModelList = [ ...geneModelList ];                      // UIに変更を反映（THREE.jsへの変更反映とUIへの変更反映がそれぞれ必要）
     setGeneModelList(_geneModelList);
+    props.setTemporaryStorage(_geneModelList);                        // 作品データを一時保存
   }
 
 
@@ -100,6 +107,7 @@ export const EditorPage : React.FC<Props> = ({ sampleProp }) => {
     const geneModel = generateGeneModel(mesh.id, mesh);
     const _GeneModelList = [ ...geneModelList, geneModel ];
     setGeneModelList(_GeneModelList);
+    props.setTemporaryStorage(_GeneModelList);    // 作品データを一時保存
   }
 
 
