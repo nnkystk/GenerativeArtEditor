@@ -32,7 +32,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
     setPosition(_position);
   }
 
-  const onClickSetButton = () => {
+  const onBlur = () => {
     props.setPosition(props.geneModel, position);
   }
 
@@ -47,6 +47,8 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         step      = "10"
         value     = { position.x }
         onChange  = { handleChangeX }
+        onBlur    = { onBlur }
+
       />
       
       <input
@@ -54,9 +56,8 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         step      = "10"
         value     = { position.y }
         onChange  = { handleChangeY }
+        onBlur    = { onBlur }
       />
-
-      <button onClick = { onClickSetButton }> SET POSITION </button>
 
     </div>
   )
