@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Grid, Paper } from "@material-ui/core";
 import { PositionInputForm } from '../Molecules/PositionInputForm'
 import GeneModel from '../Utilities/GeneModel'
 
@@ -43,30 +44,33 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-        <h2> CODING </h2>
-        <button onClick = { props.onClickAddModelButton }> ADD MODEL </button>
+      <h2> CODING </h2>
+      <button onClick = { props.onClickAddModelButton }> ADD MODEL </button>
 
-        { props.geneModelList.map( (geneModel) => (
+        <Grid container spacing = { 2 }>
 
-          <details key = { geneModel.id }>
-            <summary> ID: { geneModel.id }</summary>
-              <div> NAME: { geneModel.name }</div>
+          { props.geneModelList.map( (geneModel) => (
+            <Grid item xs = { 12 } key = { geneModel.id }>
+              <Paper variant="outlined">
+                <details>
+                  <summary> ID: { geneModel.id }</summary>
+                    <div> NAME: { geneModel.name }</div>
 
-              <PositionInputForm
-                geneModel   = { geneModel }
-                setPosition = { props.setPosition }
-              />
+                    <PositionInputForm
+                      geneModel   = { geneModel }
+                      setPosition = { props.setPosition }
+                    />
 
-              { geneModel.effectList.map( (effect: any) => (
-                <li key = { geneModel.id + '_' + effect.id } > Effect: { effect.id } </li> ))
-              }
+                    { geneModel.effectList.map( (effect: any) => (
+                      <li key = { geneModel.id + '_' + effect.id } > Effect: { effect.id } </li> ))
+                    }
 
+                </details>
+              </Paper>
+            </Grid>
 
-          </details>
-          
-          ))
-        }
-
+          ))}
+        </Grid>
     </div>
   );
 };

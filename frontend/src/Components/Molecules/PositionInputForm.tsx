@@ -40,7 +40,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-      <span> POSITION: </span>
+      <div> POSITION: </div>
 
       <input
         type      = "number"
@@ -48,7 +48,6 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         value     = { position.x }
         onChange  = { handleChangeX }
         onBlur    = { onBlur }
-
       />
       
       <input

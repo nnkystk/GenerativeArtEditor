@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import * as THREE from 'three';
+import { Grid, Divider } from "@material-ui/core";
 import GeneModel from '../Utilities/GeneModel'
 import GeneEffectRoll from '../Utilities/GeneEffects/GeneEffectRoll'
 import { PlaybackScreen } from '../Organisms/PlaybackScreen'
 import { CodingScreen } from '../Organisms/CodingScreen'
 import { CodingScreenDev } from '../Organisms/CodingScreenDev'
-import { Grid } from "@material-ui/core";
 
 
 type Props = {
@@ -120,22 +120,26 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
 
   return(
-    <div>
-      <Grid container>
-        <Grid item xs = { 10 }>
-          <PlaybackScreen geneModelList = { geneModelList } setGeneModelList = { setGeneModelList } />
-        </Grid>
-        <Grid item xs = { 2 }>
-          <div className = "SwitchGuidePanel">
-            <button onClick = { onClickCodingButton }> CODE </button>
-            <button onClick = { onClickSampleButton }> SAMPLE </button>
-          </div>
-          <div className = "GuidePanel">
-            { decideGuidePanelToShow(panelToShowIndex) }
-          </div>
-        </Grid>
+    <Grid container spacing = { 2 }>
+
+      <Grid item xs = { 1 }>
+        <span>side bar</span>
       </Grid>
-    </div>
+
+      <Grid item xs = { 9 }>
+        <PlaybackScreen geneModelList = { geneModelList } setGeneModelList = { setGeneModelList } />
+      </Grid>
+
+      <Grid item xs = { 2 }>
+        <div className = "SwitchGuidePanel">
+          <button onClick = { onClickCodingButton }> CODE </button>
+          <button onClick = { onClickSampleButton }> SAMPLE </button>
+        </div>
+        <div className = "GuidePanel">
+          { decideGuidePanelToShow(panelToShowIndex) }
+        </div>
+      </Grid>
+    </Grid>
   );
 };
 

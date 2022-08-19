@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom'
-import { Grid } from '@material-ui/core';
+import { Grid, Divider } from "@material-ui/core";
 import { EditorPage } from './Pages/EditorPage'
 import { HomePage } from './Pages/HomePage'
 
@@ -14,36 +14,43 @@ const App : React.FunctionComponent = () => {
   }
 
   return (
-    <BrowserRouter>
-      <Grid container>
 
-        <Grid item xs = { 1 }>
-          <div className = 'Navigation'>
-            <Grid item  xs = { 3 } sm = { 1 }>
-              <Link to = '/editor' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
-                <span>EDITOR</span>
-              </Link>
-            </Grid>
-            <Grid item  xs = { 3 } sm = { 1 }>
+    <BrowserRouter>
+
+      <Grid container spacing = { 1 }>
+
+        <Grid item xs = { 12 } >
+
+          <Grid container className = 'Navigation'>
+            <Grid item xs = { 1 }>
               <Link to = '/home' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
                 <span>HOME</span>
               </Link>
             </Grid>
-          </div>
+            <Grid item xs = { 1 }>
+              <Link to = '/editor' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
+                <span>EDITOR</span>
+              </Link>
+            </Grid>
+          </Grid>
+
+          <Divider />
+
         </Grid>
-        
-        <Grid item xs = { 10 }>
-          <div className = 'Main'>  { /** URLに応じて表示内容を変更する */ }
-              <Routes>
-                <Route path = '/'       element = { <EditorPage temporaryStorage = { temporaryStorage } setTemporaryStorage = { setTemporaryStorage } />} />
-                <Route path = '/editor' element = { <EditorPage temporaryStorage = { temporaryStorage } setTemporaryStorage = { setTemporaryStorage } />} />
-                <Route path = '/home'   element = { <HomePage   temporaryStorage = { temporaryStorage } setTemporaryStorage = { setTemporaryStorage }/>} />
-              </Routes>
-          </div>
+
+        <Grid item xs = { 12 } >
+          <Grid container className = 'Main'> { /** URLに応じて表示内容を変更する */ }
+            <Routes>
+              <Route path = '/'       element = { <EditorPage temporaryStorage = { temporaryStorage } setTemporaryStorage = { setTemporaryStorage } />} />
+              <Route path = '/editor' element = { <EditorPage temporaryStorage = { temporaryStorage } setTemporaryStorage = { setTemporaryStorage } />} />
+              <Route path = '/home'   element = { <HomePage   temporaryStorage = { temporaryStorage } setTemporaryStorage = { setTemporaryStorage }/>} />
+            </Routes>
+          </Grid>
         </Grid>
-        
+
       </Grid>
     </BrowserRouter>
+
   );
 };
 
