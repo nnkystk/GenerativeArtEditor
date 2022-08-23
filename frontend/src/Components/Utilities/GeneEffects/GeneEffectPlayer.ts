@@ -1,4 +1,4 @@
-import GeneModel from './GeneModel'
+import GeneModel from '../GeneModel'
 
 
 class GeneEffectPlayer{

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper } from "@material-ui/core";
+import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
 import GeneModel from '../Utilities/GeneModel'
+import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
+import { Vector2Tuple } from "three";
 
 
 /**
@@ -39,6 +42,18 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
   const test = () => {
     console.log('test');
   }
+  const setParameters = (geneEffect: GeneEffectInterface, vector: Vector) => {
+    console.log("a")
+  }
+
+  const getEffectInputForm = (geneEffect: GeneEffectInterface) => {
+    if(geneEffect.id == "ROLL"){
+      return <EffectRollForm
+        geneEffect = { geneEffect }
+        setParameters = { setParameters }
+      />
+    }
+  }
 
 
   return(
@@ -61,8 +76,12 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
                       setPosition = { props.setPosition }
                     />
 
-                    { geneModel.effectList.map( (effect: any) => (
-                      <li key = { geneModel.id + '_' + effect.id } > Effect: { effect.id } </li> ))
+                    { geneModel.effectList.map( (geneEffect: any) => (
+                      <li key = { geneModel.id + '_' + geneEffect.id } >
+                        <span> Effect: { geneEffect.id } </span>
+                        { getEffectInputForm(geneEffect) }
+                      </li>
+                      ))
                     }
 
                 </details>

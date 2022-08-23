@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Grid } from "@material-ui/core";
 import * as THREE from 'three';
 import GeneModel from '../Utilities/GeneModel' 
-import GeneEffectPlayer from '../Utilities/GeneEffectPlayer'
+import GeneEffectPlayer from '../Utilities/GeneEffects/GeneEffectPlayer'
 import { width } from "@mui/system";
 
 /**
@@ -40,7 +40,6 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
   useEffect( () => { initializeThree() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるためuseEffectにフックする
   useEffect( () => { updateSceneThree()  }, [ props.geneModelList ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
   useEffect( () => { return () => { stopThree() } }, [ ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
-  useEffect( () => { threeRenderer.setSize(screenSize.width, screenSize.height), [screenSize] } )
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -138,17 +137,12 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
       alignItems ="center" justifyContent="center" 
       style = { { backgroundColor : "#e0e0e0" } }
     >
-      <Grid item xs={12}>
-        <canvas
-          id = 'canvas'
-          ref = { canvasRef }
-          onClick = { onClickCanvas }
-        />
-      </Grid>
+      <canvas
+        id = 'canvas'
+        ref = { canvasRef }
+        onClick = { onClickCanvas }
+      />
 
-      <Grid item xs={12}>
-        <Sample setScreenSize= { setScreenSize } screenSize = { screenSize }/>
-      </Grid>
     </Grid>
   );
 
@@ -161,28 +155,4 @@ export default PlaybackScreen
 
 interface SamplaProps {
   setScreenSize    : any
-  screenSize: any
 }
-
-// 表示エリアのサイズを取得する処理のサンプル
-const Sample = (props: SamplaProps) => {
-
-  const ref: any | null = useRef(null);
-
-  useEffect(() => {
-    console.log(ref.current);
-    console.log(
-      JSON.stringify(ref.current.getBoundingClientRect())
-    );
-  }, []);
-
-  return (
-    <div ref={ref}>
-      <h2> Sample </h2>
-      <button onClick={ () => {
-        const size = ref.current.getBoundingClientRect();
-        props.setScreenSize({width: size.width, height: props.screenSize.height})}
-      }>change size</button>
-    </div>
-  );
-};

@@ -68,9 +68,16 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
 
   // MEMO: 外部クラスメソッド化する
+  const generateGeneEffect = () => {
+    const effect = new GeneEffectRoll("sample", { x: 0, y: 0.01, z: 0 });   // !!! 仮置きでROLLEffectを生成 !!!
+    return effect
+  }
+
+
+  // MEMO: 外部クラスメソッド化する
   const generateGeneModel = (id: number, mesh: THREE.Mesh) => {
     const name        = "sample";
-    const effectList  = [ new GeneEffectRoll({ x: 0, y: 0.01, z: 0 }) ];   // !!! 仮置きでROLLEffectを生成 !!!
+    const effectList  = [ generateGeneEffect() ];
     const geneModel   = new GeneModel(id, mesh, effectList, { name: name });
     return geneModel
   }
@@ -79,7 +86,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   // MEMO: 外部クラスメソッド化する
   const setGeneModelPosition = (geneModel: GeneModel, position: Vector) => {
     geneModel.mesh.position.set(position.x, position.y, position.z);  // THREE.jsへ変更を反映
-    // geneModel.position = position
     const _geneModelList = [ ...geneModelList ];                      // UIに変更を反映（THREE.jsへの変更反映とUIへの変更反映がそれぞれ必要）
     setGeneModelList(_geneModelList);
     props.setTemporaryStorage(_geneModelList);                        // 作品データを一時保存
@@ -122,15 +128,11 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   return(
     <Grid container spacing = { 2 }>
 
-      <Grid item xs = { 1 }>
-        <span>side bar</span>
-      </Grid>
-
-      <Grid item xs = { 9 }>
+      <Grid item xs = { 9 } style = { { zIndex:50 } }>
         <PlaybackScreen geneModelList = { geneModelList } setGeneModelList = { setGeneModelList } />
       </Grid>
 
-      <Grid item xs = { 2 }>
+      <Grid item xs = { 3 } style = { { backgroundColor: "white", zIndex: 100 } }>
         <div className = "SwitchGuidePanel">
           <button onClick = { onClickCodingButton }> CODE </button>
           <button onClick = { onClickSampleButton }> SAMPLE </button>
