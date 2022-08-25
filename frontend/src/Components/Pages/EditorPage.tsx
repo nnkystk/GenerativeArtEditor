@@ -7,7 +7,7 @@ import { PlaybackScreen } from '../Organisms/PlaybackScreen'
 import { CodingScreen } from '../Organisms/CodingScreen'
 import { CodingScreenDev } from '../Organisms/CodingScreenDev'
 import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
-
+import { GeneGenerator } from '../Utilities/GeneGenerator'
 
 type Props = {
   sampleProp         ?: any;
@@ -41,7 +41,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-
   const initializeThree = () => {
 
     // 一時保存された作品情報がある場合、その情報を読み込む
@@ -50,41 +49,14 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
       setGeneModelList(props.temporaryStorage);
     }else{
       // サンプルモデルを生成
-      const mesh      = generateMesh();
-      const geneModel = generateGeneModel(mesh.id, mesh);
+      const mesh      = GeneGenerator.generateMesh();
+      const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
       const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
       setGeneModelList(_GeneModelList);
     }
 
   }
 
-
-  // MEMO: 外部クラスメソッド化する
-  const generateMesh = () => {
-    const geometry  = new THREE.BoxGeometry(100, 100, 100);
-    const material  = new THREE.MeshNormalMaterial();
-    const box       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
-    return box
-  }
-
-
-  // MEMO: 外部クラスメソッド化する
-  const generateGeneEffect = () => {
-    const effect = new GeneEffectRoll("sample", { x: 0, y: 0.01, z: 0 });   // !!! 仮置きでROLLEffectを生成 !!!
-    return effect
-  }
-
-
-  // MEMO: 外部クラスメソッド化する
-  const generateGeneModel = (id: number, mesh: THREE.Mesh) => {
-    const name        = "sample";
-    const effectList  = [ generateGeneEffect() ];
-    const geneModel   = new GeneModel(id, mesh, effectList, { name: name });
-    return geneModel
-  }
-
-  
-  // MEMO: 外部クラスメソッド化する
   const setGeneModelPosition = (geneModel: GeneModel, position: Vector) => {
     geneModel.mesh.position.set(position.x, position.y, position.z);  // THREE.jsへ変更を反映
     const _geneModelList = [ ...geneModelList ];                      // UIに変更を反映（THREE.jsへの変更反映とUIへの変更反映がそれぞれ必要）
@@ -92,15 +64,12 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     props.setTemporaryStorage(_geneModelList);                        // 作品データを一時保存
   }
 
-
-  // MEMO: 外部クラスメソッド化する
   const setGeneEffectParameters = (geneEffect: GeneEffectInterface, paramaters: any) => {
     geneEffect.parameters = paramaters;
     const _geneModelList = [ ...geneModelList ];    // UIに変更を反映
     setGeneModelList(_geneModelList);
     props.setTemporaryStorage(_geneModelList);      // 作品データを一時保存
   }
-
 
   const decideGuidePanelToShow = (index: string) =>{
     let panelToShow;
@@ -118,15 +87,13 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     return panelToShow;
   }
 
-
   const addGeneModel = () => {
-    const mesh      = generateMesh();
-    const geneModel = generateGeneModel(mesh.id, mesh);
+    const mesh      = GeneGenerator.generateMesh();
+    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
     const _GeneModelList = [ ...geneModelList, geneModel ];
     setGeneModelList(_GeneModelList);
     props.setTemporaryStorage(_GeneModelList);    // 作品データを一時保存
   }
-
 
   const onClickCodingButton = () => {
     setPanelToShowIndex(INDEX_CODING_PANEL);
@@ -134,7 +101,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   const onClickSampleButton = () => {
     setPanelToShowIndex(INDEX_SAMPLE_PANEL);
   }
-
 
   return(
     <Grid container spacing = { 2 }>
@@ -156,26 +122,5 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   );
 };
 
-
 export default EditorPage
 
-
-
-// 表示エリアのサイズを取得する処理のサンプル
-const Sample = () => {
-
-  const ref: any | null = useRef(null);
-
-  useEffect(() => {
-    console.log(ref.current);
-    console.log(
-      JSON.stringify(ref.current.getBoundingClientRect())
-    );
-  }, []);
-
-  return (
-    <div ref={ref}>
-      <h2> Sample </h2>
-    </div>
-  );
-};

@@ -1,0 +1,34 @@
+import * as THREE from 'three';
+import GeneModel from '../Utilities/GeneModel'
+import GeneEffectRoll from '../Utilities/GeneEffects/GeneEffectRoll'
+import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
+
+
+export class GeneGenerator{
+
+  constructor(){
+
+  }
+
+  static generateMesh (){
+    const geometry  = new THREE.BoxGeometry(100, 100, 100);
+    const material  = new THREE.MeshNormalMaterial();
+    const box       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
+    return box
+  }
+
+  static generateGeneEffect(){
+    const effect = new GeneEffectRoll("sample", { x: 0, y: 0.01, z: 0 });   // !!! 仮置きでROLLEffectを生成 !!!
+    return effect
+  }
+
+  static generateGeneModel(id: number, mesh: THREE.Mesh){
+    const name        = "sample";
+    const effectList  = [ this.generateGeneEffect() ];
+    const geneModel   = new GeneModel(id, mesh, effectList, { name: name });
+    return geneModel
+  }
+
+}
+
+export default GeneGenerator
