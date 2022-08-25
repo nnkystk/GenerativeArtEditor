@@ -31,7 +31,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
   }
   const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _parameters = { ...parameters } 
-    const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
+    const newVal      = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _parameters.z     = newVal
     setParameters(_parameters);
   }
@@ -46,7 +46,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
 
       <input
         type      = "number"
-        step      = "10"
+        step      = "0.001"
         value     = { parameters.x }
         onChange  = { handleChangeX }
         onBlur    = { onBlur }
@@ -54,7 +54,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
       
       <input
         type      = "number"
-        step      = "10"
+        step      = "0.001"
         value     = { parameters.y }
         onChange  = { handleChangeY }
         onBlur    = { onBlur }
@@ -62,8 +62,8 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
 
       <input
         type      = "number"
-        step      = "10"
-        value     = {parameters.z }
+        step      = "0.001"
+        value     = { parameters.z }
         onChange  = { handleChangeZ }
         onBlur    = { onBlur }
       />

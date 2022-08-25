@@ -6,6 +6,7 @@ import GeneEffectRoll from '../Utilities/GeneEffects/GeneEffectRoll'
 import { PlaybackScreen } from '../Organisms/PlaybackScreen'
 import { CodingScreen } from '../Organisms/CodingScreen'
 import { CodingScreenDev } from '../Organisms/CodingScreenDev'
+import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
 
 
 type Props = {
@@ -92,6 +93,15 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   }
 
 
+  // MEMO: 外部クラスメソッド化する
+  const setGeneEffectParameters = (geneEffect: GeneEffectInterface, paramaters: any) => {
+    geneEffect.parameters = paramaters;
+    const _geneModelList = [ ...geneModelList ];    // UIに変更を反映
+    setGeneModelList(_geneModelList);
+    props.setTemporaryStorage(_geneModelList);      // 作品データを一時保存
+  }
+
+
   const decideGuidePanelToShow = (index: string) =>{
     let panelToShow;
     if(index == INDEX_SAMPLE_PANEL){
@@ -102,6 +112,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
         geneModelList         = { geneModelList }
         onClickAddModelButton = { addGeneModel }
         setPosition           = { setGeneModelPosition }
+        setParameters         = { setGeneEffectParameters }
       />
     }
     return panelToShow;
