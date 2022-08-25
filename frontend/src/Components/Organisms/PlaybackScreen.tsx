@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Grid } from "@material-ui/core";
 import * as THREE from 'three';
-import GeneModel from '../Utilities/GeneModel' 
-import GeneEffectPlayer from '../Utilities/GeneEffects/GeneEffectPlayer'
+import GeneModel from '../../Utilities/GeneModel' 
+import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 import { width } from "@mui/system";
 
 /**

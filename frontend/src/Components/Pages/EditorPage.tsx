@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
-import * as THREE from 'three';
 import { Grid, Divider } from "@material-ui/core";
-import GeneModel from '../Utilities/GeneModel'
-import GeneEffectRoll from '../Utilities/GeneEffects/GeneEffectRoll'
-import { PlaybackScreen } from '../Organisms/PlaybackScreen'
-import { CodingScreen } from '../Organisms/CodingScreen'
-import { CodingScreenDev } from '../Organisms/CodingScreenDev'
-import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
-import { GeneGenerator } from '../Utilities/GeneGenerator'
+import GeneModel from '../../Utilities/GeneModel';
+import GeneEffectInterface from '../../Utilities/GeneEffects/GeneEffectInterface';
+import GeneEffectParameter from '../../Utilities/GeneEffects/GeneEffectParameter';
+import { GeneGenerator } from '../../Utilities/GeneGenerator';
+import { PlaybackScreen } from '../Organisms/PlaybackScreen';
+import { CodingScreen } from '../Organisms/CodingScreen';
+import { CodingScreenDev } from '../Organisms/CodingScreenDev';
+
+
 
 type Props = {
   sampleProp         ?: any;
@@ -64,8 +65,8 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     props.setTemporaryStorage(_geneModelList);                        // 作品データを一時保存
   }
 
-  const setGeneEffectParameters = (geneEffect: GeneEffectInterface, paramaters: any) => {
-    geneEffect.parameters = paramaters;
+  const setGeneEffectParameter = (geneEffect: GeneEffectInterface, paramater: GeneEffectParameter) => {
+    geneEffect.parameter = paramater;
     const _geneModelList = [ ...geneModelList ];    // UIに変更を反映
     setGeneModelList(_geneModelList);
     props.setTemporaryStorage(_geneModelList);      // 作品データを一時保存
@@ -81,7 +82,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
         geneModelList         = { geneModelList }
         onClickAddModelButton = { addGeneModel }
         setPosition           = { setGeneModelPosition }
-        setParameters         = { setGeneEffectParameters }
+        setParameter          = { setGeneEffectParameter }
       />
     }
     return panelToShow;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GeneModel from '../Utilities/GeneModel'
+import GeneModel from '../../Utilities/GeneModel'
 
 
 // Type Declaration of Props

@@ -1,43 +1,40 @@
-import React, { useEffect, useState } from "react";
-import GeneEffectInterface from "src/Components/Utilities/GeneEffects/GeneEffectInterface";
-import GeneEffectRoll from "src/Components/Utilities/GeneEffects/GeneEffectRoll";
+import React, { useState } from "react";
+import GeneEffectInterface from "src/Utilities/GeneEffects/GeneEffectInterface";
+import GeneEffectRoll from 'src/Utilities/GeneEffects/GeneEffectRoll';
+import GeneEffectParameter from  '../../../Utilities/GeneEffects/GeneEffectParameter'
 
-type Vector = {
-  x: number, y: number, z: number
-}
-// Type Declaration of Props
 interface Props{
   geneEffect: GeneEffectRoll | GeneEffectInterface
-  setParameters(geneEffect: GeneEffectInterface, vector: Vector) : void
+  setParameter(geneEffect: GeneEffectInterface, parameter: GeneEffectParameter) : void
 }
 
 export const EffectRollForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ parameters, setParameters ] = useState<Vector>(props.geneEffect.parameters);
+  const [ parameter, setParameter ] = useState<GeneEffectParameter>(props.geneEffect.parameter);
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const _parameters = { ...parameters } 
-    const newVal      = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.x     = newVal
-    setParameters(_parameters);
+    const _parameters     = { ...parameter } 
+    const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
+    _parameters.vector.x  = newVal
+    setParameter(_parameters);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const _parameters = { ...parameters } 
-    const newVal      = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.y     = newVal
-    setParameters(_parameters);
+    const _parameters     = { ...parameter } 
+    const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
+    _parameters.vector.y  = newVal
+    setParameter(_parameters);
   }
   const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const _parameters = { ...parameters } 
-    const newVal      = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.z     = newVal
-    setParameters(_parameters);
+    const _parameters     = { ...parameter } 
+    const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
+    _parameters.vector.z  = newVal
+    setParameter(_parameters);
   }
 
   const onBlur = () => {
-    props.setParameters(props.geneEffect, parameters);
+    props.setParameter(props.geneEffect, parameter);
   }
 
 
@@ -47,7 +44,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
       <input
         type      = "number"
         step      = "0.001"
-        value     = { parameters.x }
+        value     = { parameter.vector.x }
         onChange  = { handleChangeX }
         onBlur    = { onBlur }
       />
@@ -55,7 +52,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
       <input
         type      = "number"
         step      = "0.001"
-        value     = { parameters.y }
+        value     = { parameter.vector.y }
         onChange  = { handleChangeY }
         onBlur    = { onBlur }
       />
@@ -63,7 +60,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
       <input
         type      = "number"
         step      = "0.001"
-        value     = { parameters.z }
+        value     = { parameter.vector.z }
         onChange  = { handleChangeZ }
         onBlur    = { onBlur }
       />

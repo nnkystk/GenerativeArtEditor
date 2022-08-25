@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import GeneModel from '../Utilities/GeneModel'
-import GeneEffectRoll from '../Utilities/GeneEffects/GeneEffectRoll'
-import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
-
+import GeneModel from './GeneModel'
+import GeneEffectRoll from './GeneEffects/GeneEffectRoll'
+import GeneEffectParameter from '../Utilities/GeneEffects/GeneEffectParameter'
 
 export class GeneGenerator{
 
@@ -18,7 +17,9 @@ export class GeneGenerator{
   }
 
   static generateGeneEffect(){
-    const effect = new GeneEffectRoll("sample", { x: 0, y: 0.01, z: 0 });   // !!! 仮置きでROLLEffectを生成 !!!
+    const effectParams = new GeneEffectParameter();
+    effectParams.vector = { x: 0, y: 0.01, z: 0 };
+    const effect = new GeneEffectRoll("sample", effectParams);   // !!! 仮置きでROLLEffectを生成 !!!
     return effect
   }
 

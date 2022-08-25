@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
-import GeneModel from '../Utilities/GeneModel'
-import GeneEffectInterface from "../Utilities/GeneEffects/GeneEffectInterface";
+import GeneModel from '../../Utilities/GeneModel'
+import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
 
 
 /**
@@ -19,7 +19,7 @@ interface Props{
   geneModelList           : Array<any>
   onClickAddModelButton   : any
   setPosition(geneModel: GeneModel, vector: Vector) : void
-  setParameters(geneEffect: GeneEffectInterface, parameters: any) : void
+  setParameter(geneEffect: GeneEffectInterface, parameter: any) : void
 }
 type Vector = {
   x: number, y: number, z: number
@@ -46,8 +46,8 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
   const getEffectInputForm = (geneEffect: GeneEffectInterface) => {
     if(geneEffect.id == "ROLL"){
       return <EffectRollForm
-        geneEffect = { geneEffect }
-        setParameters = { props.setParameters }
+        geneEffect    = { geneEffect }
+        setParameter  = { props.setParameter }
       />
     }
   }
