@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { Grid, Divider } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel';
 import GeneEffectInterface from '../../Utilities/GeneEffects/GeneEffectInterface';
@@ -28,11 +28,30 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
   const [ geneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
   const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_CODING_PANEL);  // 表示する対象パネルを指定するキー
+  const [ isPlayingFlg, setIsPlayingFlg ]   = useState<boolean>(false);
+  const [ isEditableFlg, setIsEditableFlg ] = useState<boolean>(true);
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
   useEffect( () => { initializeThree() },         []);
+  useEffect( () => { switchIsEditableFlg() },     [ isPlayingFlg ] );
   
+  // ___ use memo ___ ___ ___ ___ ___
+  /** MEMO: なぜuseMemoを使用しているのか？
+   *    Ans. canvas要素のcontextが多重に存在することで発生するエラーを避けるため
+   *    - canvas要素を含むコンポーネントがレンダーされるたび、contextが内部的に生成される
+   *    - contextの存在個数が上限を突破するとブラウザが間引きを行う。THREEがコンテキストを見失うことでエラーが発生する
+   *    - 対策として、useMemoを用いて再レンダーの条件を通常のコンポーネントよりも絞る
+   */
+  const memoPlayBackScreen = useMemo( () => 
+    <PlaybackScreen
+      geneModelList     = { geneModelList }
+      setGeneModelList  = { setGeneModelList }
+      isPlayingFlg      = { isPlayingFlg }
+      setIsPlayingFlg   = { setIsPlayingFlg } 
+    />,
+    [geneModelList, isPlayingFlg])
+
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
   };
@@ -72,6 +91,23 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     props.setTemporaryStorage(_geneModelList);      // 作品データを一時保存
   }
 
+  const addGeneModel = () => {
+    const mesh      = GeneGenerator.generateMesh();
+    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
+    const _GeneModelList = [ ...geneModelList, geneModel ];
+    setGeneModelList(_GeneModelList);
+    props.setTemporaryStorage(_GeneModelList);    // 作品データを一時保存
+  }
+
+  const switchIsEditableFlg = () => {
+    /** 再生中はコーディングを禁止する */
+    if(isPlayingFlg == true){
+      setIsEditableFlg(false);
+    }else{
+      setIsEditableFlg(true);
+    }
+  }
+
   const decideGuidePanelToShow = (index: string) =>{
     let panelToShow;
     if(index == INDEX_SAMPLE_PANEL){
@@ -88,12 +124,11 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     return panelToShow;
   }
 
-  const addGeneModel = () => {
-    const mesh      = GeneGenerator.generateMesh();
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
-    const _GeneModelList = [ ...geneModelList, geneModel ];
-    setGeneModelList(_GeneModelList);
-    props.setTemporaryStorage(_GeneModelList);    // 作品データを一時保存
+  const provideGuidePanelStyle = (isEditableFlg: boolean) => {
+    const style = isEditableFlg?
+      { backgroundColor: "white", zIndex: 100 }
+      : { backgroundColor: "grey", zIndex: 100 }
+    return style
   }
 
   const onClickCodingButton = () => {
@@ -107,10 +142,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     <Grid container spacing = { 2 }>
 
       <Grid item xs = { 9 } style = { { zIndex:50 } }>
-        <PlaybackScreen geneModelList = { geneModelList } setGeneModelList = { setGeneModelList } />
+        { memoPlayBackScreen }
       </Grid>
 
-      <Grid item xs = { 3 } style = { { backgroundColor: "white", zIndex: 100 } }>
+      <Grid item xs = { 3 } style = { provideGuidePanelStyle(isEditableFlg) }>
         <div className = "SwitchGuidePanel">
           <button onClick = { onClickCodingButton }> CODE </button>
           <button onClick = { onClickSampleButton }> SAMPLE </button>

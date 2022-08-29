@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GeneModel from '../../Utilities/GeneModel'
 
-
 // Type Declaration of Props
 type Vector = {
   x: number, y: number, z: number
@@ -23,6 +22,8 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.x     = newVal
+    // handleChange内ではprops.setPosition（つまり親のstateに変更が伴う処理）を行わないこと
+    // 高頻度でcanvasの再レンダーが起きるとTHREEがクラッシュする可能性があるため
     setPosition(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +35,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
 
   const onBlur = () => {
     props.setPosition(props.geneModel, position);
+
   }
 
 

@@ -14,10 +14,13 @@ import { width } from "@mui/system";
  */
 
 interface Props {
-  sampleProp         ?: any
-  geneModelList       : Array<GeneModel>
-  setGeneModelList    : any
+  sampleProp         ?: any;
+  geneModelList       : Array<GeneModel>;
+  setGeneModelList    : any;
+  isPlayingFlg        : boolean;
+  setIsPlayingFlg(bool: boolean): void 
 }
+
 
 export const PlaybackScreen: React.FC<Props> = (props: Props) => {
 
@@ -27,7 +30,6 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ screenSize,     setScreenSize ]     = useState<ScreenSize>({ width: 960, height: 540 });
-  const [ isPlayingFlg,   setIsPlayingFlg ]   = useState<Boolean>(false);
   const [ threeRenderer,  setThreeRenderer]   = useState<THREE.WebGLRenderer>(new THREE.WebGLRenderer());
   const [ threeScene,     setThreeScene ]     = useState<THREE.Scene>(new THREE.Scene());
   const [ threeCamera,    setThreeCamera ]    = useState<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
@@ -96,7 +98,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
     * @param arg
     * @return 
     */
-      if(isPlayingFlg == false){
+      if(props.isPlayingFlg == false){
 
         const tick = () => {
           
@@ -110,19 +112,19 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
         }
 
         tick();
-        setIsPlayingFlg(true);
+        props.setIsPlayingFlg(true);
       }
     }
 
 
   const stopThree = () => {
     cancelAnimationFrame(reqAnmIdRef.current);
-    setIsPlayingFlg(false);
+    props.setIsPlayingFlg(false);
   }
 
-
+  
   const onClickCanvas = () => {
-    if(isPlayingFlg == true){
+    if(props.isPlayingFlg == true){
       stopThree();
     }else{
       updateSceneThree();   // シーンにメッシュが追加されていることを保証
