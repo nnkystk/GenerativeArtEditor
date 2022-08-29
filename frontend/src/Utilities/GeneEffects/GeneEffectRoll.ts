@@ -5,10 +5,10 @@ type Vector = { x: number, y: number, z: number }
 class GeneEffectRoll implements GeneEffectInterface{
   
   id : string = "ROLL";
-  uid: string;
+  uid: number;
   parameter: GeneEffectParameter;
 
-  constructor(uid: string, parameter: GeneEffectParameter){
+  constructor(uid: number, parameter: GeneEffectParameter){
     this.uid = uid;
     this.parameter = parameter;
   }

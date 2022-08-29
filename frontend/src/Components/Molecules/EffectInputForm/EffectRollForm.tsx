@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import GeneEffectInterface from "src/Utilities/GeneEffects/GeneEffectInterface";
-import GeneEffectRoll from 'src/Utilities/GeneEffects/GeneEffectRoll';
+import GeneEffectRoll from '../../../Utilities/GeneEffects/GeneEffectRoll';
 import GeneEffectParameter from  '../../../Utilities/GeneEffects/GeneEffectParameter'
+import geneModelStorage from '../../../Utilities/GeneModelStorage';
 
 interface Props{
   geneEffect: GeneEffectRoll | GeneEffectInterface
-  setParameter(geneEffect: GeneEffectInterface, parameter: GeneEffectParameter) : void
+  geneModelStorage: geneModelStorage
+  geneModelID: number
 }
 
 export const EffectRollForm: React.FC<Props> = (props: Props) => {
@@ -34,7 +36,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
   }
 
   const onBlur = () => {
-    props.setParameter(props.geneEffect, parameter);
+    props.geneModelStorage.setEffectParameter(props.geneModelID, props.geneEffect.uid,  parameter);
   }
 
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Grid } from "@material-ui/core";
 import * as THREE from 'three';
-import GeneModel from '../../Utilities/GeneModel' 
+import GeneModel from '../../Utilities/GeneModel'
+import GeneModelStorage from '../../Utilities/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 import { width } from "@mui/system";
 
@@ -15,8 +16,7 @@ import { width } from "@mui/system";
 
 interface Props {
   sampleProp         ?: any;
-  geneModelList       : Array<GeneModel>;
-  setGeneModelList    : any;
+  geneModelStorage    : GeneModelStorage;
   isPlayingFlg        : boolean;
   setIsPlayingFlg(bool: boolean): void 
 }
@@ -40,7 +40,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { initializeThree() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるためuseEffectにフックする
-  useEffect( () => { updateSceneThree()  }, [ props.geneModelList ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
+  useEffect( () => { updateSceneThree()  }, [ props.geneModelStorage.storage ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
   useEffect( () => { return () => { stopThree() } }, [ ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
 
   // ___ event handler ___ ___ ___ ___ ___
@@ -50,7 +50,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
   // ___ method ___ ___ ___ ___ ___
 
   const test = () => {
-    props.geneModelList.forEach( (geneModel: any) => {
+    props.geneModelStorage.storage.forEach( (geneModel: any) => {
     })
   }
 
@@ -86,7 +86,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
      * Summary: シーンを更新する
      * Imp: すべてのMeshをシーンに追加する
      */
-    props.geneModelList.forEach( (geneModel: any) => {
+    props.geneModelStorage.storage.forEach( (geneModel: any) => {
       threeScene.add(geneModel.mesh);
     })
   }
@@ -103,7 +103,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
         const tick = () => {
           
           // Effectを発火
-          props.geneModelList.forEach( (geneModel: GeneModel) => {
+          props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
               GeneEffectPlayer.play(geneModel);
           })
 

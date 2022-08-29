@@ -4,6 +4,8 @@ import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
 import GeneModel from '../../Utilities/GeneModel'
 import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
+import GeneModelStorage from "src/Utilities/GeneModelStorage";
+import { positions } from "@mui/system";
 
 
 /**
@@ -16,10 +18,9 @@ import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface
 // Type Declaration of Props
 interface Props{
   sampleProp             ?: any
-  geneModelList           : Array<any>
+  geneModelStorage        : GeneModelStorage
+  updateGeneModelStotage  : any
   onClickAddModelButton   : any
-  setPosition(geneModel: GeneModel, vector: Vector) : void
-  setParameter(geneEffect: GeneEffectInterface, parameter: any) : void
 }
 type Vector = {
   x: number, y: number, z: number
@@ -43,11 +44,12 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-  const getEffectInputForm = (geneEffect: GeneEffectInterface) => {
+  const getEffectInputForm = (geneModelID: number, geneEffect: GeneEffectInterface) => {
     if(geneEffect.id == "ROLL"){
       return <EffectRollForm
-        geneEffect    = { geneEffect }
-        setParameter  = { props.setParameter }
+        geneModelStorage  = { props.geneModelStorage }
+        geneModelID       = { geneModelID }
+        geneEffect        = { geneEffect }
       />
     }
   }
@@ -61,7 +63,7 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
 
         <Grid container spacing = { 2 }>
 
-          { props.geneModelList.map( (geneModel) => (
+          { props.geneModelStorage.storage.map( (geneModel) => (
             <Grid item xs = { 12 } key = { geneModel.id }>
               <Paper variant="outlined">
                 <details>
@@ -69,14 +71,14 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
                     <div> NAME: { geneModel.name }</div>
 
                     <PositionInputForm
-                      geneModel   = { geneModel }
-                      setPosition = { props.setPosition }
+                      geneModelStorage  = { props.geneModelStorage }
+                      geneModel         = { geneModel }
                     />
 
                     { geneModel.effectList.map( (geneEffect: any) => (
                       <li key = { geneModel.id + '_' + geneEffect.id } >
                         <span> Effect: { geneEffect.id } </span>
-                        { getEffectInputForm(geneEffect) }
+                        { getEffectInputForm(geneModel.id, geneEffect) }
                       </li>
                       ))
                     }

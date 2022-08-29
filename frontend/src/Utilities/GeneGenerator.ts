@@ -19,7 +19,7 @@ export class GeneGenerator{
   static generateGeneEffect(){
     const effectParams = new GeneEffectParameter();
     effectParams.vector = { x: 0, y: 0.01, z: 0 };
-    const effect = new GeneEffectRoll("sample", effectParams);   // !!! 仮置きでROLLEffectを生成 !!!
+    const effect = new GeneEffectRoll(1, effectParams);   // !!! 仮置きでROLLEffectを生成 !!!
     return effect
   }
 

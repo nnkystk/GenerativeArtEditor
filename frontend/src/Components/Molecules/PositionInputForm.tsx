@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import GeneModelStorage from "src/Utilities/GeneModelStorage";
 import GeneModel from '../../Utilities/GeneModel'
 
 // Type Declaration of Props
@@ -7,8 +8,8 @@ type Vector = {
 }
 
 interface Props{
-  geneModel   : GeneModel
-  setPosition(geneModel: GeneModel, vector: Vector) : void
+  geneModelStorage: GeneModelStorage
+  geneModel       : GeneModel
 }
 
 
@@ -34,8 +35,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
   }
 
   const onBlur = () => {
-    props.setPosition(props.geneModel, position);
-
+    props.geneModelStorage.setPosition(props.geneModel.id, position);
   }
 
 

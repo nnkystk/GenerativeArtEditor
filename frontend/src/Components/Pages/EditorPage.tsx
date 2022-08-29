@@ -1,22 +1,14 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { Grid, Divider } from "@material-ui/core";
-import GeneModel from '../../Utilities/GeneModel';
-import GeneEffectInterface from '../../Utilities/GeneEffects/GeneEffectInterface';
-import GeneEffectParameter from '../../Utilities/GeneEffects/GeneEffectParameter';
-import { GeneGenerator } from '../../Utilities/GeneGenerator';
+import { Grid } from "@material-ui/core";
 import { PlaybackScreen } from '../Organisms/PlaybackScreen';
 import { CodingScreen } from '../Organisms/CodingScreen';
 import { CodingScreenDev } from '../Organisms/CodingScreenDev';
-
-
+import GeneModelStorage from "../../Utilities/GeneModelStorage";
 
 type Props = {
   sampleProp         ?: any;
   temporaryStorage    : any;
   setTemporaryStorage : any;
-}
-type Vector = {
-  x: number, y: number, z: number
 }
 
 export const EditorPage : React.FC<Props> = (props: Props) => {
@@ -26,7 +18,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
-  const [ geneModelList, setGeneModelList ] = useState<Array<GeneModel>>([]);
+  const [ geneModelStorarge, setGeneModelStorarge ] = useState<GeneModelStorage>(new GeneModelStorage());
   const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_CODING_PANEL);  // 表示する対象パネルを指定するキー
   const [ isPlayingFlg, setIsPlayingFlg ]   = useState<boolean>(false);
   const [ isEditableFlg, setIsEditableFlg ] = useState<boolean>(true);
@@ -45,12 +37,11 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
    */
   const memoPlayBackScreen = useMemo( () => 
     <PlaybackScreen
-      geneModelList     = { geneModelList }
-      setGeneModelList  = { setGeneModelList }
+      geneModelStorage  = { geneModelStorarge }
       isPlayingFlg      = { isPlayingFlg }
       setIsPlayingFlg   = { setIsPlayingFlg } 
     />,
-    [geneModelList, isPlayingFlg])
+    [geneModelStorarge, isPlayingFlg])
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -66,37 +57,26 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     // 一時保存された作品情報がある場合、その情報を読み込む
     // ない場合、新規にサンプルモデルを生成する
     if(props.temporaryStorage){
-      setGeneModelList(props.temporaryStorage);
+      setGeneModelStorarge(props.temporaryStorage);
     }else{
       // サンプルモデルを生成
-      const mesh      = GeneGenerator.generateMesh();
-      const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
-      const _GeneModelList = [ ...geneModelList, geneModel ];   // MEMO: pushによる配列の更新はReactが変更を検知できないため新しいリストを作成すること
-      setGeneModelList(_GeneModelList);
+      addGeneModel();
     }
-
+    
+    updateGeneModelStotage();
   }
 
-  const setGeneModelPosition = (geneModel: GeneModel, position: Vector) => {
-    geneModel.mesh.position.set(position.x, position.y, position.z);  // THREE.jsへ変更を反映
-    const _geneModelList = [ ...geneModelList ];                      // UIに変更を反映（THREE.jsへの変更反映とUIへの変更反映がそれぞれ必要）
-    setGeneModelList(_geneModelList);
-    props.setTemporaryStorage(_geneModelList);                        // 作品データを一時保存
+  const updateGeneModelStotage = () => {
+    const _geneModelStorarge = new GeneModelStorage();
+    _geneModelStorarge.storage = geneModelStorarge.storage;
+    setGeneModelStorarge(_geneModelStorarge);
+    props.setTemporaryStorage(_geneModelStorarge);
   }
 
-  const setGeneEffectParameter = (geneEffect: GeneEffectInterface, paramater: GeneEffectParameter) => {
-    geneEffect.parameter = paramater;
-    const _geneModelList = [ ...geneModelList ];    // UIに変更を反映
-    setGeneModelList(_geneModelList);
-    props.setTemporaryStorage(_geneModelList);      // 作品データを一時保存
-  }
 
   const addGeneModel = () => {
-    const mesh      = GeneGenerator.generateMesh();
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
-    const _GeneModelList = [ ...geneModelList, geneModel ];
-    setGeneModelList(_GeneModelList);
-    props.setTemporaryStorage(_GeneModelList);    // 作品データを一時保存
+    geneModelStorarge.addGeneModel();
+    updateGeneModelStotage();
   }
 
   const switchIsEditableFlg = () => {
@@ -115,10 +95,9 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     }else if(index == INDEX_CODING_PANEL){
       // panelToShow = <CodingScreen geneModelList = { geneModelList } />
       panelToShow = <CodingScreenDev
-        geneModelList         = { geneModelList }
-        onClickAddModelButton = { addGeneModel }
-        setPosition           = { setGeneModelPosition }
-        setParameter          = { setGeneEffectParameter }
+        geneModelStorage        = { geneModelStorarge }
+        updateGeneModelStotage  = { updateGeneModelStotage }
+        onClickAddModelButton   = { addGeneModel }
       />
     }
     return panelToShow;
