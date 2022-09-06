@@ -14,7 +14,6 @@ const App : React.FunctionComponent = () => {
       <Grid container spacing = { 1 }>
 
         <Grid item xs = { 12 } >
-
           <Grid container className = 'Navigation'>
             <Grid item xs = { 1 }>
               <Link to = '/home' style = { { textDecoration: 'none' , fontWeight: 'bold' } }>
@@ -27,9 +26,7 @@ const App : React.FunctionComponent = () => {
               </Link>
             </Grid>
           </Grid>
-
-          <Divider />
-
+          <Divider style = { { width: '100%' } }/>
         </Grid>
 
         <Grid item xs = { 12 } >

@@ -81,9 +81,9 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   const decideGuidePanelToShow = (index: string) =>{
     let panelToShow;
     if(index == INDEX_SAMPLE1_PANEL){
-      panelToShow = <h2> SAMPLE1 </h2>
+      panelToShow = <h2> S1 </h2>
     }else if(index == INDEX_SAMPLE2_PANEL){
-      panelToShow = <h2> SAMPLE2 </h2>
+      panelToShow = <h2> S2 </h2>
     }
     return panelToShow;
   }
@@ -107,24 +107,22 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   return(
     <Grid container spacing = { 2 }>
 
-      <Grid item xs = { 9 } style = { { zIndex:50 } }>
+      <Grid item xs = { 11 } style = { { zIndex :50 } }>
         { memoPlayBackScreen }
       </Grid>
 
-      <Grid item xs = { 3 } style = {{ backgroundColor: "white", zIndex: 100 }}>
+      <Grid item xs = { 1 } style = {{ backgroundColor: "white", zIndex: 100 }}>
         <div className = "SwitchGuidePanel">
-          <button onClick = { onClickSample1Button }> SAMPLE1 </button>
-          <button onClick = { onClickSample2Button }> SAMPLE2 </button>
+          <button onClick = { onClickSample1Button }> S1 </button>
+          <button onClick = { onClickSample2Button }> S2 </button>
         </div>
         <div className = "GuidePanel">
           { decideGuidePanelToShow(panelToShowIndex) }
         </div>
-        
       </Grid>
 
-      <Divider />
-
-      <Grid item xs = {12}>
+      <Grid item xs = { 12 }>
+        <Divider style = { { width: '100%' } } />
         <CodingScreenDev
           geneModelStorage        = { geneModelStorarge }
           updateGeneModelStotage  = { updateGeneModelStotage }

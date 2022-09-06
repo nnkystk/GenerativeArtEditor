@@ -58,7 +58,7 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
         <Grid container spacing = { 2 }>
 
           { props.geneModelStorage.storage.map( (geneModel) => (
-            <Grid item xs = { 12 } key = { geneModel.id }>
+            <Grid key = { geneModel.id }  item sm = { 6 } md = { 4 }  lg = { 3 }>
               <Paper variant="outlined">
                 <details>
                   <summary> ID: { geneModel.id }</summary>
