@@ -44,13 +44,12 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-  const getEffectInputForm = (geneModelID: number, geneEffect: GeneEffectInterface) => {
+  const generateEffectInputForm = (geneEffect: GeneEffectInterface) => {
+    /**
+     * Summary: EffectのIDに応じたコンポーネントを返すメソッド
+     */
     if(geneEffect.id == "ROLL"){
-      return <EffectRollForm
-        geneModelStorage  = { props.geneModelStorage }
-        geneModelID       = { geneModelID }
-        geneEffect        = { geneEffect }
-      />
+      return <EffectRollForm geneEffect = { geneEffect } />
     }
   }
 
@@ -70,15 +69,12 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
                   <summary> ID: { geneModel.id }</summary>
                     <div> NAME: { geneModel.name }</div>
 
-                    <PositionInputForm
-                      geneModelStorage  = { props.geneModelStorage }
-                      geneModel         = { geneModel }
-                    />
+                    <PositionInputForm geneModel= { geneModel } />
 
                     { geneModel.effectList.map( (geneEffect: any) => (
                       <li key = { geneModel.id + '_' + geneEffect.id } >
                         <span> Effect: { geneEffect.id } </span>
-                        { getEffectInputForm(geneModel.id, geneEffect) }
+                        { generateEffectInputForm(geneEffect) }
                       </li>
                       ))
                     }

@@ -19,16 +19,6 @@ class GeneModelStorage{
     }
   }
 
-  setPosition(id: number, position: Vector){
-    const targetModel = this.getGeneModelById(id);
-    if(targetModel){
-      // UI表示用のオブジェクトに反映する
-      targetModel.position = position;
-      // Meshに反映する
-      targetModel.mesh.position.set(position.x, position.y, position.z);
-    }
-  }
-
   setEffectParameter(modelID: number, effectUID: number, paramerer: GeneEffectParameter){
     const targetModel = this.getGeneModelById(modelID);
     if(targetModel){

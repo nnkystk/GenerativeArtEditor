@@ -6,8 +6,6 @@ import geneModelStorage from '../../../Utilities/GeneModelStorage';
 
 interface Props{
   geneEffect: GeneEffectRoll | GeneEffectInterface
-  geneModelStorage: geneModelStorage
-  geneModelID: number
 }
 
 export const EffectRollForm: React.FC<Props> = (props: Props) => {
@@ -36,7 +34,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
   }
 
   const onBlur = () => {
-    props.geneModelStorage.setEffectParameter(props.geneModelID, props.geneEffect.uid,  parameter);
+    props.geneEffect.parameter = parameter;
   }
 
 

@@ -8,8 +8,7 @@ type Vector = {
 }
 
 interface Props{
-  geneModelStorage: GeneModelStorage
-  geneModel       : GeneModel
+  geneModel: GeneModel
 }
 
 
@@ -24,18 +23,18 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.x     = newVal
     // handleChange内ではprops.setPosition（つまり親のstateに変更が伴う処理）を行わないこと
-    // 高頻度でcanvasの再レンダーが起きるとTHREEがクラッシュする可能性があるため
+    // 高頻度でcanvasを再レンダーするとTHREEがクラッシュを起こす可能性があるため
     setPosition(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
-    const newVal    = event.target.valueAsNumber > 0? event.target.valueAsNumber: 0;
+    const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.y     = newVal
     setPosition(_position);
   }
 
   const onBlur = () => {
-    props.geneModelStorage.setPosition(props.geneModel.id, position);
+    props.geneModel.setPosition(position);
   }
 
 

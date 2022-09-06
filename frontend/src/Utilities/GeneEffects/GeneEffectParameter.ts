@@ -11,7 +11,6 @@ export class GeneEffectParameter{
   positionSub1: Coordinate = {x: 0, y: 0, z: 0};
   positionSub2: Coordinate = {x: 0, y: 0, z: 0};  
 
-
   constructor(){
   }
 

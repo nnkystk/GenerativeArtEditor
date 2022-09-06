@@ -73,7 +73,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     props.setTemporaryStorage(_geneModelStorarge);
   }
 
-
   const addGeneModel = () => {
     geneModelStorarge.addGeneModel();
     updateGeneModelStotage();
