@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 
 type Props = {
   sampleProp         ?: any;
-  temporaryStorage    : any;
-  setTemporaryStorage : any;
 }
 
 export const HomePage : React.FC <Props> = ({ sampleProp }) => {
