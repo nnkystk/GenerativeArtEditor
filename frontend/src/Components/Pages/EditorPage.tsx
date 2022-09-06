@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Divider } from "@material-ui/core";
 import { PlaybackScreen } from '../Organisms/PlaybackScreen';
 import { CodingScreen } from '../Organisms/CodingScreen';
 import { CodingScreenDev } from '../Organisms/CodingScreenDev';
@@ -11,13 +11,13 @@ type Props = {
 
 export const EditorPage : React.FC<Props> = (props: Props) => {
 
-  const INDEX_SAMPLE_PANEL  = "SAMPLE";
-  const INDEX_CODING_PANEL  = "CODING";
+  const INDEX_SAMPLE1_PANEL  = "SAMPLE1";
+  const INDEX_SAMPLE2_PANEL  = "SAMPLE2";
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
   const [ geneModelStorarge, setGeneModelStorarge ] = useState<GeneModelStorage>(new GeneModelStorage());
-  const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_CODING_PANEL);  // 表示する対象パネルを指定するキー
+  const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_SAMPLE1_PANEL);  // 表示する対象パネルを指定するキー
   const [ isPlayingFlg, setIsPlayingFlg ]           = useState<boolean>(false);
   const [ isEditableFlg, setIsEditableFlg ]         = useState<boolean>(true);
   const [ reqInstPlayFlg, setReqInstPlayFlg ]       = useState<boolean>(false);   // 1フレームレンダーが必要であることを示すフラグ（3Dオブジェクトに生じた変更を反映する場合に使用）
@@ -38,8 +38,8 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     <PlaybackScreen
       geneModelStorage  = { geneModelStorarge }
       isPlayingFlg      = { isPlayingFlg }
-      setIsPlayingFlg   = { setIsPlayingFlg }
       reqInstPlayFlg    = { reqInstPlayFlg }
+      setIsPlayingFlg   = { setIsPlayingFlg }
       setReqInstPlayFlg = { setReqInstPlayFlg }
     />,
     [geneModelStorarge, isPlayingFlg, reqInstPlayFlg])
@@ -80,32 +80,28 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
   const decideGuidePanelToShow = (index: string) =>{
     let panelToShow;
-    if(index == INDEX_SAMPLE_PANEL){
-      panelToShow = <h2> SAMPLE </h2>
-    }else if(index == INDEX_CODING_PANEL){
-      // panelToShow = <CodingScreen geneModelList = { geneModelList } />
-      panelToShow = <CodingScreenDev
-        geneModelStorage        = { geneModelStorarge }
-        updateGeneModelStotage  = { updateGeneModelStotage }
-        setReqInstPlayFlg       = { setReqInstPlayFlg }
-        onClickAddModelButton   = { addGeneModel }
-      />
+    if(index == INDEX_SAMPLE1_PANEL){
+      panelToShow = <h2> SAMPLE1 </h2>
+    }else if(index == INDEX_SAMPLE2_PANEL){
+      panelToShow = <h2> SAMPLE2 </h2>
     }
     return panelToShow;
   }
 
+  /**
   const provideGuidePanelStyle = (isEditableFlg: boolean) => {
     const style = isEditableFlg?
       { backgroundColor: "white", zIndex: 100 }
       : { backgroundColor: "grey", zIndex: 100 }
     return style
   }
+  */
 
-  const onClickCodingButton = () => {
-    setPanelToShowIndex(INDEX_CODING_PANEL);
+  const onClickSample1Button = () => {
+    setPanelToShowIndex(INDEX_SAMPLE1_PANEL);
   }
-  const onClickSampleButton = () => {
-    setPanelToShowIndex(INDEX_SAMPLE_PANEL);
+  const onClickSample2Button = () => {
+    setPanelToShowIndex(INDEX_SAMPLE2_PANEL);
   }
 
   return(
@@ -115,17 +111,27 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
         { memoPlayBackScreen }
       </Grid>
 
-      <Grid item xs = { 3 } style = { provideGuidePanelStyle(isEditableFlg) }>
+      <Grid item xs = { 3 } style = {{ backgroundColor: "white", zIndex: 100 }}>
         <div className = "SwitchGuidePanel">
-          <button onClick = { onClickCodingButton }> CODE </button>
-          <button onClick = { onClickSampleButton }> SAMPLE </button>
+          <button onClick = { onClickSample1Button }> SAMPLE1 </button>
+          <button onClick = { onClickSample2Button }> SAMPLE2 </button>
         </div>
         <div className = "GuidePanel">
           { decideGuidePanelToShow(panelToShowIndex) }
         </div>
+        
       </Grid>
 
-      <button onClick = {updateGeneModelStotage}>aaa</button>
+      <Divider />
+
+      <Grid item xs = {12}>
+        <CodingScreenDev
+          geneModelStorage        = { geneModelStorarge }
+          updateGeneModelStotage  = { updateGeneModelStotage }
+          setReqInstPlayFlg       = { setReqInstPlayFlg }
+          onClickAddModelButton   = { addGeneModel }
+        />
+      </Grid>
 
     </Grid>
   );

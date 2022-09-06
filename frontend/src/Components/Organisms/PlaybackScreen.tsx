@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Grid } from "@material-ui/core";
+import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
+import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
 import GeneModel from '../../Utilities/GeneModel'
 import GeneModelStorage from '../../Utilities/GeneModelStorage' 
@@ -17,9 +19,9 @@ interface Props {
   sampleProp         ?: any;
   geneModelStorage    : GeneModelStorage;
   isPlayingFlg        : boolean;
-  setIsPlayingFlg(bool: boolean): void;
   reqInstPlayFlg      : boolean;
-  setReqInstPlayFlg(bool: boolean):void;
+  setIsPlayingFlg(bool: boolean)    : void;
+  setReqInstPlayFlg(bool: boolean)  :void;
 }
 
 
@@ -136,11 +138,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
 
 
   return (
-    <Grid container
-      className = "PlayBackScreen"
-      alignItems ="center" justifyContent="center" 
-      style = { { backgroundColor : "#e0e0e0" } }
-    >
+    <div>
 
       {/** リクエストがあった場合、レンダーを単発実行する */}
       {(() => {
@@ -150,13 +148,25 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
         }
       })()}
 
-      <canvas
-        id = 'canvas'
-        ref = { canvasRef }
-        onClick = { onClickCanvas }
-      />
+      <Grid container
+        className = "PlayBackScreen"
+        style = { { backgroundColor : "#e0e0e0" } }
+      >
 
-    </Grid>
+        <Grid container
+          alignItems ="center" justifyContent="center"
+        >
+          <canvas id = 'canvas' ref = { canvasRef } onClick = { onClickCanvas }/>
+        </Grid>
+
+        <Grid container>
+          { props.isPlayingFlg ?
+            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { stopThree }/> :
+            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { playBackThree } /> }
+        </Grid>
+
+      </Grid>
+    </div>
   );
 
 };
