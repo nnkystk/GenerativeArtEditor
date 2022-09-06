@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import GeneModel from '../../Utilities/GeneModel'
 import GeneModelStorage from '../../Utilities/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
-import { width } from "@mui/system";
 
 /**
  * Summary	: ジェネラティブアート作品を再生するComponent
@@ -18,7 +17,9 @@ interface Props {
   sampleProp         ?: any;
   geneModelStorage    : GeneModelStorage;
   isPlayingFlg        : boolean;
-  setIsPlayingFlg(bool: boolean): void 
+  setIsPlayingFlg(bool: boolean): void;
+  reqInstPlayFlg      : boolean;
+  setReqInstPlayFlg(bool: boolean):void;
 }
 
 
@@ -41,6 +42,7 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { initializeThree() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるためuseEffectにフックする
   useEffect( () => { updateSceneThree()  }, [ props.geneModelStorage.storage ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
+  useEffect( () => { props.setReqInstPlayFlg(false) }, [ props.reqInstPlayFlg ] );  // レンダーリクエストがあった場合、レンダー実行後にリクエストを解除する
   useEffect( () => { return () => { stopThree() } }, [ ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
 
   // ___ event handler ___ ___ ___ ___ ___
@@ -139,6 +141,15 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
       alignItems ="center" justifyContent="center" 
       style = { { backgroundColor : "#e0e0e0" } }
     >
+
+      {/** リクエストがあった場合、レンダーを単発実行する */}
+      {(() => {
+        if (props.reqInstPlayFlg) {
+          updateSceneThree();
+          threeRenderer.render(threeScene, threeCamera);
+        }
+      })()}
+
       <canvas
         id = 'canvas'
         ref = { canvasRef }

@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
-import GeneModel from '../../Utilities/GeneModel'
 import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
 import GeneModelStorage from "src/Utilities/GeneModelStorage";
-import { positions } from "@mui/system";
 
 
 /**
@@ -21,11 +19,8 @@ interface Props{
   geneModelStorage        : GeneModelStorage
   updateGeneModelStotage  : any
   onClickAddModelButton   : any
+  setReqInstPlayFlg(bool: boolean): void;
 }
-type Vector = {
-  x: number, y: number, z: number
-}
-
 
 export const CodingScreenDev: React.FC<Props> = (props: Props) => {
 
@@ -58,7 +53,7 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     <div>
 
       <h2> CODING </h2>
-      <button onClick = { props.onClickAddModelButton }> ADD MODEL </button>
+      <button onClick = { () => { props.onClickAddModelButton(), props.setReqInstPlayFlg(true) } }> ADD MODEL </button>
 
         <Grid container spacing = { 2 }>
 
@@ -69,7 +64,10 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
                   <summary> ID: { geneModel.id }</summary>
                     <div> NAME: { geneModel.name }</div>
 
-                    <PositionInputForm geneModel= { geneModel } />
+                    <PositionInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
 
                     { geneModel.effectList.map( (geneEffect: any) => (
                       <li key = { geneModel.id + '_' + geneEffect.id } >

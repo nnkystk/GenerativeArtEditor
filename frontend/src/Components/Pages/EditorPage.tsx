@@ -7,8 +7,6 @@ import GeneModelStorage from "../../Utilities/GeneModelStorage";
 
 type Props = {
   sampleProp         ?: any;
-  temporaryStorage    : any;
-  setTemporaryStorage : any;
 }
 
 export const EditorPage : React.FC<Props> = (props: Props) => {
@@ -19,9 +17,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ]     = useState<string>('This is SampleState');
   const [ geneModelStorarge, setGeneModelStorarge ] = useState<GeneModelStorage>(new GeneModelStorage());
-  const [ panelToShowIndex, setPanelToShowIndex ] = useState<string>(INDEX_CODING_PANEL);  // 表示する対象パネルを指定するキー
-  const [ isPlayingFlg, setIsPlayingFlg ]   = useState<boolean>(false);
-  const [ isEditableFlg, setIsEditableFlg ] = useState<boolean>(true);
+  const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_CODING_PANEL);  // 表示する対象パネルを指定するキー
+  const [ isPlayingFlg, setIsPlayingFlg ]           = useState<boolean>(false);
+  const [ isEditableFlg, setIsEditableFlg ]         = useState<boolean>(true);
+  const [ reqInstPlayFlg, setReqInstPlayFlg ]       = useState<boolean>(false);   // 1フレームレンダーが必要であることを示すフラグ（3Dオブジェクトに生じた変更を反映する場合に使用）
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
@@ -39,9 +38,11 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     <PlaybackScreen
       geneModelStorage  = { geneModelStorarge }
       isPlayingFlg      = { isPlayingFlg }
-      setIsPlayingFlg   = { setIsPlayingFlg } 
+      setIsPlayingFlg   = { setIsPlayingFlg }
+      reqInstPlayFlg    = { reqInstPlayFlg }
+      setReqInstPlayFlg = { setReqInstPlayFlg }
     />,
-    [geneModelStorarge, isPlayingFlg])
+    [geneModelStorarge, isPlayingFlg, reqInstPlayFlg])
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -53,16 +54,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   }
 
   const initializeThree = () => {
-
-    // 一時保存された作品情報がある場合、その情報を読み込む
-    // ない場合、新規にサンプルモデルを生成する
-    if(props.temporaryStorage){
-      setGeneModelStorarge(props.temporaryStorage);
-    }else{
-      // サンプルモデルを生成
-      addGeneModel();
-    }
-    
+    addGeneModel();
     updateGeneModelStotage();
   }
 
@@ -70,7 +62,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     const _geneModelStorarge = new GeneModelStorage();
     _geneModelStorarge.storage = geneModelStorarge.storage;
     setGeneModelStorarge(_geneModelStorarge);
-    props.setTemporaryStorage(_geneModelStorarge);
   }
 
   const addGeneModel = () => {
@@ -96,6 +87,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
       panelToShow = <CodingScreenDev
         geneModelStorage        = { geneModelStorarge }
         updateGeneModelStotage  = { updateGeneModelStotage }
+        setReqInstPlayFlg       = { setReqInstPlayFlg }
         onClickAddModelButton   = { addGeneModel }
       />
     }
@@ -132,6 +124,9 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
           { decideGuidePanelToShow(panelToShowIndex) }
         </div>
       </Grid>
+
+      <button onClick = {updateGeneModelStotage}>aaa</button>
+
     </Grid>
   );
 };

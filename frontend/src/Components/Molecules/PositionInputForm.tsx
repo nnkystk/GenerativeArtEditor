@@ -9,6 +9,7 @@ type Vector = {
 
 interface Props{
   geneModel: GeneModel
+  setReqInstPlayFlg(bool: boolean): void;
 }
 
 
@@ -35,6 +36,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
 
   const onBlur = () => {
     props.geneModel.setPosition(position);
+    props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
 
 
