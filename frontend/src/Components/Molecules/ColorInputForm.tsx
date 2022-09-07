@@ -53,6 +53,8 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
       <input
         type      = "number"
         step      = "1"
+        min       = "0"
+        max       = "255"
         value     = { parseInt(color.r, 16) }
         onChange  = { handleChangeR }
         onBlur    = { onBlur }
@@ -61,6 +63,8 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
       <input
         type      = "number"
         step      = "1"
+        min       = "0"
+        max       = "255"
         value     = { parseInt(color.g, 16)  }
         onChange  = { handleChangeG }
         onBlur    = { onBlur }
@@ -69,6 +73,8 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
       <input
         type      = "number"
         step      = "1"
+        min       = "0"
+        max       = "255"
         value     = { parseInt(color.b, 16)  }
         onChange  = { handleChangeB }
         onBlur    = { onBlur }
