@@ -7,148 +7,38 @@ import GeneModel from '../../Utilities/GeneModel'
 import GeneModelStorage from '../../Utilities/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 
-/**
- * Summary	: ジェネラティブアート作品を再生するComponent
- * Logic		: - 作品ファイルの読み込みおよび復号化を行う
- *            - 復号化した情報をレンダリング用データへ加工する
- *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
- * View			: - XXXする
- */
-
 interface Props {
-  sampleProp         ?: any;
   geneModelStorage    : GeneModelStorage;
   isPlayingFlg        : boolean;
   reqInstPlayFlg      : boolean;
   setIsPlayingFlg(bool: boolean)    : void;
   setReqInstPlayFlg(bool: boolean)  :void;
 }
+interface State{
+  screenSize: any;
+  threeRenderer: any;
+  threeScene: any;
+  threeCamera: any;
+  reqAnmIdRef: any
+};
+export class PlaybackScreen extends React.Component<Props, State>{
 
+  FOV = 50;
 
-export const PlaybackScreen: React.FC<Props> = (props: Props) => {
-
-  const FOV: number = 50;
-
-  type ScreenSize = { width: number, height: number }
-
-  // ___ state ___ ___ ___ ___ ___
-  const [ screenSize,     setScreenSize ]     = useState<ScreenSize>({ width: 960, height: 540 });
-  const [ threeRenderer,  setThreeRenderer]   = useState<THREE.WebGLRenderer>(new THREE.WebGLRenderer());
-  const [ threeScene,     setThreeScene ]     = useState<THREE.Scene>(new THREE.Scene());
-  const [ threeCamera,    setThreeCamera ]    = useState<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
-
-  // ___ use ref ___ ___ ___ ___ ___
-  const canvasRef:    any | null = useRef(null);
-  const reqAnmIdRef:  any | null = useRef(null);    // cancelAnimationFrame実行用にIDを保持する レンダリングを起こさないためにRefを使用
-
-  // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { initializeThree() }, [ canvasRef ] );    // DOMの描画後（canvas要素の生成後）にThree.jsのレンダリングを行う必要があるためuseEffectにフックする
-  useEffect( () => { updateSceneThree()  }, [ props.geneModelStorage.storage ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
-  useEffect( () => { props.setReqInstPlayFlg(false) }, [ props.reqInstPlayFlg ] );  // レンダーリクエストがあった場合、レンダー実行後にリクエストを解除する
-  useEffect( () => { return () => { stopThree() } }, [ ]);    // 本コンポーネントがアンマウントされた際にアニメーション登録を解除する
-
-  // ___ event handler ___ ___ ___ ___ ___
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-  };
-
-  // ___ method ___ ___ ___ ___ ___
-
-  const test = () => {
-    props.geneModelStorage.storage.forEach( (geneModel: any) => {
-    })
-  }
-
-
-  const initializeThree = () => {
-   /**
-    * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
-    */
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas: document.querySelector("#canvas") as HTMLCanvasElement
-    });
-    const scene   = new THREE.Scene();
-    const camera  = new THREE.PerspectiveCamera(FOV, screenSize.width / screenSize.height);
-    camera.position.set(0, 0, +1000);
-    // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-    // scene.add(light);
-
-    // レンダラーをセットアップする
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(screenSize.width, screenSize.height);
-
-    // シーンをセットアップする
-    updateSceneThree();
-
-    setThreeRenderer(renderer);
-    setThreeScene(scene);
-    setThreeCamera(camera);
-    
+  state: State = {
+    // optional second annotation for better type inference
+    screenSize    : { width: 960, height: 540 },
+    threeRenderer : new THREE.WebGLRenderer(),
+    threeScene    : new THREE.Scene(),
+    threeCamera   : new THREE.PerspectiveCamera(),
+    reqAnmIdRef   : ""
   };
 
 
-  const updateSceneThree = () => {
-    /**
-     * Summary: シーンを更新する
-     * Imp: すべてのMeshをシーンに追加する
-     */
-    props.geneModelStorage.storage.forEach( (geneModel: any) => {
-      threeScene.add(geneModel.mesh);
-    })
-  }
+  render() {
 
-
-  const playBackThree = () => {
-    /**
-    * ジェネラティブアート作品を再生する
-    * @param arg
-    * @return 
-    */
-      if(props.isPlayingFlg == false){
-
-        const tick = () => {
-          
-          // Effectを発火
-          props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
-              GeneEffectPlayer.play(geneModel);
-          })
-
-          threeRenderer.render(threeScene, threeCamera);
-          reqAnmIdRef.current = requestAnimationFrame(tick);
-        }
-
-        tick();
-        props.setIsPlayingFlg(true);
-      }
-    }
-
-
-  const stopThree = () => {
-    cancelAnimationFrame(reqAnmIdRef.current);
-    props.setIsPlayingFlg(false);
-  }
-
-  
-  const onClickCanvas = () => {
-    if(props.isPlayingFlg == true){
-      stopThree();
-    }else{
-      updateSceneThree();   // シーンにメッシュが追加されていることを保証
-      playBackThree();
-    }
-  }
-
-
-  return (
-    <div>
-
-      {/** リクエストがあった場合、レンダーを単発実行する */}
-      {(() => {
-        if (props.reqInstPlayFlg) {
-          updateSceneThree();
-          threeRenderer.render(threeScene, threeCamera);
-        }
-      })()}
+    return (
+      <div>
 
       <Grid container
         className = "PlayBackScreen"
@@ -158,26 +48,133 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
         <Grid container
           alignItems ="center" justifyContent="center"
         >
-          <canvas id = 'canvas' ref = { canvasRef } onClick = { onClickCanvas }/>
+          <canvas id = 'canvas' onClick = { this.onClickCanvas }/>
         </Grid>
 
         <Grid container>
-          { props.isPlayingFlg ?
-            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { stopThree }/> :
-            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { playBackThree } /> }
+          { this.props.isPlayingFlg ?
+            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { this.stopThree }/> :
+            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { this.playBackThree } /> }
         </Grid>
 
+        <h2> { this.props.reqInstPlayFlg.toString() }</h2>
+
       </Grid>
-    </div>
-  );
+      </div>
+    );
+  }
 
-};
+	// ___ ライフサイクル ___ ___ ___ ___ ___
 
+  // コンポーネントがマウント(配置)された直前に呼び出されるメソッド
+  // このメソッド内では描画されたDOMにアクセスすることができます
+	componentDidMount(){
+    this.initializeThree();
+	}
+
+  // コンポーネントが再描画されたタイミングで呼び出されるメソッド
+  componentDidUpdate(){
+    if (this.props.reqInstPlayFlg) {
+      this.updateSceneThree();
+      this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
+      this.props.setReqInstPlayFlg(false);
+    }
+
+  }
+
+  
+  // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
+  componentWillUnmount(){
+    this.stopThree();
+    console.log("c")
+  }
+
+
+	// ___ イベントハンドラ ___ ___ ___ ___ ___
+
+  test(){
+		console.log('test');
+	} 
+
+  // ___ メソッド ___ ___ ___ ___ ___
+  initializeThree = () => {
+    /**
+     * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
+     */
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector("#canvas") as HTMLCanvasElement
+      });
+      const scene   = new THREE.Scene();
+      const camera  = new THREE.PerspectiveCamera(this.FOV, this.state.screenSize.width / this.state.screenSize.height);
+      camera.position.set(0, 0, +1000);
+      // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+      // scene.add(light);
+
+      // レンダラーをセットアップする
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(this.state.screenSize.width, this.state.screenSize.height);
+
+      // シーンをセットアップする
+      this.updateSceneThree();
+
+      this.setState({threeRenderer: renderer});
+      this.setState({threeScene: scene})
+      this.setState({threeCamera: camera})
+     
+   };
+ 
+ 
+   updateSceneThree = () => {
+      /**
+      * Summary: シーンを更新する
+      * Imp: すべてのMeshをシーンに追加する
+      */
+      this.props.geneModelStorage.storage.forEach( (geneModel: any) => {
+        this.state.threeScene.add(geneModel.mesh);
+      })
+    }
+
+ 
+  playBackThree = () => {
+     /**
+     * ジェネラティブアート作品を再生する
+     * @param arg
+     * @return 
+     */
+       if(this.props.isPlayingFlg == false){
+ 
+         const tick = () => {
+           
+           // Effectを発火
+           this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
+               GeneEffectPlayer.play(geneModel);
+           })
+ 
+           this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
+           this.state.reqAnmIdRef = requestAnimationFrame(tick);
+         }
+ 
+         tick();
+         this.props.setIsPlayingFlg(true);
+       }
+     }
+ 
+ 
+  stopThree = () => {
+     cancelAnimationFrame(this.state.reqAnmIdRef);
+     this.props.setIsPlayingFlg(false);
+   }
+ 
+   
+  onClickCanvas = () => {
+     if(this.props.isPlayingFlg == true){
+       this.stopThree();
+     }else{
+       this.updateSceneThree();   // シーンにメッシュが追加されていることを保証
+       this.playBackThree();
+     }
+   }
+}
 
 export default PlaybackScreen
-
-
-
-interface SamplaProps {
-  setScreenSize    : any
-}
