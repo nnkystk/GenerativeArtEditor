@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 type Props = {
-  sampleProp ?: any;
+  sampleProp         ?: any;
 }
 
-export const ContactPage : React.FC <Props> = ({ sampleProp }) => {
+export const HomePage : React.FC <Props> = ({ sampleProp }) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
@@ -23,9 +23,9 @@ export const ContactPage : React.FC <Props> = ({ sampleProp }) => {
 
   return (
     <div>
-      <h2>{ ContactPage.name }</h2>
+      <h2>{ HomePage.name }</h2>
     </div>
   );
 };
 
-export default ContactPage
+export default HomePage

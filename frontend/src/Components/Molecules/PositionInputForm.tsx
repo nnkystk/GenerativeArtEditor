@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import GeneModel from '../Utilities/GeneModel'
-
+import GeneModelStorage from "src/Utilities/GeneModelStorage";
+import GeneModel from '../../Utilities/GeneModel'
 
 // Type Declaration of Props
 type Vector = {
@@ -8,8 +8,8 @@ type Vector = {
 }
 
 interface Props{
-  geneModel   : GeneModel
-  setPosition(geneModel: GeneModel, vector: Vector) : void
+  geneModel: GeneModel
+  setReqInstPlayFlg(bool: boolean): void;
 }
 
 
@@ -23,24 +23,28 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.x     = newVal
-    setPosition(_position);
+    // 変更をUIに反映
+    updateUI(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
-    const newVal    = event.target.valueAsNumber > 0? event.target.valueAsNumber: 0;
+    const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.y     = newVal
-    setPosition(_position);
+    // 変更をUIに反映
+    updateUI(_position);
   }
-
-  const onClickSetButton = () => {
-    props.setPosition(props.geneModel, position);
+  const updateUI = (position: Vector) => {
+    // UIに反映
+    setPosition(position);
+    // 3Dレンダー画面に反映
+    props.geneModel.setPosition(position);
+    props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
-
 
   return(
     <div>
 
-      <span> POSITION: </span>
+      <div> POSITION: </div>
 
       <input
         type      = "number"
@@ -55,8 +59,6 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         value     = { position.y }
         onChange  = { handleChangeY }
       />
-
-      <button onClick = { onClickSetButton }> SET POSITION </button>
 
     </div>
   )

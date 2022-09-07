@@ -57,6 +57,6 @@ export const FCTemplate: React.FC<Props> = (props: Props) => {
       />
     </div>
   );
-};
+}
 
 export default FCTemplate

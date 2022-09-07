@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Grid, Paper } from "@material-ui/core";
+import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
-import GeneModel from '../Utilities/GeneModel'
+import { ScaleInputForm } from '../Molecules/ScaleInputForm'
+import { ColorInputForm } from '../Molecules/ColorInputForm'
+import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
+import GeneModelStorage from "src/Utilities/GeneModelStorage";
 
 
 /**
@@ -13,14 +18,11 @@ import GeneModel from '../Utilities/GeneModel'
 // Type Declaration of Props
 interface Props{
   sampleProp             ?: any
-  geneModelList           : Array<any>
+  geneModelStorage        : GeneModelStorage
+  updateGeneModelStotage  : any
   onClickAddModelButton   : any
-  setPosition(geneModel: GeneModel, vector: Vector) : void
+  setReqInstPlayFlg(bool: boolean): void;
 }
-type Vector = {
-  x: number, y: number, z: number
-}
-
 
 export const CodingScreenDev: React.FC<Props> = (props: Props) => {
 
@@ -39,34 +41,60 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
+  const generateEffectInputForm = (geneEffect: GeneEffectInterface) => {
+    /**
+     * Summary: EffectのIDに応じたコンポーネントを返すメソッド
+     */
+    if(geneEffect.id == "ROLL"){
+      return <EffectRollForm geneEffect = { geneEffect } />
+    }
+  }
+
 
   return(
     <div>
 
-        <h2> CODING </h2>
-        <button onClick = { props.onClickAddModelButton }> ADD MODEL </button>
+      <h2> CODING </h2>
+      <button onClick = { () => { props.onClickAddModelButton(), props.setReqInstPlayFlg(true) } }> ADD MODEL </button>
 
-        { props.geneModelList.map( (geneModel) => (
+        <Grid container spacing = { 2 }>
 
-          <details key = { geneModel.id }>
-            <summary> ID: { geneModel.id }</summary>
-              <div> NAME: { geneModel.name }</div>
+          { props.geneModelStorage.storage.map( (geneModel) => (
+            <Grid key = { geneModel.id }  item sm = { 6 } md = { 4 }  lg = { 3 }>
+              <Paper variant="outlined">
+                <details>
+                  <summary> { geneModel.name }</summary>
+                    <div> ID: { geneModel.id }</div>
 
-              <PositionInputForm
-                geneModel   = { geneModel }
-                setPosition = { props.setPosition }
-              />
+                    <PositionInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
 
-              { geneModel.effectList.map( (effect: any) => (
-                <li key = { geneModel.id + '_' + effect.id } > Effect: { effect.id } </li> ))
-              }
+                    <ScaleInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
 
+                    <ColorInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
 
-          </details>
-          
-          ))
-        }
+                    { geneModel.effectList.map( (geneEffect: any) => (
+                      <li key = { geneModel.id + '_' + geneEffect.id } >
+                        <span> Effect: { geneEffect.id } </span>
+                        { generateEffectInputForm(geneEffect) }
+                      </li>
+                      ))
+                    }
 
+                </details>
+              </Paper>
+            </Grid>
+
+          ))}
+        </Grid>
     </div>
   );
 };
