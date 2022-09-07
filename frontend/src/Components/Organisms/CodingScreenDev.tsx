@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
+import { ScaleInputForm } from '../Molecules/ScaleInputForm'
 import { ColorInputForm } from '../Molecules/ColorInputForm'
 import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
 import GeneModelStorage from "src/Utilities/GeneModelStorage";
@@ -62,10 +63,15 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
             <Grid key = { geneModel.id }  item sm = { 6 } md = { 4 }  lg = { 3 }>
               <Paper variant="outlined">
                 <details>
-                  <summary> ID: { geneModel.id }</summary>
-                    <div> NAME: { geneModel.name }</div>
+                  <summary> { geneModel.name }</summary>
+                    <div> ID: { geneModel.id }</div>
 
                     <PositionInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
+
+                    <ScaleInputForm
                       geneModel = { geneModel }
                       setReqInstPlayFlg = { props.setReqInstPlayFlg }
                     />

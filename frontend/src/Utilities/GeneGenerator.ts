@@ -11,7 +11,7 @@ export class GeneGenerator{
 
   static generateMesh (){
     const geometry  = new THREE.BoxGeometry(100, 100, 100);
-    const material  = new THREE.MeshMatcapMaterial();
+    const material  = new THREE.MeshMatcapMaterial({ color: 0xffffff });
     const box       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
     return box
   }
