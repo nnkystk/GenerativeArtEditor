@@ -19,6 +19,7 @@ interface State{
   threeRenderer: any;
   threeScene: any;
   threeCamera: any;
+  recorder  : any;
   reqAnmIdRef: any
 };
 export class PlaybackScreen extends React.Component<Props, State>{
@@ -32,17 +33,26 @@ export class PlaybackScreen extends React.Component<Props, State>{
  *            FuncComponentの場合、レンダーのたびにCanvasコンテキストが生成され、重複によるクラッシュを起こしてしまう。
  */
 
-  FOV = 50;
+ FOV = 50;
 
-  state: State = {
-    // optional second annotation for better type inference
-    screenSize    : { width: 960, height: 540 },
-    threeRenderer : new THREE.WebGLRenderer(),
-    threeScene    : new THREE.Scene(),
-    threeCamera   : new THREE.PerspectiveCamera(),
-    reqAnmIdRef   : ""
-  };
+  constructor(props: Props){
+    super(props)
 
+    this.state = {
+      // optional second annotation for better type inference
+      screenSize    : { width: 960, height: 540 },
+      threeRenderer : new THREE.WebGLRenderer(),
+      threeScene    : new THREE.Scene(),
+      threeCamera   : new THREE.PerspectiveCamera(),
+      recorder      : undefined,
+      reqAnmIdRef   : ""
+    };
+
+    this.test = this.test.bind(this)
+    this.start = this.start.bind(this)
+    this.stop = this.stop.bind(this)
+
+  }
 
   render() {
 
@@ -66,7 +76,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
             <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { this.playBackThree } /> }
         </Grid>
 
-        <h2> { this.props.reqInstPlayFlg.toString() }</h2>
+        <button onClick = {this.start}>start</button>
+        <button onClick = {this.stop}>stop</button>
+        <a id="downloadlink">download</a>
 
       </Grid>
       </div>
@@ -101,9 +113,44 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
 	// ___ イベントハンドラ ___ ___ ___ ___ ___
 
+  start(){
+
+    {/* @ts-ignore */}
+    const canvas: HTMLCanvasElement = document.getElementById('canvas');
+    //canvasからストリームを取得
+    if(canvas){
+      {/* @ts-ignore */}
+      const stream = canvas.captureStream();
+      //ストリームからMediaRecorderを生成
+      const recorder = new MediaRecorder(stream, {mimeType:'video/webm;codecs=vp9'});
+      //ダウンロード用のリンクを準備
+      var anchor = document.getElementById('downloadlink');
+
+      //録画終了時に動画ファイルのダウンロードリンクを生成する処理
+      recorder.ondataavailable = function(e) {
+        var videoBlob = new Blob([e.data], { type: e.data.type });
+        const blobUrl = window.URL.createObjectURL(videoBlob);
+        {/* @ts-ignore */}
+        anchor.download = 'GenerativeArt.webm';
+        {/* @ts-ignore */}
+        anchor.href = blobUrl;
+        {/* @ts-ignore */}
+        anchor.click()
+      }
+
+      recorder.start();
+      this.setState({recorder: recorder})
+    }
+  }
+
+  stop(){
+    this.state.recorder.stop();
+  }
+
   test(){
-		console.log('test');
-	} 
+
+
+  }
 
   // ___ メソッド ___ ___ ___ ___ ___
   initializeThree = () => {
@@ -161,7 +208,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
            })
  
            this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
-           this.state.reqAnmIdRef = requestAnimationFrame(tick);
+           this.setState({reqAnmIdRef: requestAnimationFrame(tick)});
          }
  
          tick();
