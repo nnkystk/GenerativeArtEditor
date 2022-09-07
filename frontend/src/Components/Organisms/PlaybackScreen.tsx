@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import GeneModel from '../../Utilities/GeneModel'
 import GeneModelStorage from '../../Utilities/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
+import Recorder from './Recorder'
 
 interface Props {
   geneModelStorage    : GeneModelStorage;
@@ -19,7 +20,6 @@ interface State{
   threeRenderer: any;
   threeScene: any;
   threeCamera: any;
-  recorder  : any;
   reqAnmIdRef: any
 };
 export class PlaybackScreen extends React.Component<Props, State>{
@@ -33,55 +33,46 @@ export class PlaybackScreen extends React.Component<Props, State>{
  *            FuncComponentの場合、レンダーのたびにCanvasコンテキストが生成され、重複によるクラッシュを起こしてしまう。
  */
 
- FOV = 50;
+  FOV: number = 50;
+  canvasRef: any;
 
   constructor(props: Props){
-    super(props)
 
+    super(props)
     this.state = {
       // optional second annotation for better type inference
       screenSize    : { width: 960, height: 540 },
       threeRenderer : new THREE.WebGLRenderer(),
       threeScene    : new THREE.Scene(),
       threeCamera   : new THREE.PerspectiveCamera(),
-      recorder      : undefined,
       reqAnmIdRef   : ""
     };
 
     this.test = this.test.bind(this)
-    this.start = this.start.bind(this)
-    this.stop = this.stop.bind(this)
+    this.canvasRef = React.createRef();
 
   }
 
   render() {
 
     return (
-      <div>
+      <Grid container className = "PlayBackScreen" style = { { backgroundColor : "#e0e0e0" } } >
 
-      <Grid container
-        className = "PlayBackScreen"
-        style = { { backgroundColor : "#e0e0e0" } }
-      >
-
-        <Grid container
-          alignItems ="center" justifyContent="center"
-        >
-          <canvas id = 'canvas' onClick = { this.onClickCanvas }/>
+        <Grid container alignItems ="center" justifyContent="center" >
+          <canvas id = 'canvas' ref = { this.canvasRef } onClick = { this.onClickCanvas }/>
         </Grid>
 
         <Grid container>
           { this.props.isPlayingFlg ?
-            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { this.stopThree }/> :
-            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { this.playBackThree } /> }
+            <PauseCircleOutlineOutlined     sx = {{ fontSize: 50 }} onClick = { this.playBackThree } />:
+            <PlayCircleFilledWhiteOutlined  sx = {{ fontSize: 50 }} onClick = { this.stopThree } />
+          }
         </Grid>
 
-        <button onClick = {this.start}>start</button>
-        <button onClick = {this.stop}>stop</button>
-        <a id="downloadlink">download</a>
+        {/* @ts-ignore */}
+        <Recorder canvas = { this.canvasRef.current }/>
 
       </Grid>
-      </div>
     );
   }
 
@@ -113,43 +104,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
 	// ___ イベントハンドラ ___ ___ ___ ___ ___
 
-  start(){
-
-    {/* @ts-ignore */}
-    const canvas: HTMLCanvasElement = document.getElementById('canvas');
-    //canvasからストリームを取得
-    if(canvas){
-      {/* @ts-ignore */}
-      const stream = canvas.captureStream();
-      //ストリームからMediaRecorderを生成
-      const recorder = new MediaRecorder(stream, {mimeType:'video/webm;codecs=vp9'});
-      //ダウンロード用のリンクを準備
-      var anchor = document.getElementById('downloadlink');
-
-      //録画終了時に動画ファイルのダウンロードリンクを生成する処理
-      recorder.ondataavailable = function(e) {
-        var videoBlob = new Blob([e.data], { type: e.data.type });
-        const blobUrl = window.URL.createObjectURL(videoBlob);
-        {/* @ts-ignore */}
-        anchor.download = 'GenerativeArt.webm';
-        {/* @ts-ignore */}
-        anchor.href = blobUrl;
-        {/* @ts-ignore */}
-        anchor.click()
-      }
-
-      recorder.start();
-      this.setState({recorder: recorder})
-    }
-  }
-
-  stop(){
-    this.state.recorder.stop();
-  }
-
   test(){
-
-
   }
 
   // ___ メソッド ___ ___ ___ ___ ___
