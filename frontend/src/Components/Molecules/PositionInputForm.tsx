@@ -19,12 +19,12 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
   const [ position, setPosition ] = useState<Vector>(props.geneModel.position);
 
   // ___ event handler ___ ___ ___ ___ ___
+  // handleChange内ではprops.setPosition（つまり親のstateに変更が伴う処理）を行わないこと
+  // 高頻度でcanvasを再レンダーするとTHREEがクラッシュを起こす可能性があるため
   const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.x     = newVal
-    // handleChange内ではprops.setPosition（つまり親のstateに変更が伴う処理）を行わないこと
-    // 高頻度でcanvasを再レンダーするとTHREEがクラッシュを起こす可能性があるため
     setPosition(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {

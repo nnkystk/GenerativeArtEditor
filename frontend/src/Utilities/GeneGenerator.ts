@@ -11,14 +11,14 @@ export class GeneGenerator{
 
   static generateMesh (){
     const geometry  = new THREE.BoxGeometry(100, 100, 100);
-    const material  = new THREE.MeshNormalMaterial();
+    const material  = new THREE.MeshMatcapMaterial();
     const box       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
     return box
   }
 
   static generateGeneEffect(){
     const effectParams = new GeneEffectParameter();
-    effectParams.vector = { x: 0, y: 0.01, z: 0 };
+    effectParams.vector = { x: 0.01, y: 0.01, z: 0 };
     const effect = new GeneEffectRoll(1, effectParams);   // !!! 仮置きでROLLEffectを生成 !!!
     return effect
   }

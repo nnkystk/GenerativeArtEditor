@@ -70,6 +70,8 @@ export const PlaybackScreen: React.FC<Props> = (props: Props) => {
     const scene   = new THREE.Scene();
     const camera  = new THREE.PerspectiveCamera(FOV, screenSize.width / screenSize.height);
     camera.position.set(0, 0, +1000);
+    // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+    // scene.add(light);
 
     // レンダラーをセットアップする
     renderer.setPixelRatio(window.devicePixelRatio);
