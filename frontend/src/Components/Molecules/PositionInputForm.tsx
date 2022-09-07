@@ -19,26 +19,27 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
   const [ position, setPosition ] = useState<Vector>(props.geneModel.position);
 
   // ___ event handler ___ ___ ___ ___ ___
-  // handleChange内ではprops.setPosition（つまり親のstateに変更が伴う処理）を行わないこと
-  // 高頻度でcanvasを再レンダーするとTHREEがクラッシュを起こす可能性があるため
   const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.x     = newVal
-    setPosition(_position);
+    // 変更をUIに反映
+    updateUI(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.y     = newVal
-    setPosition(_position);
+    // 変更をUIに反映
+    updateUI(_position);
   }
-
-  const onBlur = () => {
+  const updateUI = (position: Vector) => {
+    // UIに反映
+    setPosition(position);
+    // 3Dレンダー画面に反映
     props.geneModel.setPosition(position);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
-
 
   return(
     <div>
@@ -50,7 +51,6 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         step      = "10"
         value     = { position.x }
         onChange  = { handleChangeX }
-        onBlur    = { onBlur }
       />
       
       <input
@@ -58,7 +58,6 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         step      = "10"
         value     = { position.y }
         onChange  = { handleChangeY }
-        onBlur    = { onBlur }
       />
 
     </div>

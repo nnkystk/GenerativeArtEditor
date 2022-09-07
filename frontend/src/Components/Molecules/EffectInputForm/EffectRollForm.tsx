@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import GeneEffectInterface from "src/Utilities/GeneEffects/GeneEffectInterface";
 import GeneEffectRoll from '../../../Utilities/GeneEffects/GeneEffectRoll';
 import GeneEffectParameter from  '../../../Utilities/GeneEffects/GeneEffectParameter'
-import geneModelStorage from '../../../Utilities/GeneModelStorage';
 
 interface Props{
   geneEffect: GeneEffectRoll | GeneEffectInterface
@@ -31,10 +30,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
     const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _parameters.vector.z  = newVal
     setParameter(_parameters);
-  }
-
-  const onBlur = () => {
-    props.geneEffect.parameter = parameter;
+    props.geneEffect.parameter = _parameters;
   }
 
 
@@ -46,7 +42,6 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
         step      = "0.001"
         value     = { parameter.vector.x }
         onChange  = { handleChangeX }
-        onBlur    = { onBlur }
       />
       
       <input
@@ -54,7 +49,6 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
         step      = "0.001"
         value     = { parameter.vector.y }
         onChange  = { handleChangeY }
-        onBlur    = { onBlur }
       />
 
       <input
@@ -62,7 +56,6 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
         step      = "0.001"
         value     = { parameter.vector.z }
         onChange  = { handleChangeZ }
-        onBlur    = { onBlur }
       />
 
     </div>

@@ -22,6 +22,15 @@ interface State{
   reqAnmIdRef: any
 };
 export class PlaybackScreen extends React.Component<Props, State>{
+/**
+ * Summary	: ジェネラティブアート作品を再生するComponent
+ * Logic		: - 作品ファイルの読み込みおよび復号化を行う
+ *            - 復号化した情報をレンダリング用データへ加工する
+ *            - 親ComponentからCCCを受け取り、DDDとしたものを子Componentに渡す
+ * View			: - XXXする
+ * Memo     : ClassComponentを意図的に利用している。
+ *            FuncComponentの場合、レンダーのたびにCanvasコンテキストが生成され、重複によるクラッシュを起こしてしまう。
+ */
 
   FOV = 50;
 

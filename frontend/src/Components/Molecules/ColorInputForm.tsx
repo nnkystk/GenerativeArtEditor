@@ -21,28 +21,32 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
     const inputVal =  event.target.valueAsNumber? event.target.valueAsNumber: 0;
     const newVal  = inputVal.toString(16);
     _color.r     = newVal
-    setColor(_color);
+    // UIに変更を反映
+    updateUI(_color);
   }
   const handleChangeG = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _color = { ...color } 
     const inputVal =  event.target.valueAsNumber? event.target.valueAsNumber: 0;
     const newVal  = inputVal.toString(16);
     _color.g     = newVal
-    setColor(_color);
+    // UIに変更を反映
+    updateUI(_color);
   }
   const handleChangeB = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _color = { ...color } 
     const inputVal =  event.target.valueAsNumber? event.target.valueAsNumber: 0;
     const newVal  = inputVal.toString(16);
     _color.b     = newVal
-    setColor(_color);
+    // UIに変更を反映
+    updateUI(_color);
   }
-
-  const onBlur = () => {
+  const updateUI = (color: HexadecimalColor) => {
+    // UIに反映
+    setColor(color);
+    // 3Dレンダー画面に反映
     props.geneModel.setColor(color);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
-
 
   return(
     <div>
@@ -52,32 +56,29 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
       {/** UI上では16進数の値を10進数に変換した値を表示する */}
       <input
         type      = "number"
-        step      = "1"
+        step      = "5"
         min       = "0"
         max       = "255"
         value     = { parseInt(color.r, 16) }
         onChange  = { handleChangeR }
-        onBlur    = { onBlur }
       />
 
       <input
         type      = "number"
-        step      = "1"
+        step      = "5"
         min       = "0"
         max       = "255"
         value     = { parseInt(color.g, 16)  }
         onChange  = { handleChangeG }
-        onBlur    = { onBlur }
       />
 
       <input
         type      = "number"
-        step      = "1"
+        step      = "5"
         min       = "0"
         max       = "255"
         value     = { parseInt(color.b, 16)  }
         onChange  = { handleChangeB }
-        onBlur    = { onBlur }
       />
 
     </div>

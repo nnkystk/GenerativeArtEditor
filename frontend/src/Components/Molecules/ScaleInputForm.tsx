@@ -25,26 +25,31 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
     const _scale = { ...scale } 
     const newVal = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _scale.x     = newVal
-    setScale(_scale);
+    // UIに変更を反映
+    updateUI(_scale);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _scale = { ...scale } 
     const newVal = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _scale.y     = newVal
-    setScale(_scale);
+    // UIに変更を反映
+    updateUI(_scale);
   }
   const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _scale = { ...scale } 
     const newVal = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _scale.z     = newVal
-    setScale(_scale);
+    // UIに変更を反映
+    updateUI(_scale);
   }
 
-  const onBlur = () => {
+  const updateUI = (scale: Vector) => {
+    // UIに反映
+    setScale(scale);
+    // 3Dレンダー画面に反映
     props.geneModel.setScale(scale);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
-
 
   return(
     <div>
@@ -53,24 +58,21 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
 
       <input
         type      = "number"
-        step      = "0.1"
+        step      = "0.05"
         value     = { scale.x }
         onChange  = { handleChangeX }
-        onBlur    = { onBlur }
       />
       <input
         type      = "number"
-        step      = "0.1"
+        step      = "0.05"
         value     = { scale.y }
         onChange  = { handleChangeY }
-        onBlur    = { onBlur }
       />
       <input
         type      = "number"
-        step      = "0.1"
+        step      = "0.05"
         value     = { scale.z }
         onChange  = { handleChangeZ }
-        onBlur    = { onBlur }
       />
 
     </div>
