@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import GeneModel from './GeneModel'
+import GeneModel from './GeneModel/GeneModel'
 import GeneEffectInterface from '../Utilities/GeneEffects/GeneEffectInterface'
 import GeneEffectRoll from './GeneEffects/GeneEffectRoll'
 import GeneEffectParameter from '../Utilities/GeneEffects/GeneEffectParameter'
 import EffectID from './GlobalVarriables/EffectID'
-import GeneEffectStorage from './GeneEffectStorage'
+import GeneEffectStorage from './GeneEffects/GeneEffectStorage'
 
 export class GeneGenerator{
 

@@ -3,8 +3,8 @@ import { Grid, Divider } from "@material-ui/core";
 import { PlaybackScreen } from '../Organisms/PlaybackScreen';
 import { CodingScreenMaterial } from '../Organisms/CodingScreenMaterial';
 import GeneGenerator from "../../Utilities/GeneGenerator";
-import GeneModelStorage from "../../Utilities/GeneModelStorage";
-import GeneEffectStorage from "../../Utilities/GeneEffectStorage";
+import GeneModelStorage from "../../Utilities/GeneModel/GeneModelStorage";
+import GeneEffectStorage from "../../Utilities/GeneEffects/GeneEffectStorage";
 
 type Props = {
   sampleProp         ?: any;

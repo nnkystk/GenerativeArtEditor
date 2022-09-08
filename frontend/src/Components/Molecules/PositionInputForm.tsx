@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
-import GeneModel from '../../Utilities/GeneModel'
+import GeneModel from '../../Utilities/GeneModel/GeneModel'
 import Vector from '../../Utilities/GlobalVarriables/Vector'
 
 interface Props{

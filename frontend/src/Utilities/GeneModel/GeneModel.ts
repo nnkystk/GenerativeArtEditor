@@ -1,7 +1,7 @@
-import Vector from './GlobalVarriables/Vector'
-import HexadecimalColor from './GlobalVarriables/HexadecimalColor'
-import GeneEffectInterface from './GeneEffects/GeneEffectInterface'
-import GeneEffectStorage from './GeneEffectStorage'
+import Vector from '../GlobalVarriables/Vector'
+import HexadecimalColor from '../GlobalVarriables/HexadecimalColor'
+import GeneEffectInterface from '../GeneEffects/GeneEffectInterface'
+import GeneEffectStorage from '../GeneEffects/GeneEffectStorage'
 
 type Options = {
   name?: string

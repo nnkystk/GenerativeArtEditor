@@ -3,8 +3,8 @@ import { Grid, Tooltip, Paper } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
-import GeneModel from '../../Utilities/GeneModel'
-import GeneModelStorage from '../../Utilities/GeneModelStorage' 
+import GeneModel from '../../Utilities/GeneModel/GeneModel'
+import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from './Recorder'
 

@@ -7,9 +7,9 @@ import { ScaleInputForm } from '../Molecules/ScaleInputForm'
 import { ColorInputForm } from '../Molecules/ColorInputForm'
 import { EffectGenerateForm } from '../Molecules/EffectGenerateForm'
 import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
-import GeneModelStorage from '../../Utilities/GeneModelStorage';
+import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
 import GeneGenerator from '../../Utilities/GeneGenerator'
-import GeneEffectStorage from "../../Utilities/GeneEffectStorage";
+import GeneEffectStorage from "../../Utilities/GeneEffects/GeneEffectStorage";
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent

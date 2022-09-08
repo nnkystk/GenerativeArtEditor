@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Tooltip } from "@material-ui/core";
 import { AddCircleOutline } from '@mui/icons-material';
-import GeneModel from '../../Utilities/GeneModel';
+import GeneModel from '../../Utilities/GeneModel/GeneModel';
 import GeneGenerator from '../../Utilities/GeneGenerator'
 import EffectID from '../../Utilities/GlobalVarriables/EffectID'
 
