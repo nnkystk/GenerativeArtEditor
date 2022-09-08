@@ -26,23 +26,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   useEffect( () => { console.log(sampleState) },  [ sampleState ] );
   useEffect( () => { initializeThree() },         []);
   useEffect( () => { switchIsEditableFlg() },     [ isPlayingFlg ] );
-  
-  // ___ use memo ___ ___ ___ ___ ___
-  /** MEMO: なぜuseMemoを使用しているのか？
-   *    Ans. canvas要素のcontextが多重に存在することで発生するエラーを避けるため
-   *    - canvas要素を含むコンポーネントがレンダーされるたび、contextが内部的に生成される
-   *    - contextの存在個数が上限を突破するとブラウザが間引きを行う。THREEがコンテキストを見失うことでエラーが発生する
-   *    - 対策として、useMemoを用いて再レンダーの条件を通常のコンポーネントよりも絞る
-   */
-  const memoPlayBackScreen = useMemo( () => 
-    <PlaybackScreen
-      geneModelStorage  = { geneModelStorarge }
-      isPlayingFlg      = { isPlayingFlg }
-      reqInstPlayFlg    = { reqInstPlayFlg }
-      setIsPlayingFlg   = { setIsPlayingFlg }
-      setReqInstPlayFlg = { setReqInstPlayFlg }
-    />,
-    [geneModelStorarge, isPlayingFlg, reqInstPlayFlg])
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +91,13 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     <Grid container spacing = { 2 }>
 
       <Grid item xs = { 11 } style = { { zIndex :50 } }>
-        { memoPlayBackScreen }
+        <PlaybackScreen
+          geneModelStorage  = { geneModelStorarge }
+          isPlayingFlg      = { isPlayingFlg }
+          reqInstPlayFlg    = { reqInstPlayFlg }
+          setIsPlayingFlg   = { setIsPlayingFlg }
+          setReqInstPlayFlg = { setReqInstPlayFlg }
+        />
       </Grid>
 
       <Grid item xs = { 1 } style = {{ backgroundColor: "white", zIndex: 100 }}>
