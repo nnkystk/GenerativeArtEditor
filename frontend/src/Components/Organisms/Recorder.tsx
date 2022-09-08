@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Grid } from "@material-ui/core";
-
-
+import { Grid, Tooltip } from "@material-ui/core";
+import { RadioButtonUnchecked, RadioButtonChecked } from '@mui/icons-material';
 
 interface Props {
   canvas?: HTMLCanvasElement | null;
@@ -14,6 +13,7 @@ export const Recorder: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ recorder, setRecorder ] = useState<MediaRecorder>();
+  const [ isRecordingFlg, setIsrecordingFlg ] = useState<boolean>(false);
 
   // ___ use ref ___ ___ ___ ___ ___
   const anchorRef: any | null = useRef(null);
@@ -37,15 +37,21 @@ export const Recorder: React.FC<Props> = (props: Props) => {
 
       // 録画終了時に発火するイベントを登録
       recorder.ondataavailable = (e) => {
-        var videoBlob = new Blob([e.data], { type: e.data.type });
-        const blobUrl = window.URL.createObjectURL(videoBlob);
-        anchorRef.current.download = 'GenerativeArtWork.webm';    // 出力ファイル名
-        anchorRef.current.href = blobUrl;                         // anchorDOMにファイルをセット
-        anchorRef.current.click();                                // リンク押下を実行
+
+        const isConfirmed = window.confirm('Download Movie?');
+
+        if(isConfirmed){
+          var videoBlob = new Blob([e.data], { type: e.data.type });
+          const blobUrl = window.URL.createObjectURL(videoBlob);
+          anchorRef.current.download = 'GenerativeArtWork.webm';    // 出力ファイル名
+          anchorRef.current.href = blobUrl;                         // anchorDOMにファイルをセット
+          anchorRef.current.click();                                // リンク押下を実行
+        }
       }
 
       recorder.start();
       setRecorder(recorder);
+      setIsrecordingFlg(true);
     }
   }
 
@@ -57,12 +63,19 @@ export const Recorder: React.FC<Props> = (props: Props) => {
         alert('Recording has not been triggered')
       }
     }
+    setIsrecordingFlg(false);
   }
 
   return (
     <div>
-      <button onClick = { startRecording }> start </button>
-      <button onClick = { stopRecording }> stop </button>
+      { isRecordingFlg?
+        <Tooltip title = "Stop Recording">
+          <RadioButtonChecked onClick = { stopRecording } fontSize = "large" />
+        </ Tooltip>:
+        <Tooltip title = "Start Recording">
+          <RadioButtonUnchecked onClick = { startRecording } fontSize = "large" />
+        </Tooltip>
+      }
       <a ref = { anchorRef } id="anchor" hidden> download </a>
     </div>
   );

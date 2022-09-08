@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Tooltip, Paper } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
@@ -56,30 +56,42 @@ export class PlaybackScreen extends React.Component<Props, State>{
   render() {
 
     return (
-      <Grid container className = "PlayBackScreen" style = { { backgroundColor : "#e0e0e0" } } >
+      <div className = "PlayBackScreen" style = { { backgroundColor : "#e0e0e0" } }>
 
-        <Grid container alignItems ="center" justifyContent="center" >
-          <canvas id = 'canvas' ref = { this.canvasRef } onClick = { this.onClickCanvas }/>
+        <Grid container alignItems ="center" justifyContent="center" onClick = { this.onClickCanvas }>
+          <canvas id = 'canvas' ref = { this.canvasRef } />
         </Grid>
 
-        <Grid container>
-          { this.props.isPlayingFlg ?
-            <PauseCircleOutlineOutlined     sx = {{ fontSize: 50 }} onClick = { this.playBackThree } />:
-            <PlayCircleFilledWhiteOutlined  sx = {{ fontSize: 50 }} onClick = { this.stopThree } />
-          }
+        <Grid container style={{ paddingLeft: 10, paddingRight: 10 }}>
+
+          <Grid item xs = { 6 }>
+            <Grid container>
+              { this.props.isPlayingFlg ?
+                <Tooltip title="Pause">
+                  <PauseCircleOutlineOutlined fontSize = "large" onClick = { this.onClickCanvas } />
+                </Tooltip>:
+                <Tooltip title="Play">
+                  <PlayCircleFilledWhiteOutlined fontSize = "large" onClick = { this.onClickCanvas } />
+                </Tooltip>
+              }
+            </Grid>
+          </Grid>
+
+          <Grid item xs = { 6 }>
+            <Grid container direction="row-reverse" justifyContent="flex-start" alignItems="center" >
+              <Recorder canvas = { this.canvasRef.current }/>
+            </Grid>
+          </Grid>
+
         </Grid>
 
-        {/* @ts-ignore */}
-        <Recorder canvas = { this.canvasRef.current }/>
-
-      </Grid>
+      </div>
     );
   }
 
 	// ___ ライフサイクル ___ ___ ___ ___ ___
 
   // コンポーネントがマウント(配置)された直前に呼び出されるメソッド
-  // このメソッド内では描画されたDOMにアクセスすることができます
 	componentDidMount(){
     this.initializeThree();
 	}
@@ -93,7 +105,6 @@ export class PlaybackScreen extends React.Component<Props, State>{
     }
 
   }
-
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
   componentWillUnmount(){
@@ -129,9 +140,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
       // シーンをセットアップする
       this.updateSceneThree();
 
-      this.setState({threeRenderer: renderer});
-      this.setState({threeScene: scene})
-      this.setState({threeCamera: camera})
+      this.setState({ threeRenderer: renderer });
+      this.setState({ threeScene: scene })
+      this.setState({ threeCamera: camera })
      
    };
  
