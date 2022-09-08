@@ -1,5 +1,5 @@
 import GeneEffectParameter from './GeneEffectParameter'
-import EffectID from '../GlobalVarriables/EffectID'
+import { EffectID } from '../GlobalVarriables/EffectCatalog'
 
 interface GeneEffectInterface{
 

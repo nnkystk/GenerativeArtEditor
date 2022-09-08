@@ -58,6 +58,8 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
      */
     if(geneEffect.id == "ROLL"){
       return <EffectRollForm geneEffect = { geneEffect } />
+    }else if(geneEffect.id == "MOVE"){
+      return <EffectRollForm geneEffect = { geneEffect } />
     }
   }
 

@@ -1,6 +1,5 @@
 import GeneModel from './GeneModel'
 
-
 class GeneModelStorage{
 
   public storage: Array<GeneModel> = [];

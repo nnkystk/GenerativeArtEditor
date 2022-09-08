@@ -2,9 +2,9 @@ import GeneEffectInterface from './GeneEffectInterface'
 import GeneEffectParameter from './GeneEffectParameter'
 import { EffectID } from '../GlobalVarriables/EffectCatalog'
 
-class GeneEffectRoll implements GeneEffectInterface{
+class GeneEffectMove implements GeneEffectInterface{
   
-  id : EffectID = "ROLL";
+  id : EffectID = "MOVE";
   uid: number;
   parameter: GeneEffectParameter;
 
@@ -25,4 +25,4 @@ class GeneEffectRoll implements GeneEffectInterface{
 }
 
 
-export default GeneEffectRoll
+export default GeneEffectMove

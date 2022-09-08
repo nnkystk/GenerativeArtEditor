@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Paper, Tooltip } from "@material-ui/core";
+import { Grid, Paper, Tooltip, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { AddCircleOutline } from '@mui/icons-material';
 import GeneModel from '../../Utilities/GeneModel/GeneModel';
 import GeneGenerator from '../../Utilities/GeneGenerator'
-import EffectID from '../../Utilities/GlobalVarriables/EffectID'
+import { EffectID } from '../../Utilities/GlobalVarriables/EffectCatalog'
+import { EFFECT_CATALOG } from '../../Utilities/GlobalVarriables/EffectCatalog'
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -47,15 +48,40 @@ export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
   }
 
   return(
-    <Tooltip title = "Add Effect">
-      <Paper
-        variant = "outlined"
-        style   = {{ padding: 10, cursor:'pointer' }}
-        onClick = { onClickAddEffectButton }
-      >
-        <AddCircleOutline fontSize = "large" />
-      </Paper>
-    </Tooltip>
+    <div>
+  
+      <Grid container>
+
+        <Grid item xs={10}>
+
+          <FormControl fullWidth>
+            <InputLabel>Effect To Add</InputLabel>
+            {/** @ts-ignore */}
+            <Select value = { generateTargetID } label = "Effect" onChange={ (event: React.ChangeEvent<HTMLInputElement>) => { setGenerateTargetID(event.target.value) } }>
+              { EFFECT_CATALOG.map( (obj) => {
+                return(
+                  <MenuItem key = { props.geneModel.id + obj.id } value = { obj.id }> { obj.id } </MenuItem>
+                )
+              })}
+
+            </Select>
+          </FormControl>
+
+        </Grid>
+
+        <Grid item xs={2}>
+          <Tooltip title = "Add Effect" style={{}}>
+            <AddCircleOutline
+              style     = {{ cursor:'pointer' }}
+              onClick   = { onClickAddEffectButton }
+              fontSize  = "large"
+            />
+          </Tooltip>
+        </Grid>
+
+      </Grid>
+
+    </div>
   );
 };
 

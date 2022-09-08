@@ -1,5 +1,5 @@
 import GeneEffectInterface from './GeneEffectInterface'
-import EffectID from '../GlobalVarriables/EffectID';
+import { EffectID } from '../GlobalVarriables/EffectCatalog';
 
 class GeneEffectStorage{
 

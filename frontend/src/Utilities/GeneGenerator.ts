@@ -3,13 +3,11 @@ import GeneModel from './GeneModel/GeneModel'
 import GeneEffectInterface from '../Utilities/GeneEffects/GeneEffectInterface'
 import GeneEffectRoll from './GeneEffects/GeneEffectRoll'
 import GeneEffectParameter from '../Utilities/GeneEffects/GeneEffectParameter'
-import EffectID from './GlobalVarriables/EffectID'
+import { EffectID } from './GlobalVarriables/EffectCatalog'
 import GeneEffectStorage from './GeneEffects/GeneEffectStorage'
+import { EFFECT_CATALOG } from './GlobalVarriables/EffectCatalog';
 
 export class GeneGenerator{
-
-  // エフェクトとそのIDをまとめたリスト
-  static EFFECT_CATALOG = [ { id: 'ROLL', effect: GeneEffectRoll } ];
   
   constructor(){ }
 
@@ -34,7 +32,7 @@ export class GeneGenerator{
   }
 
   static findEffectByID(effectID: EffectID){
-    const targetEffect = GeneGenerator.EFFECT_CATALOG.find( (obj) => obj.id == effectID );
+    const targetEffect = EFFECT_CATALOG.find( (obj) => obj.id == effectID );
     if(targetEffect){
       return targetEffect.effect;
     }else{
