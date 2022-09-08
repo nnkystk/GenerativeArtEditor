@@ -13,7 +13,7 @@ class GeneEffectPlayer{
      * @return  void
      */
 
-    geneModel.effectList.map( (effect) => {
+    geneModel.effectList.storage.map( (effect) => {
       effect.play(geneModel.mesh);
     })
 

@@ -1,10 +1,10 @@
 import GeneEffectInterface from './GeneEffectInterface'
 import GeneEffectParameter from './GeneEffectParameter'
+import EffectID from '../GlobalVarriables/EffectID'
 
-type Vector = { x: number, y: number, z: number }
 class GeneEffectRoll implements GeneEffectInterface{
   
-  id : string = "ROLL";
+  id : EffectID = "ROLL";
   uid: number;
   parameter: GeneEffectParameter;
 

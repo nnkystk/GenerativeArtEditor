@@ -1,6 +1,7 @@
-import Vector from './Vector'
-import HexadecimalColor from './HexadecimalColor'
+import Vector from './GlobalVarriables/Vector'
+import HexadecimalColor from './GlobalVarriables/HexadecimalColor'
 import GeneEffectInterface from './GeneEffects/GeneEffectInterface'
+import GeneEffectStorage from './GeneEffectStorage'
 
 type Options = {
   name?: string
@@ -12,13 +13,13 @@ class GeneModel{
 
   public id         : number;
   public mesh       : THREE.Mesh;
-  public effectList : Array<GeneEffectInterface>;
+  public effectList : GeneEffectStorage;
   public name       : string | undefined;
   public position   : Coordinate;
   public scale      : Coordinate;
   public color      : HexadecimalColor;
 
-  constructor(id:number, mesh: THREE.Mesh, effectList: Array<GeneEffectInterface>, options?: Options) {
+  constructor(id:number, mesh: THREE.Mesh, effectList: GeneEffectStorage, options?: Options) {
     this.id         = id;
     this.mesh       = mesh;
     this.effectList = effectList;

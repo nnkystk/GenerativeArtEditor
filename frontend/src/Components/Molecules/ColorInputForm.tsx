@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel'
-import HexadecimalColor from '../../Utilities/HexadecimalColor'
+import HexadecimalColor from '../../Utilities/GlobalVarriables/HexadecimalColor'
 
 // Type Declaration of Props
 interface Props{
