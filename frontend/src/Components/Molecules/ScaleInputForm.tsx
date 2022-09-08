@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GeneModelStorage from "src/Utilities/GeneModelStorage";
+import { Grid, TextField } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel'
 
 // Type Declaration of Props
@@ -54,26 +54,62 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-      <div> SIZE: </div>
+      <Grid container spacing = { 2 }>
+        <Grid item xs = { 12 }>
+          <span> Scale: </span>
+        </Grid>
+      </Grid>
 
-      <input
-        type      = "number"
-        step      = "0.05"
-        value     = { scale.x }
-        onChange  = { handleChangeX }
-      />
-      <input
-        type      = "number"
-        step      = "0.05"
-        value     = { scale.y }
-        onChange  = { handleChangeY }
-      />
-      <input
-        type      = "number"
-        step      = "0.05"
-        value     = { scale.z }
-        onChange  = { handleChangeZ }
-      />
+      <Grid container alignItems ="center" spacing = { 2 }>
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "X"
+            value     = { scale.x }
+            onChange  = { handleChangeX }
+            size      = "small"
+            inputProps = {{
+              step: "0.05"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "Y"
+            value     = { scale.y }
+            onChange  = { handleChangeY }
+            size      = "small"
+            inputProps = {{
+              step: "0.05"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "Z"
+            value     = { scale.z }
+            onChange  = { handleChangeZ }
+            size      = "small"
+            inputProps = {{
+              step: "0.05"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+      </Grid>
 
     </div>
   )

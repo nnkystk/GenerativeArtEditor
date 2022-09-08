@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Paper } from "@material-ui/core";
+import { Grid, Paper, TextField } from "@material-ui/core";
 import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
 import { ScaleInputForm } from '../Molecules/ScaleInputForm'
@@ -24,7 +24,7 @@ interface Props{
   setReqInstPlayFlg(bool: boolean): void;
 }
 
-export const CodingScreenDev: React.FC<Props> = (props: Props) => {
+export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
@@ -60,34 +60,41 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
         <Grid container spacing = { 2 }>
 
           { props.geneModelStorage.storage.map( (geneModel) => (
-            <Grid key = { geneModel.id }  item sm = { 6 } md = { 4 }  lg = { 3 }>
-              <Paper variant="outlined">
+            <Grid key = { geneModel.id }  item xs = { 12 } sm = { 6 } md = { 4 }  lg = { 3 }>
+              <Paper variant = "outlined" style = {{ padding: 10 }}>
                 <details>
                   <summary> { geneModel.name }</summary>
-                    <div> ID: { geneModel.id }</div>
 
-                    <PositionInputForm
-                      geneModel = { geneModel }
-                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                    />
+                    <Grid container style = {{ padding: 10 }}>
+                      <PositionInputForm
+                        geneModel = { geneModel }
+                        setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                      />
+                    </Grid>
 
-                    <ScaleInputForm
-                      geneModel = { geneModel }
-                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                    />
+                    <Grid container style = {{ padding: 10 }}>
+                      <ScaleInputForm
+                        geneModel = { geneModel }
+                        setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                      />
+                    </Grid>
 
-                    <ColorInputForm
-                      geneModel = { geneModel }
-                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                    />
+                    <Grid container style = {{ padding: 10 }}>
+                      <ColorInputForm
+                        geneModel = { geneModel }
+                        setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                      />
+                    </Grid>
 
-                    { geneModel.effectList.map( (geneEffect: any) => (
-                      <li key = { geneModel.id + '_' + geneEffect.id } >
-                        <span> Effect: { geneEffect.id } </span>
-                        { generateEffectInputForm(geneEffect) }
-                      </li>
-                      ))
-                    }
+                    <Grid container style = {{ padding: 10 }}>
+                      { geneModel.effectList.map( (geneEffect: any) => (
+                        <li key = { geneModel.id + '_' + geneEffect.id } >
+                          <span> Effect: { geneEffect.id } </span>
+                          { generateEffectInputForm(geneEffect) }
+                        </li>
+                        ))
+                      }
+                    </Grid>
 
                 </details>
               </Paper>
@@ -100,4 +107,4 @@ export const CodingScreenDev: React.FC<Props> = (props: Props) => {
 };
 
 
-export default CodingScreenDev
+export default CodingScreenMaterial

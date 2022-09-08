@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from "react";
-import GeneModelStorage from "src/Utilities/GeneModelStorage";
+import React, { useState } from "react";
+import { Grid, TextField } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel'
-
-// Type Declaration of Props
-type Vector = {
-  x: number, y: number, z: number
-}
+import Vector from '../../Utilities/Vector'
 
 interface Props{
   geneModel: GeneModel
   setReqInstPlayFlg(bool: boolean): void;
 }
-
-
 export const PositionInputForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
@@ -22,14 +16,14 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
   const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _position.x     = newVal
+    _position.x     = newVal;
     // 変更をUIに反映
     updateUI(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _position.y     = newVal
+    _position.y     = newVal;
     // 変更をUIに反映
     updateUI(_position);
   }
@@ -44,25 +38,52 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-      <div> POSITION: </div>
+      <Grid container spacing = { 2 }>
+        <Grid item xs = { 12 }>
+          <span> Position: </span>
+        </Grid>
+      </Grid>
 
-      <input
-        type      = "number"
-        step      = "10"
-        value     = { position.x }
-        onChange  = { handleChangeX }
-      />
-      
-      <input
-        type      = "number"
-        step      = "10"
-        value     = { position.y }
-        onChange  = { handleChangeY }
-      />
+      <Grid container alignItems ="center" spacing = { 2 }>
+
+        <Grid item xs = { 5 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "X"
+            value     = { position.x }
+            onChange  = { handleChangeX }
+            size      = "small"
+            inputProps = {{
+              step: "10"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+        
+        <Grid item xs = { 5 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "Y"
+            value     = { position.y }
+            onChange  = { handleChangeY }
+            size      = "small"
+            inputProps = {{
+              step: "10"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+
+      </Grid>
 
     </div>
   )
 }
-
 
 export default PositionInputForm

@@ -62,7 +62,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
           <canvas id = 'canvas' ref = { this.canvasRef } />
         </Grid>
 
-        <Grid container style={{ paddingLeft: 10, paddingRight: 10 }}>
+        <Grid container style = {{ paddingLeft: 10, paddingRight: 10 }}>
 
           <Grid item xs = { 6 }>
             <Grid container>
@@ -98,12 +98,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
-    if (this.props.reqInstPlayFlg) {
-      this.updateSceneThree();
-      this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
-      this.props.setReqInstPlayFlg(false);
-    }
-
+    this.updateSceneThree();
+    this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
+    this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
   }
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド

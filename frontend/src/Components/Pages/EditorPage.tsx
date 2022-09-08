@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 import { Grid, Divider } from "@material-ui/core";
 import { PlaybackScreen } from '../Organisms/PlaybackScreen';
 import { CodingScreen } from '../Organisms/CodingScreen';
-import { CodingScreenDev } from '../Organisms/CodingScreenDev';
+import { CodingScreenMaterial } from '../Organisms/CodingScreenMaterial';
 import GeneModelStorage from "../../Utilities/GeneModelStorage";
 
 type Props = {
@@ -112,7 +112,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
       <Grid item xs = { 12 }>
         <Divider style = { { width: '100%' } } />
-        <CodingScreenDev
+        <CodingScreenMaterial
           geneModelStorage        = { geneModelStorarge }
           updateGeneModelStotage  = { updateGeneModelStotage }
           setReqInstPlayFlg       = { setReqInstPlayFlg }

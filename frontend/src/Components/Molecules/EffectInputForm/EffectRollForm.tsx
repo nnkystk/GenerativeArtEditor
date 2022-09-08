@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Grid, TextField } from "@material-ui/core";
 import GeneEffectInterface from "src/Utilities/GeneEffects/GeneEffectInterface";
 import GeneEffectRoll from '../../../Utilities/GeneEffects/GeneEffectRoll';
 import GeneEffectParameter from  '../../../Utilities/GeneEffects/GeneEffectParameter'
@@ -37,26 +38,61 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-      <input
-        type      = "number"
-        step      = "0.001"
-        value     = { parameter.vector.x }
-        onChange  = { handleChangeX }
-      />
-      
-      <input
-        type      = "number"
-        step      = "0.001"
-        value     = { parameter.vector.y }
-        onChange  = { handleChangeY }
-      />
+      <Grid container alignItems ="center" spacing = { 2 }>
 
-      <input
-        type      = "number"
-        step      = "0.001"
-        value     = { parameter.vector.z }
-        onChange  = { handleChangeZ }
-      />
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "X"
+            value     = { parameter.vector.x  }
+            onChange  = { handleChangeX }
+            size      = "small"
+            inputProps = {{
+              step  : "0.001",
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "Y"
+            value     = { parameter.vector.y  }
+            onChange  = { handleChangeY }
+            size      = "small"
+            inputProps = {{
+              step  : "0.001",
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "Z"
+            value     = { parameter.vector.z  }
+            onChange  = { handleChangeZ }
+            size      = "small"
+            inputProps = {{
+              step  : "0.001",
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+
+      </Grid>
+
 
     </div>
   )
