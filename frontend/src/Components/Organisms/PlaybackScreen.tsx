@@ -68,10 +68,18 @@ export class PlaybackScreen extends React.Component<Props, State>{
             <Grid container>
               { this.props.isPlayingFlg ?
                 <Tooltip title="Pause">
-                  <PauseCircleOutlineOutlined fontSize = "large" onClick = { this.onClickCanvas } />
+                  <PauseCircleOutlineOutlined
+                    fontSize  = "large"
+                    style     = {{ cursor:'pointer' }}
+                    onClick   = { this.onClickCanvas }
+                  />
                 </Tooltip>:
                 <Tooltip title="Play">
-                  <PlayCircleFilledWhiteOutlined fontSize = "large" onClick = { this.onClickCanvas } />
+                  <PlayCircleFilledWhiteOutlined
+                    fontSize  = "large"
+                    style     = {{ cursor:'pointer' }}
+                    onClick   = { this.onClickCanvas }
+                  />
                 </Tooltip>
               }
             </Grid>
@@ -106,7 +114,6 @@ export class PlaybackScreen extends React.Component<Props, State>{
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
   componentWillUnmount(){
     this.stopThree();
-    console.log("c")
   }
 
 

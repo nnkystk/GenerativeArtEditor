@@ -70,10 +70,10 @@ export const Recorder: React.FC<Props> = (props: Props) => {
     <div>
       { isRecordingFlg?
         <Tooltip title = "Stop Recording">
-          <RadioButtonChecked onClick = { stopRecording } fontSize = "large" />
+          <RadioButtonChecked onClick = { stopRecording } fontSize = "large" style = {{ cursor:'pointer' }} />
         </ Tooltip>:
         <Tooltip title = "Start Recording">
-          <RadioButtonUnchecked onClick = { startRecording } fontSize = "large" />
+          <RadioButtonUnchecked onClick = { startRecording } fontSize = "large" style = {{ cursor:'pointer' }} />
         </Tooltip>
       }
       <a ref = { anchorRef } id="anchor" hidden> download </a>

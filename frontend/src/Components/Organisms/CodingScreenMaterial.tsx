@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Paper, TextField } from "@material-ui/core";
+import { Grid, Paper, Tooltip } from "@material-ui/core";
+import { AddCircleOutline } from '@mui/icons-material';
 import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
 import { ScaleInputForm } from '../Molecules/ScaleInputForm'
@@ -54,54 +55,70 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-      <h2> CODING </h2>
-      <button onClick = { () => { props.onClickAddModelButton(), props.setReqInstPlayFlg(true) } }> ADD MODEL </button>
+      <Grid container spacing = { 2 } style = {{ paddingTop: 20 }}>
 
-        <Grid container spacing = { 2 }>
-
-          { props.geneModelStorage.storage.map( (geneModel) => (
-            <Grid key = { geneModel.id }  item xs = { 12 } sm = { 6 } md = { 4 }  lg = { 3 }>
-              <Paper variant = "outlined" style = {{ padding: 10 }}>
-                <details>
-                  <summary> { geneModel.name }</summary>
-
-                    <Grid container style = {{ padding: 10 }}>
-                      <PositionInputForm
-                        geneModel = { geneModel }
-                        setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                      />
-                    </Grid>
-
-                    <Grid container style = {{ padding: 10 }}>
-                      <ScaleInputForm
-                        geneModel = { geneModel }
-                        setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                      />
-                    </Grid>
-
-                    <Grid container style = {{ padding: 10 }}>
-                      <ColorInputForm
-                        geneModel = { geneModel }
-                        setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                      />
-                    </Grid>
-
-                    <Grid container style = {{ padding: 10 }}>
-                      { geneModel.effectList.map( (geneEffect: any) => (
-                        <li key = { geneModel.id + '_' + geneEffect.id } >
-                          <span> Effect: { geneEffect.id } </span>
-                          { generateEffectInputForm(geneEffect) }
-                        </li>
-                        ))
-                      }
-                    </Grid>
-
-                </details>
-              </Paper>
-            </Grid>
-
-          ))}
+        <Grid item  xs = { 12 } sm = { 6 } md = { 4 }  lg = { 3 } >
+          <Tooltip title = "Add 3DModel">
+            <Paper
+              variant = "outlined"
+              style   = {{ padding: 10, cursor:'pointer' }}
+              onClick = { () => { props.onClickAddModelButton(), props.setReqInstPlayFlg(true)} }
+            >
+              <AddCircleOutline fontSize = "large" />
+            </Paper>
+          </Tooltip>
         </Grid>
+
+        { props.geneModelStorage.storage.map( (geneModel) => (
+          <Grid key = { geneModel.id } item xs = { 12 } sm = { 6 } md = { 4 }  lg = { 3 }>
+            <Paper variant = "outlined" style = {{ padding: 10, cursor:'pointer' }}>
+              <details>
+                <summary> { geneModel.name }</summary>
+
+                  <Grid container style = {{ padding: 10 }}>
+                    <PositionInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
+                  </Grid>
+
+                  <Grid container style = {{ padding: 10 }}>
+                    <ScaleInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
+                  </Grid>
+
+                  <Grid container style = {{ padding: 10 }}>
+                    <ColorInputForm
+                      geneModel = { geneModel }
+                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
+                    />
+                  </Grid>
+
+                  <Grid container style = {{ padding: 10 }}>
+
+                  <Grid container spacing = { 2 }>
+                    <Grid item xs = { 12 }>
+                      <span> Effect: </span>
+                    </Grid>
+                  </Grid>
+
+                    { geneModel.effectList.map( (geneEffect: any) => (
+                      <li key = { geneModel.id + '_' + geneEffect.id } >
+                        <span> { geneEffect.id } </span>
+                        { generateEffectInputForm(geneEffect) }
+                      </li>
+                      ))
+                    }
+                  </Grid>
+
+              </details>
+            </Paper>
+          </Grid>
+
+        ))}
+      </Grid>
     </div>
   );
 };

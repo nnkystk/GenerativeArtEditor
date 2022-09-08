@@ -165,8 +165,8 @@ export const PlaybackScreenFC: React.FC<Props> = (props: Props) => {
 
         <Grid container>
           { props.isPlayingFlg ?
-            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { stopThree }/> :
-            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { playBackThree } /> }
+            <PlayCircleFilledWhiteOutlined  sx = {{ fontSize: 50 }} onClick = { stopThree }/> :
+            <PauseCircleOutlineOutlined     sx = {{ fontSize: 50 }} onClick = { playBackThree } /> }
         </Grid>
 
       </Grid>
