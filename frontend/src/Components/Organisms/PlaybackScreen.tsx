@@ -8,6 +8,7 @@ import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage'
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from './Recorder'
 import CanvasSize from '../../Utilities/GlobalVarriables/CanvasSize'
+import { Vector2 } from "three";
 
 interface Props {
   geneModelStorage    : GeneModelStorage;
@@ -106,7 +107,11 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
-    this.updateCanvasSize();  // TODO: 都度の実行は不要。変更時のみ実行するようにできないか
+    // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
+    const canvasSize = this.state.threeRenderer.getSize(new Vector2());
+    if(canvasSize.x != this.props.canvasSize.width || canvasSize.y != this.props.canvasSize.height ){
+      this.resizeCanvasSize();
+    }
     this.updateSceneThree();
     this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
     this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
@@ -149,7 +154,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
       this.setState({ threeCamera: camera })
    };
 
-   updateCanvasSize = () => {
+   resizeCanvasSize = () => {
     // カメラを更新
     this.state.threeCamera.aspect = this.props.canvasSize.width / this.props.canvasSize.height
     this.state.threeCamera.updateProjectionMatrix();
