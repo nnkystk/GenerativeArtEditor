@@ -7,16 +7,17 @@ import GeneModel from '../../Utilities/GeneModel/GeneModel'
 import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from './Recorder'
+import CanvasSize from '../../Utilities/GlobalVarriables/CanvasSize'
 
 interface Props {
   geneModelStorage    : GeneModelStorage;
+  canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
   reqInstPlayFlg      : boolean;
   setIsPlayingFlg(bool: boolean)    : void;
   setReqInstPlayFlg(bool: boolean)  :void;
 }
 interface State{
-  screenSize: any;
   threeRenderer: any;
   threeScene: any;
   threeCamera: any;
@@ -41,7 +42,6 @@ export class PlaybackScreen extends React.Component<Props, State>{
     super(props)
     this.state = {
       // optional second annotation for better type inference
-      screenSize    : { width: 960, height: 540 },
       threeRenderer : new THREE.WebGLRenderer(),
       threeScene    : new THREE.Scene(),
       threeCamera   : new THREE.PerspectiveCamera(),
@@ -106,6 +106,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
+    this.updateCanvasSize();  // TODO: 都度の実行は不要。変更時のみ実行するようにできないか
     this.updateSceneThree();
     this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
     this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
@@ -127,19 +128,18 @@ export class PlaybackScreen extends React.Component<Props, State>{
     /**
      * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
      */
-
       const renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector("#canvas") as HTMLCanvasElement
       });
       const scene   = new THREE.Scene();
-      const camera  = new THREE.PerspectiveCamera(this.FOV, this.state.screenSize.width / this.state.screenSize.height);
+      const camera  = new THREE.PerspectiveCamera(this.FOV, this.props.canvasSize.width / this.props.canvasSize.height);
       camera.position.set(0, 0, +1000);
       // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
       // scene.add(light);
 
       // レンダラーをセットアップする
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(this.state.screenSize.width, this.state.screenSize.height);
+      renderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
 
       // シーンをセットアップする
       this.updateSceneThree();
@@ -147,9 +147,16 @@ export class PlaybackScreen extends React.Component<Props, State>{
       this.setState({ threeRenderer: renderer });
       this.setState({ threeScene: scene })
       this.setState({ threeCamera: camera })
-     
    };
- 
+
+   updateCanvasSize = () => {
+    // カメラを更新
+    this.state.threeCamera.aspect = this.props.canvasSize.width / this.props.canvasSize.height
+    this.state.threeCamera.updateProjectionMatrix();
+    // レンダラーを更新
+    this.state.threeRenderer.setPixelRatio(window.devicePixelRatio);
+    this.state.threeRenderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
+   }
  
    updateSceneThree = () => {
       /**
