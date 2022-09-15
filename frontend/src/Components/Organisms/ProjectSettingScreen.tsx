@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Grid, TextField } from "@material-ui/core";
-import CanvasSize from '../../Utilities/GlobalVarriables/CanvasSize'
+import React, { useState } from "react";
+import { Grid } from "@material-ui/core";
+import { CanvasSizeInputForm } from '../Molecules/CanvasSizeInputForm'
+import { BasicModal } from '../Atoms/BasicModal'
 import ProjectInfo from '../../Utilities/ProjectInfo'
+
 
 interface Props {
   projectInfo     : ProjectInfo
@@ -14,26 +16,10 @@ export const ProjectSettingScreen: React.FC<Props> = (props: Props) => {
  */
 
   // ___ state ___ ___ ___ ___ ___
-  const [ canvasSizeWidth, setCanvasSizeWidth ] = useState<number>(props.projectInfo.canvasSize.width);
-  const [ canvasSizeHeight, setCanvasSizeHeight ] = useState<number>(props.projectInfo.canvasSize.height);
 
   // ___ use effect ___ ___ ___ ___ ___
 
   // ___ event handler ___ ___ ___ ___ ___
-  const handleChangeCanvasSizeWidth = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    setCanvasSizeWidth(newVal);
-  }
-  const handleChangeCanvasSizeHeight = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    setCanvasSizeHeight(newVal);
-  }
-  const onClickConfirmCanvasSize = () => {
-    const _projectInfo = { ...props.projectInfo };
-    _projectInfo.canvasSize.width   = canvasSizeWidth;
-    _projectInfo.canvasSize.height  = canvasSizeHeight;
-    props.setProjectInfo(_projectInfo);
-  }
 
   // ___ method ___ ___ ___ ___ ___
   const test = () => {
@@ -45,40 +31,16 @@ export const ProjectSettingScreen: React.FC<Props> = (props: Props) => {
       
       <Grid container alignItems ="center" spacing = { 2 }>
 
-        <Grid item xs = { 5 }>
-          
-          <TextField
-            variant   = "outlined"
-            type      = "number"
-            label     = "Width"
-            value     = { canvasSizeWidth }
-            onChange  = { handleChangeCanvasSizeWidth }
-            size      = "small"
-            inputProps = {{
-              step: "10"
-            }}
-            InputLabelProps = {{
-              shrink: true,
-            }}
+        <Grid item xs = { 12 }>
+          <BasicModal
+            contents = {<CanvasSizeInputForm
+              projectInfo     = { props.projectInfo }
+              setProjectInfo  = { props.setProjectInfo }
+            />}
+            buttonTexts = "Canvas size"
           />
-
-          <TextField
-            variant   = "outlined"
-            type      = "number"
-            label     = "Width"
-            value     = { canvasSizeHeight }
-            onChange  = { handleChangeCanvasSizeHeight }
-            size      = "small"
-            inputProps = {{
-              step: "10"
-            }}
-            InputLabelProps = {{
-              shrink: true,
-            }}
-          />
-
-          <button onClick = { onClickConfirmCanvasSize }> Confirm </button>
         </Grid>
+
       </Grid>
     </div>
   );
