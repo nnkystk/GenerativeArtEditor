@@ -138,7 +138,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
                   </Grid>
 
                   {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
-                  { geneModel.effectList.storage.map( (geneEffect: any) => (
+                  { geneModel.effectStorage.storage.map( (geneEffect: any) => (
                     <li key = { geneModel.id + '_' + geneEffect.id } >
                       <span> { geneEffect.id } </span>
                       { generateEffectPropsInputForm(geneEffect) }

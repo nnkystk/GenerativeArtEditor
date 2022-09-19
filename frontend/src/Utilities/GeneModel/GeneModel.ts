@@ -11,22 +11,22 @@ type Coordinate = {
 }
 class GeneModel{
 
-  public id         : number;
-  public mesh       : THREE.Mesh;
-  public effectList : GeneEffectStorage;
-  public name       : string | undefined;
-  public position   : Coordinate;
-  public scale      : Coordinate;
-  public color      : HexadecimalColor;
+  public id             : number;
+  public mesh           : THREE.Mesh;
+  public effectStorage  : GeneEffectStorage;
+  public name           : string | undefined;
+  public position       : Coordinate;
+  public scale          : Coordinate;
+  public color          : HexadecimalColor;
 
-  constructor(id:number, mesh: THREE.Mesh, effectList: GeneEffectStorage, options?: Options) {
-    this.id         = id;
-    this.mesh       = mesh;
-    this.effectList = effectList;
-    this.name       = options? (options.name? options.name: "No Name"): "No Name";  // nameの指定があればそれを無ければ固定値をセット
-    this.position   = { x: 0, y: 0, z: 0 };
-    this.scale      = { x: 1, y: 1, z: 1 };
-    this.color      = { r: "ff", g: "ff", b: "ff" };
+  constructor(id:number, mesh: THREE.Mesh, effectStorage: GeneEffectStorage, options?: Options) {
+    this.id             = id;
+    this.mesh           = mesh;
+    this.effectStorage  = effectStorage;
+    this.name           = options? (options.name? options.name: "No Name"): "No Name";  // nameの指定があればそれを無ければ固定値をセット
+    this.position       = { x: 0, y: 0, z: 0 };
+    this.scale          = { x: 1, y: 1, z: 1 };
+    this.color          = { r: "ff", g: "ff", b: "ff" };
   }
 
   setPosition(position: Vector){

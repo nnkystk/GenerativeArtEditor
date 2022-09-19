@@ -34,7 +34,7 @@ export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
   const onClickAddEffectButton = () => {
     // 指定されたEffectを生成・追加
     const effect = GeneGenerator.generateGeneEffect(generateTargetID);
-    props.geneModel.effectList.store(effect);
+    props.geneModel.effectStorage.store(effect);
     props.updateGeneModelStorage();
     // 変更を視覚化するために明示的に3D描画を1フレーム分実行
     props.setReqInstPlayFlg(true);
@@ -70,11 +70,7 @@ export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
       </Grid>
       
       <Grid container direction = "row-reverse" justifyContent = "flex-start" alignItems = "center">
-
-        <Tooltip title = "add effect you selected" style = {{ }}>
-          <button onClick = { onClickAddEffectButton }> Confirm </button>
-        </Tooltip>
-        
+        <button onClick = { onClickAddEffectButton }> Confirm </button>
       </Grid>
 
     </div>
