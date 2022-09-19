@@ -10,6 +10,8 @@ import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface
 import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
 import GeneGenerator from '../../Utilities/GeneGenerator'
 import GeneEffectStorage from "../../Utilities/GeneEffects/GeneEffectStorage";
+import { BasicModal } from '../Atoms/BasicModal'
+
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -52,7 +54,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-  const generateEffectInputForm = (geneEffect: GeneEffectInterface) => {
+  const generateEffectPropsInputForm = (geneEffect: GeneEffectInterface) => {
     /**
      * Summary: EffectのIDに応じたコンポーネントを返すメソッド
      */
@@ -119,20 +121,27 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
                     </Grid>
                   </Grid>
 
+                  {/** Effectを新規登録するフォーム */}
                   <Grid container spacing = { 2 }>
                     <Grid item xs = { 12 }>
-                      <EffectGenerateForm
-                        geneModel               = { geneModel }
-                        updateGeneModelStorage  = { props.updateGeneModelStorage }
-                        setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                      <BasicModal
+                        contents = {
+                          <EffectGenerateForm
+                            geneModel               = { geneModel }
+                            updateGeneModelStorage  = { props.updateGeneModelStorage }
+                            setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                          />
+                        }
+                        buttonTexts = "Add Effect"
                       />
                     </Grid>
                   </Grid>
 
+                  {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
                   { geneModel.effectList.storage.map( (geneEffect: any) => (
                     <li key = { geneModel.id + '_' + geneEffect.id } >
                       <span> { geneEffect.id } </span>
-                      { generateEffectInputForm(geneEffect) }
+                      { generateEffectPropsInputForm(geneEffect) }
                     </li>
                     ))
                   }

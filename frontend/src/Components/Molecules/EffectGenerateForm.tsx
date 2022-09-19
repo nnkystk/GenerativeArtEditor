@@ -23,18 +23,16 @@ interface Props{
 export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
-  const [ generateTargetID, setGenerateTargetID ] = useState<EffectID>('ROLL');
+  const [ generateTargetID, setGenerateTargetID ] = useState<EffectID>('ROLL');   // 新規追加するEffectのID
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { console.log(sampleState) }, [ sampleState ] );
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
   };
 
   const onClickAddEffectButton = () => {
-    // Effectを生成・追加
+    // 指定されたEffectを生成・追加
     const effect = GeneGenerator.generateGeneEffect(generateTargetID);
     props.geneModel.effectList.store(effect);
     props.updateGeneModelStorage();
@@ -52,33 +50,31 @@ export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
   
       <Grid container>
 
-        <Grid item xs={10}>
+        <Grid item xs = { 12 }>
 
           <FormControl fullWidth>
             <InputLabel>Effect To Add</InputLabel>
+
             {/** @ts-ignore */}
-            <Select value = { generateTargetID } label = "Effect" onChange={ (event: React.ChangeEvent<HTMLInputElement>) => { setGenerateTargetID(event.target.value) } }>
+            <Select value = { generateTargetID } label = "Effect" onChange = { (event: React.ChangeEvent<HTMLInputElement>) => { setGenerateTargetID(event.target.value) } }>
               { EFFECT_CATALOG.map( (obj) => {
                 return(
                   <MenuItem key = { props.geneModel.id + obj.id } value = { obj.id }> { obj.id } </MenuItem>
                 )
               })}
-
             </Select>
           </FormControl>
 
         </Grid>
 
-        <Grid item xs={2}>
-          <Tooltip title = "Add Effect" style={{}}>
-            <AddCircleOutline
-              style     = {{ cursor:'pointer' }}
-              onClick   = { onClickAddEffectButton }
-              fontSize  = "large"
-            />
-          </Tooltip>
-        </Grid>
+      </Grid>
+      
+      <Grid container direction = "row-reverse" justifyContent = "flex-start" alignItems = "center">
 
+        <Tooltip title = "add effect you selected" style = {{ }}>
+          <button onClick = { onClickAddEffectButton }> Confirm </button>
+        </Tooltip>
+        
       </Grid>
 
     </div>
