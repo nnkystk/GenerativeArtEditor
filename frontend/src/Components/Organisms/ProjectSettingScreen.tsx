@@ -33,10 +33,12 @@ export const ProjectSettingScreen: React.FC<Props> = (props: Props) => {
 
         <Grid item xs = { 12 }>
           <BasicModal
-            contents = {<CanvasSizeInputForm
-              projectInfo     = { props.projectInfo }
-              setProjectInfo  = { props.setProjectInfo }
-            />}
+            contents = {
+              <CanvasSizeInputForm
+                projectInfo     = { props.projectInfo }
+                setProjectInfo  = { props.setProjectInfo }
+              />
+            }
             buttonTexts = "Canvas size"
           />
         </Grid>

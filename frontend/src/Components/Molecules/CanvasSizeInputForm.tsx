@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Grid, TextField, Button } from "@material-ui/core";
-import { BasicModal } from '../Atoms/BasicModal'
-import CanvasSize from '../../Utilities/GlobalVarriables/CanvasSize'
 import ProjectInfo from '../../Utilities/ProjectInfo'
 
 interface Props {
@@ -43,9 +41,9 @@ export const CanvasSizeInputForm: React.FC<Props> = (props: Props) => {
 
   return (
     <div>
-      <Grid container>
+      <Grid container spacing = { 2 }>
+
         <Grid item xs = { 12 }>
-        
           <TextField
             variant   = "outlined"
             type      = "number"
@@ -60,7 +58,9 @@ export const CanvasSizeInputForm: React.FC<Props> = (props: Props) => {
               shrink: true,
             }}
           />
+        </Grid>
 
+        <Grid item xs = { 12 }>
           <TextField
             variant   = "outlined"
             type      = "number"
@@ -75,7 +75,6 @@ export const CanvasSizeInputForm: React.FC<Props> = (props: Props) => {
               shrink: true,
             }}
           />
-
         </Grid>
 
       </Grid>
@@ -83,6 +82,7 @@ export const CanvasSizeInputForm: React.FC<Props> = (props: Props) => {
       <Grid container direction="row-reverse" justifyContent="flex-start" alignItems="center">
         <button onClick = { onClickConfirmCanvasSize }> Confirm </button>
       </Grid>
+
     </div>
   );
 
