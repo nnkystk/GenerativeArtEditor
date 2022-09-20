@@ -64,7 +64,7 @@ export const CanvasSizeInputForm: React.FC<Props> = (props: Props) => {
           <TextField
             variant   = "outlined"
             type      = "number"
-            label     = "Width"
+            label     = "Height"
             value     = { canvasSizeHeight }
             onChange  = { handleChangeCanvasSizeHeight }
             size      = "small"
@@ -79,7 +79,7 @@ export const CanvasSizeInputForm: React.FC<Props> = (props: Props) => {
 
       </Grid>
 
-      <Grid container direction="row-reverse" justifyContent="flex-start" alignItems="center">
+      <Grid container direction = "row-reverse" justifyContent = "flex-start" alignItems = "center">
         <button onClick = { onClickConfirmCanvasSize }> Confirm </button>
       </Grid>
 

@@ -111,6 +111,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
         />
       </Grid>
 
+      <Grid item xs = { 12 }>
+        <h2>FOOTER</h2>
+      </Grid>
+
     </Grid>
   );
 };

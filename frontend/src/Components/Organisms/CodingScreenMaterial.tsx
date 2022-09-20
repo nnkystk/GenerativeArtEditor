@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Paper, Tooltip } from "@material-ui/core";
+import { Grid, Paper, Tooltip, Divider } from "@material-ui/core";
 import { AddCircleOutline } from '@mui/icons-material';
 import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
 import { PositionInputForm } from '../Molecules/PositionInputForm'
@@ -11,6 +11,8 @@ import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
 import GeneGenerator from '../../Utilities/GeneGenerator'
 import GeneEffectStorage from "../../Utilities/GeneEffects/GeneEffectStorage";
 import { BasicModal } from '../Atoms/BasicModal'
+import GeneModel from "src/Utilities/GeneModel/GeneModel";
+import { BasicAccordion } from '../Atoms/BasicAccordion'
 
 
 /**
@@ -67,11 +69,10 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
 
   return(
-    <div>
-
       <Grid container spacing = { 2 } style = {{ paddingTop: 20 }}>
 
-        <Grid item  xs = { 12 } sm = { 6 } md = { 4 }  lg = { 3 } >
+        {/** Add GeneModel Button */}
+        <Grid item xs = { 12 }>
           <Tooltip title = "Add 3DModel">
             <Paper
               variant = "outlined"
@@ -85,77 +86,119 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
         {/** GeneModel */}
         { props.geneModelStorage.storage.map( (geneModel) => (
-          <Grid key = { geneModel.id } item xs = { 12 } sm = { 6 } md = { 4 }  lg = { 3 }>
-            <Paper variant = "outlined" style = {{ padding: 10, cursor:'pointer' }}>
-              <details>
-                <summary> { geneModel.name }</summary>
+          <Grid key = { geneModel.id } item xs = { 12 } sm = { 12 } md = { 12 }  lg = { 6 } xl = { 4 }>
 
-                  {/** Property */}
-                  <Grid container style = {{ padding: 10 }}>
-                    <PositionInputForm
-                      geneModel = { geneModel }
-                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                    />
-                  </Grid>
-
-                  <Grid container style = {{ padding: 10 }}>
-                    <ScaleInputForm
-                      geneModel = { geneModel }
-                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                    />
-                  </Grid>
-
-                  <Grid container style = {{ padding: 10 }}>
-                    <ColorInputForm
-                      geneModel = { geneModel }
-                      setReqInstPlayFlg = { props.setReqInstPlayFlg }
-                    />
-                  </Grid>
-
-                {/** Effect */}
-                <Grid container style = {{ padding: 10 }}>
-
-                  <Grid container spacing = { 2 }>
-                    <Grid item xs = { 12 }>
-                      <span> Effect: </span>
-                    </Grid>
-                  </Grid>
-
-                  {/** Effectを新規登録するフォーム */}
-                  <Grid container spacing = { 2 }>
-                    <Grid item xs = { 12 }>
-                      <BasicModal
-                        contents = {
-                          <EffectGenerateForm
-                            geneModel               = { geneModel }
-                            updateGeneModelStorage  = { props.updateGeneModelStorage }
-                            setReqInstPlayFlg       = { props.setReqInstPlayFlg }
-                          />
-                        }
-                        buttonTexts = "Add Effect"
-                      />
-                    </Grid>
-                  </Grid>
-
-                  {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
-                  { geneModel.effectStorage.storage.map( (geneEffect: any) => (
-                    <li key = { geneModel.id + '_' + geneEffect.id } >
-                      <span> { geneEffect.id } </span>
-                      { generateEffectPropsInputForm(geneEffect) }
-                    </li>
-                    ))
-                  }
-                </Grid>
-
-              </details>
-            </Paper>
+            <BasicAccordion
+              label     = { geneModel.id }
+              contents  = {
+                <GeneModelEditPanel
+                  geneModel               = { geneModel}
+                  geneModelStorage        = { props.geneModelStorage }
+                  updateGeneModelStorage  = { props.updateGeneModelStorage }
+                  setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                />
+              }
+            />
           </Grid>
 
         ))}
       </Grid>
-    </div>
   );
 };
 
+
+interface PropsGeneModelEditPanel{
+  geneModel               : GeneModel;
+  geneModelStorage        : GeneModelStorage;
+  updateGeneModelStorage  : any;
+  setReqInstPlayFlg(bool: boolean): void;
+}
+
+const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneModelEditPanel) => {
+
+  const generateEffectPropsInputForm = (geneEffect: GeneEffectInterface) => {
+    /**
+     * Summary: EffectのIDに応じたコンポーネントを返すメソッド
+     */
+    if(geneEffect.id == "ROLL"){
+      return <EffectRollForm geneEffect = { geneEffect } />
+    }else if(geneEffect.id == "MOVE"){
+      return <EffectRollForm geneEffect = { geneEffect } />
+    }
+  }
+
+  return(
+
+    <Grid container spacing = { 2 }>
+
+      <Grid item xs>
+
+        {/** Property */}
+        <Grid container style = {{ padding: 10 }}>
+          <PositionInputForm
+            geneModel = { props.geneModel }
+            setReqInstPlayFlg = { props.setReqInstPlayFlg }
+          />
+        </Grid>
+
+        <Grid container style = {{ padding: 10 }}>
+          <ScaleInputForm
+            geneModel = { props.geneModel }
+            setReqInstPlayFlg = { props.setReqInstPlayFlg }
+          />
+        </Grid>
+
+        <Grid container style = {{ padding: 10 }}>
+          <ColorInputForm
+            geneModel = { props.geneModel }
+            setReqInstPlayFlg = { props.setReqInstPlayFlg }
+          />
+        </Grid>
+
+      </Grid>
+
+    <Divider orientation="vertical" flexItem />
+
+    {/** Effect */}
+    <Grid item xs>
+      <Grid container style = {{ padding: 10 }}>
+
+        <Grid container spacing = { 2 }>
+          <Grid item xs = { 12 }>
+            <span> Effect: </span>
+          </Grid>
+        </Grid>
+
+        {/** Effectを新規登録するフォーム */}
+        <Grid container spacing = { 2 }>
+          <Grid item xs = { 12 }>
+            <BasicModal
+              contents = {
+                <EffectGenerateForm
+                  geneModel               = { props.geneModel }
+                  updateGeneModelStorage  = { props.updateGeneModelStorage }
+                  setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                />
+              }
+              buttonTexts = "Add Effect"
+            />
+          </Grid>
+        </Grid>
+
+        {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
+        { props.geneModel.effectStorage.storage.map( (geneEffect: any) => (
+          <li key = { props.geneModel.id + '_' + geneEffect.id } >
+            <span> { geneEffect.id } </span>
+            { generateEffectPropsInputForm(geneEffect) }
+          </li>
+          ))
+        }
+      </Grid>
+    </Grid>
+
+  </Grid>
+
+  )
+}
 
 export default CodingScreenMaterial
