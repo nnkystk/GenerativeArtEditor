@@ -2,9 +2,9 @@ import GeneEffectInterface from './GeneEffectInterface'
 import GeneEffectParameter from './GeneEffectParameter'
 import { EffectID } from '../GlobalVarriables/EffectCatalog'
 
-class GeneEffectRoll implements GeneEffectInterface{
+class GeneEffectMove implements GeneEffectInterface{
   
-  id : EffectID = "ROLL";
+  id : EffectID = "MOVE";
   uid: number;
   parameter: GeneEffectParameter;
 
@@ -15,9 +15,9 @@ class GeneEffectRoll implements GeneEffectInterface{
 
   play(mesh: THREE.Mesh){
     if(this.parameter.vector){
-      mesh.rotation.x += this.parameter.vector.x;
-      mesh.rotation.y += this.parameter.vector.y;
-      mesh.rotation.z += this.parameter.vector.z;
+      mesh.position.x += this.parameter.vector.x;
+      mesh.position.y += this.parameter.vector.y;
+      mesh.position.z += this.parameter.vector.z;
     }
     return mesh
   }
@@ -25,4 +25,4 @@ class GeneEffectRoll implements GeneEffectInterface{
 }
 
 
-export default GeneEffectRoll
+export default GeneEffectMove

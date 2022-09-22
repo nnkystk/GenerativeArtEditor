@@ -1,21 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Tooltip, Paper } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
-import GeneModel from '../../Utilities/GeneModel'
-import GeneModelStorage from '../../Utilities/GeneModelStorage' 
+import GeneModel from '../../Utilities/GeneModel/GeneModel'
+import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
+import Recorder from './Recorder'
+import CanvasSize from '../../Utilities/GlobalVarriables/CanvasSize'
+import { Vector2 } from "three";
 
 interface Props {
   geneModelStorage    : GeneModelStorage;
+  canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
   reqInstPlayFlg      : boolean;
   setIsPlayingFlg(bool: boolean)    : void;
   setReqInstPlayFlg(bool: boolean)  :void;
 }
 interface State{
-  screenSize: any;
   threeRenderer: any;
   threeScene: any;
   threeCamera: any;
@@ -32,43 +35,65 @@ export class PlaybackScreen extends React.Component<Props, State>{
  *            FuncComponentの場合、レンダーのたびにCanvasコンテキストが生成され、重複によるクラッシュを起こしてしまう。
  */
 
-  FOV = 50;
+  FOV: number = 50;
+  canvasRef: any;
 
-  state: State = {
-    // optional second annotation for better type inference
-    screenSize    : { width: 960, height: 540 },
-    threeRenderer : new THREE.WebGLRenderer(),
-    threeScene    : new THREE.Scene(),
-    threeCamera   : new THREE.PerspectiveCamera(),
-    reqAnmIdRef   : ""
-  };
+  constructor(props: Props){
 
+    super(props)
+    this.state = {
+      // optional second annotation for better type inference
+      threeRenderer : new THREE.WebGLRenderer(),
+      threeScene    : new THREE.Scene(),
+      threeCamera   : new THREE.PerspectiveCamera(),
+      reqAnmIdRef   : ""
+    };
+
+    this.test = this.test.bind(this)
+    this.canvasRef = React.createRef();
+
+  }
 
   render() {
 
     return (
-      <div>
+      <div className = "PlayBackScreen" style = { { backgroundColor : "#e0e0e0" } }>
 
-      <Grid container
-        className = "PlayBackScreen"
-        style = { { backgroundColor : "#e0e0e0" } }
-      >
-
-        <Grid container
-          alignItems ="center" justifyContent="center"
-        >
-          <canvas id = 'canvas' onClick = { this.onClickCanvas }/>
+        <Grid container alignItems ="center" justifyContent="center" onClick = { this.onClickCanvas }>
+          <canvas id = 'canvas' ref = { this.canvasRef } />
         </Grid>
 
-        <Grid container>
-          { this.props.isPlayingFlg ?
-            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { this.stopThree }/> :
-            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { this.playBackThree } /> }
+        <Grid container style = {{ paddingLeft: 10, paddingRight: 10 }}>
+
+          <Grid item xs = { 6 }>
+            <Grid container>
+              { this.props.isPlayingFlg ?
+                <Tooltip title="Pause">
+                  <PauseCircleOutlineOutlined
+                    fontSize  = "large"
+                    style     = {{ cursor:'pointer' }}
+                    onClick   = { this.onClickCanvas }
+                  />
+                </Tooltip>:
+                <Tooltip title="Play">
+                  <PlayCircleFilledWhiteOutlined
+                    fontSize  = "large"
+                    style     = {{ cursor:'pointer' }}
+                    onClick   = { this.onClickCanvas }
+                  />
+                </Tooltip>
+              }
+            </Grid>
+          </Grid>
+
+          <Grid item xs = { 6 }>
+            <Grid container direction="row-reverse" justifyContent="flex-start" alignItems="center" >
+              <Recorder canvas = { this.canvasRef.current }/>
+            </Grid>
+          </Grid>
+
         </Grid>
 
-        <h2> { this.props.reqInstPlayFlg.toString() }</h2>
-
-      </Grid>
       </div>
     );
   }
@@ -76,63 +101,67 @@ export class PlaybackScreen extends React.Component<Props, State>{
 	// ___ ライフサイクル ___ ___ ___ ___ ___
 
   // コンポーネントがマウント(配置)された直前に呼び出されるメソッド
-  // このメソッド内では描画されたDOMにアクセスすることができます
 	componentDidMount(){
     this.initializeThree();
 	}
 
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
-    if (this.props.reqInstPlayFlg) {
-      this.updateSceneThree();
-      this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
-      this.props.setReqInstPlayFlg(false);
+    // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
+    const canvasSize = this.state.threeRenderer.getSize(new Vector2());
+    if(canvasSize.x != this.props.canvasSize.width || canvasSize.y != this.props.canvasSize.height ){
+      this.resizeCanvasSize();
     }
-
+    this.updateSceneThree();
+    this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
+    this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
   }
-
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
   componentWillUnmount(){
     this.stopThree();
-    console.log("c")
   }
 
 
 	// ___ イベントハンドラ ___ ___ ___ ___ ___
 
   test(){
-		console.log('test');
-	} 
+  }
 
   // ___ メソッド ___ ___ ___ ___ ___
   initializeThree = () => {
     /**
      * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
      */
-
       const renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector("#canvas") as HTMLCanvasElement
       });
       const scene   = new THREE.Scene();
-      const camera  = new THREE.PerspectiveCamera(this.FOV, this.state.screenSize.width / this.state.screenSize.height);
+      const camera  = new THREE.PerspectiveCamera(this.FOV, this.props.canvasSize.width / this.props.canvasSize.height);
       camera.position.set(0, 0, +1000);
       // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
       // scene.add(light);
 
       // レンダラーをセットアップする
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(this.state.screenSize.width, this.state.screenSize.height);
+      renderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
 
       // シーンをセットアップする
       this.updateSceneThree();
 
-      this.setState({threeRenderer: renderer});
-      this.setState({threeScene: scene})
-      this.setState({threeCamera: camera})
-     
+      this.setState({ threeRenderer: renderer });
+      this.setState({ threeScene: scene })
+      this.setState({ threeCamera: camera })
    };
- 
+
+   resizeCanvasSize = () => {
+    // カメラを更新
+    this.state.threeCamera.aspect = this.props.canvasSize.width / this.props.canvasSize.height
+    this.state.threeCamera.updateProjectionMatrix();
+    // レンダラーを更新
+    this.state.threeRenderer.setPixelRatio(window.devicePixelRatio);
+    this.state.threeRenderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
+   }
  
    updateSceneThree = () => {
       /**
@@ -161,7 +190,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
            })
  
            this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
-           this.state.reqAnmIdRef = requestAnimationFrame(tick);
+           this.setState({reqAnmIdRef: requestAnimationFrame(tick)});
          }
  
          tick();

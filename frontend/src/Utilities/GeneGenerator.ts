@@ -1,33 +1,43 @@
 import * as THREE from 'three';
-import GeneModel from './GeneModel'
+import GeneModel from './GeneModel/GeneModel'
+import GeneEffectInterface from '../Utilities/GeneEffects/GeneEffectInterface'
 import GeneEffectRoll from './GeneEffects/GeneEffectRoll'
 import GeneEffectParameter from '../Utilities/GeneEffects/GeneEffectParameter'
+import { EffectID } from './GlobalVarriables/EffectCatalog'
+import GeneEffectStorage from './GeneEffects/GeneEffectStorage'
+import { EFFECT_CATALOG } from './GlobalVarriables/EffectCatalog';
 
 export class GeneGenerator{
+  
+  constructor(){ }
 
-  constructor(){
-
-  }
-
-  static generateMesh (){
+  static generateMesh(){    // TODO: 引数に応じて異なるMeshを生成するよう変更
     const geometry  = new THREE.BoxGeometry(100, 100, 100);
     const material  = new THREE.MeshMatcapMaterial({ color: 0xffffff });
-    const box       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
-    return box
+    const mesh       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
+    return mesh
   }
 
-  static generateGeneEffect(){
-    const effectParams = new GeneEffectParameter();
-    effectParams.vector = { x: 0.01, y: 0.01, z: 0 };
-    const effect = new GeneEffectRoll(1, effectParams);   // !!! 仮置きでROLLEffectを生成 !!!
+  static generateGeneModel(modelID: number, mesh: THREE.Mesh, effectList: GeneEffectStorage){
+    const name        = "sample";
+    const geneModel   = new GeneModel(modelID, mesh, effectList, { name: name });
+    return geneModel
+  }
+
+  static generateGeneEffect(effectID: EffectID){
+    const TargetEffect = GeneGenerator.findEffectByID(effectID);
+    const uid = 1;    // !!! 仮置き !!!
+    const effect = new TargetEffect(uid, new GeneEffectParameter());   // !!! 仮置き !!!
     return effect
   }
 
-  static generateGeneModel(id: number, mesh: THREE.Mesh){
-    const name        = "sample";
-    const effectList  = [ this.generateGeneEffect() ];
-    const geneModel   = new GeneModel(id, mesh, effectList, { name: name });
-    return geneModel
+  static findEffectByID(effectID: EffectID){
+    const targetEffect = EFFECT_CATALOG.find( (obj) => obj.id == effectID );
+    if(targetEffect){
+      return targetEffect.effect;
+    }else{
+      return GeneEffectRoll;
+    }
   }
 
 }

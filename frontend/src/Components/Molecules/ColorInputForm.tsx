@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import GeneModel from '../../Utilities/GeneModel'
-import HexadecimalColor from '../../Utilities/HexadecimalColor'
+import React, { useState } from "react";
+import { Grid, TextField } from "@material-ui/core";
+import GeneModel from '../../Utilities/GeneModel/GeneModel'
+import HexadecimalColor from '../../Utilities/GlobalVarriables/HexadecimalColor'
 
 // Type Declaration of Props
 interface Props{
@@ -51,35 +52,73 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
   return(
     <div>
 
-      <div> Color: </div>
+      <Grid container spacing = { 2 }>
+        <Grid item xs = { 12 }>
+          <span> Color: </span>
+        </Grid>
+      </Grid>
 
-      {/** UI上では16進数の値を10進数に変換した値を表示する */}
-      <input
-        type      = "number"
-        step      = "5"
-        min       = "0"
-        max       = "255"
-        value     = { parseInt(color.r, 16) }
-        onChange  = { handleChangeR }
-      />
+      <Grid container alignItems ="center" spacing = { 2 }>
 
-      <input
-        type      = "number"
-        step      = "5"
-        min       = "0"
-        max       = "255"
-        value     = { parseInt(color.g, 16)  }
-        onChange  = { handleChangeG }
-      />
+        <Grid item xs = { 12 } md = { 4 }>
+          {/** UI上では16進数の値を10進数に変換した値を表示する */}
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "R"
+            value     = { parseInt(color.r, 16) }
+            onChange  = { handleChangeR }
+            size      = "small"
+            inputProps = {{
+              step  : "5",
+              min   : "0",
+              max   : "255"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+        
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "G"
+            value     = { parseInt(color.g, 16) }
+            onChange  = { handleChangeG }
+            size      = "small"
+            inputProps = {{
+              step  : "5",
+              min   : "0",
+              max   : "255"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
 
-      <input
-        type      = "number"
-        step      = "5"
-        min       = "0"
-        max       = "255"
-        value     = { parseInt(color.b, 16)  }
-        onChange  = { handleChangeB }
-      />
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "B"
+            value     = { parseInt(color.b, 16) }
+            onChange  = { handleChangeB }
+            size      = "small"
+            inputProps = {{
+              step  : "5",
+              min   : "0",
+              max   : "255"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>        
+
+      </Grid>
 
     </div>
   )

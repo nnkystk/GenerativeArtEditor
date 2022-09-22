@@ -1,12 +1,12 @@
-import GeneEffectParameter from './GeneEffectParameter'
+import { GeneInteractionParameter } from './GeneInteractionParameter'
 import { EffectID } from '../GlobalVarriables/EffectCatalog'
 
-interface GeneEffectInterface{
+interface GeneInteractionInterface{
 
   // 実装必須
   id        : EffectID;
   uid       : number;
-  parameter : GeneEffectParameter;  // Effectの強さや方向等を調整するためのパラメータ
+  parameter : GeneInteractionParameter;  // Effectの強さや方向等を調整するためのパラメータ
   play(mesh: THREE.Mesh): THREE.Mesh;
 
   instructions  ?: Array<string>;        // Effectの説明テキスト
@@ -14,4 +14,4 @@ interface GeneEffectInterface{
 }
 
 
-export default GeneEffectInterface
+export default GeneInteractionInterface

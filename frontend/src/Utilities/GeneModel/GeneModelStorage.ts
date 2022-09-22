@@ -1,7 +1,4 @@
-import GeneEffectParameter from './GeneEffects/GeneEffectParameter';
 import GeneModel from './GeneModel'
-import GeneGenerator from './GeneGenerator';
-import Vector from './Vector'
 
 class GeneModelStorage{
 
@@ -10,6 +7,7 @@ class GeneModelStorage{
   constructor(){
   }
 
+  /**
   getGeneModelById(id: number){
     const targetModel = this.storage.find( (model) => model.id === id );
     if(targetModel){
@@ -32,10 +30,9 @@ class GeneModelStorage{
       console.log('Model is not found')
     }
   }
+   */
 
-  addGeneModel(){
-    const mesh      = GeneGenerator.generateMesh();
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh);
+  store(geneModel: GeneModel){
     this.storage.push(geneModel);
   }
 

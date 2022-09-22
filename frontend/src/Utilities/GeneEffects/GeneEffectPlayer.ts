@@ -1,4 +1,4 @@
-import GeneModel from '../GeneModel'
+import GeneModel from '../GeneModel/GeneModel'
 
 
 class GeneEffectPlayer{
@@ -13,7 +13,7 @@ class GeneEffectPlayer{
      * @return  void
      */
 
-    geneModel.effectList.map( (effect) => {
+    geneModel.effectStorage.storage.map( (effect) => {
       effect.play(geneModel.mesh);
     })
 

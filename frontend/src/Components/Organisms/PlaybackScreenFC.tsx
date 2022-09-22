@@ -3,8 +3,8 @@ import { Grid } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
-import GeneModel from '../../Utilities/GeneModel'
-import GeneModelStorage from '../../Utilities/GeneModelStorage' 
+import GeneModel from '../../Utilities/GeneModel/GeneModel'
+import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage' 
 import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 
 /**
@@ -165,8 +165,8 @@ export const PlaybackScreenFC: React.FC<Props> = (props: Props) => {
 
         <Grid container>
           { props.isPlayingFlg ?
-            <PlayCircleFilledWhiteOutlined sx={{ fontSize: 50 }} onClick = { stopThree }/> :
-            <PauseCircleOutlineOutlined sx={{ fontSize: 50 }} onClick = { playBackThree } /> }
+            <PlayCircleFilledWhiteOutlined  sx = {{ fontSize: 50 }} onClick = { stopThree }/> :
+            <PauseCircleOutlineOutlined     sx = {{ fontSize: 50 }} onClick = { playBackThree } /> }
         </Grid>
 
       </Grid>
