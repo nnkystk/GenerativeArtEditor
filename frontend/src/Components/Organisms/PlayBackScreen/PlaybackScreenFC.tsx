@@ -9,7 +9,7 @@ import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
 
 /**
  * WARNING  : 本コンポーネントを使用すると、ReactによるレンダーのたびにCanvasのコンテキストが多重生成されTHREE.jsがクラッシュを起こす
- *            対策として、クラスコンポーネントに移植したものを使用すること
+ *            対策として、クラスコンポーネントに移植したものを使用すること 本コンポーネントは現在使用されていない
  * Summary	: ジェネラティブアート作品を再生するComponent
  * Logic		: - 作品ファイルの読み込みおよび復号化を行う
  *            - 復号化した情報をレンダリング用データへ加工する

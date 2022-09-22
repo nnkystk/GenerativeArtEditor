@@ -19,8 +19,8 @@ export class GeneGenerator{
   }
 
   static generateGeneModel(modelID: number, mesh: THREE.Mesh, effectList: GeneEffectStorage){
-    const name        = "sample";
-    const geneModel   = new GeneModel(modelID, mesh, effectList, { name: name });
+    const options     = { name: "sample" };
+    const geneModel   = new GeneModel(modelID, mesh, effectList, options);
     return geneModel
   }
 
