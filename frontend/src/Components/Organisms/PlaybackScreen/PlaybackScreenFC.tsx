@@ -3,9 +3,9 @@ import { Grid } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
-import GeneModel from '../../Utilities/GeneModel/GeneModel'
-import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage' 
-import GeneEffectPlayer from '../../Utilities/GeneEffects/GeneEffectPlayer'
+import GeneModel from '../../../Utilities/GeneModel/GeneModel'
+import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
+import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 
 /**
  * WARNING  : 本コンポーネントを使用すると、ReactによるレンダーのたびにCanvasのコンテキストが多重生成されTHREE.jsがクラッシュを起こす

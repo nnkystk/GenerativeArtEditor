@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Tooltip, Divider } from "@material-ui/core";
 import { AddCircleOutline }   from '@mui/icons-material';
-import { BasicModal }         from '../Atoms/BasicModal'
-import { BasicAccordion }     from '../Atoms/BasicAccordion'
-import { EffectRollForm }     from '../Molecules/EffectInputForm/EffectRollForm'
-import { EffectMoveForm }     from '../Molecules/EffectInputForm/EffectMoveForm'
-import { PositionInputForm }  from '../Molecules/PositionInputForm'
-import { ScaleInputForm }     from '../Molecules/ScaleInputForm'
-import { ColorInputForm }     from '../Molecules/ColorInputForm'
-import { EffectGenerateForm } from '../Molecules/EffectGenerateForm'
-import GeneEffectInterface    from "../../Utilities/GeneEffects/GeneEffectInterface";
-import GeneModelStorage       from '../../Utilities/GeneModel/GeneModelStorage';
-import GeneGenerator          from '../../Utilities/GeneGenerator'
-import GeneEffectStorage      from "../../Utilities/GeneEffects/GeneEffectStorage";
-import GeneModel              from '../../Utilities/GeneModel/GeneModel';
+import { BasicModal }         from '../../Atoms/BasicModal'
+import { BasicAccordion }     from '../../Atoms/BasicAccordion'
+import { EffectRollForm }     from '../../Molecules/EffectInputForm/EffectRollForm'
+import { EffectMoveForm }     from '../../Molecules/EffectInputForm/EffectMoveForm'
+import { PositionInputForm }  from '../../Molecules/PositionInputForm'
+import { ScaleInputForm }     from '../../Molecules/ScaleInputForm'
+import { ColorInputForm }     from '../../Molecules/ColorInputForm'
+import { EffectGenerateForm } from '../../Molecules/EffectGenerateForm'
+import GeneEffectInterface    from "../../../Utilities/GeneEffects/GeneEffectInterface";
+import GeneModelStorage       from '../../../Utilities/GeneModel/GeneModelStorage';
+import GeneGenerator          from '../../../Utilities/GeneGenerator'
+import GeneEffectStorage      from "../../../Utilities/GeneEffects/GeneEffectStorage";
+import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent

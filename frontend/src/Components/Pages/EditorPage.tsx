@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { Grid, Divider } from "@material-ui/core";
-import { PlaybackScreen } from '../Organisms/PlaybackScreen';
-import { CodingScreenMaterial } from '../Organisms/CodingScreenMaterial';
+import { PlaybackScreen } from '../Organisms/PlaybackScreen/PlaybackScreen';
+import { CodingScreenMaterial } from '../Organisms/CodingScreen/CodingScreenMaterial';
 import { ProjectSettingScreen } from '../Organisms/ProjectSettingScreen'
 import GeneGenerator from '../../Utilities/GeneGenerator';
 import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
