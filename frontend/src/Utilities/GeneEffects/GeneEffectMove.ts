@@ -15,9 +15,9 @@ class GeneEffectMove implements GeneEffectInterface{
 
   play(mesh: THREE.Mesh){
     if(this.parameter.vector){
-      mesh.rotation.x += this.parameter.vector.x;
-      mesh.rotation.y += this.parameter.vector.y;
-      mesh.rotation.z += this.parameter.vector.z;
+      mesh.position.x += this.parameter.vector.x;
+      mesh.position.y += this.parameter.vector.y;
+      mesh.position.z += this.parameter.vector.z;
     }
     return mesh
   }

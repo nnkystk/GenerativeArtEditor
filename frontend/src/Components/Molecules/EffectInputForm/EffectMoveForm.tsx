@@ -8,7 +8,7 @@ interface Props{
   geneEffect: GeneEffectRoll | GeneEffectInterface
 }
 
-export const EffectRollForm: React.FC<Props> = (props: Props) => {
+export const EffectMoveForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ parameter, setParameter ] = useState<GeneEffectParameter>(props.geneEffect.parameter);
@@ -48,7 +48,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
           onChange  = { handleChangeX }
           size      = "small"
           inputProps = {{
-            step  : "0.001",
+            step  : "0.1",
           }}
           InputLabelProps = {{
             shrink: true,
@@ -65,7 +65,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
           onChange  = { handleChangeY }
           size      = "small"
           inputProps = {{
-            step  : "0.001",
+            step  : "0.1",
           }}
           InputLabelProps = {{
             shrink: true,
@@ -82,7 +82,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
           onChange  = { handleChangeZ }
           size      = "small"
           inputProps = {{
-            step  : "0.001",
+            step  : "0.1",
           }}
           InputLabelProps = {{
             shrink: true,
@@ -96,4 +96,4 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
 }
 
 
-export default EffectRollForm
+export default EffectMoveForm

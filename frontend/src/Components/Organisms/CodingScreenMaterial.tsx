@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Tooltip, Divider } from "@material-ui/core";
-import { AddCircleOutline } from '@mui/icons-material';
-import { EffectRollForm } from '../Molecules/EffectInputForm/EffectRollForm'
-import { PositionInputForm } from '../Molecules/PositionInputForm'
-import { ScaleInputForm } from '../Molecules/ScaleInputForm'
-import { ColorInputForm } from '../Molecules/ColorInputForm'
+import { AddCircleOutline }   from '@mui/icons-material';
+import { BasicModal }         from '../Atoms/BasicModal'
+import { BasicAccordion }     from '../Atoms/BasicAccordion'
+import { EffectRollForm }     from '../Molecules/EffectInputForm/EffectRollForm'
+import { EffectMoveForm }     from '../Molecules/EffectInputForm/EffectMoveForm'
+import { PositionInputForm }  from '../Molecules/PositionInputForm'
+import { ScaleInputForm }     from '../Molecules/ScaleInputForm'
+import { ColorInputForm }     from '../Molecules/ColorInputForm'
 import { EffectGenerateForm } from '../Molecules/EffectGenerateForm'
-import GeneEffectInterface from "../../Utilities/GeneEffects/GeneEffectInterface";
-import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
-import GeneGenerator from '../../Utilities/GeneGenerator'
-import GeneEffectStorage from "../../Utilities/GeneEffects/GeneEffectStorage";
-import { BasicModal } from '../Atoms/BasicModal'
-import GeneModel from "src/Utilities/GeneModel/GeneModel";
-import { BasicAccordion } from '../Atoms/BasicAccordion'
-
+import GeneEffectInterface    from "../../Utilities/GeneEffects/GeneEffectInterface";
+import GeneModelStorage       from '../../Utilities/GeneModel/GeneModelStorage';
+import GeneGenerator          from '../../Utilities/GeneGenerator'
+import GeneEffectStorage      from "../../Utilities/GeneEffects/GeneEffectStorage";
+import GeneModel              from '../../Utilities/GeneModel/GeneModel';
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -63,7 +63,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
     if(geneEffect.id == "ROLL"){
       return <EffectRollForm geneEffect = { geneEffect } />
     }else if(geneEffect.id == "MOVE"){
-      return <EffectRollForm geneEffect = { geneEffect } />
+      return <EffectMoveForm geneEffect = { geneEffect } />
     }
   }
 
@@ -86,7 +86,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
         {/** GeneModel */}
         { props.geneModelStorage.storage.map( (geneModel) => (
-          <Grid key = { geneModel.id } item xs = { 12 } sm = { 12 } md = { 12 }  lg = { 6 } xl = { 4 }>
+          <Grid key = { geneModel.id } item xs = { 12 } sm = { 12 } md = { 12 }  lg = { 12 } xl = { 6 }>
 
             <BasicAccordion
               label     = { geneModel.id }
@@ -123,7 +123,7 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
     if(geneEffect.id == "ROLL"){
       return <EffectRollForm geneEffect = { geneEffect } />
     }else if(geneEffect.id == "MOVE"){
-      return <EffectRollForm geneEffect = { geneEffect } />
+      return <EffectMoveForm geneEffect = { geneEffect } />
     }
   }
 
@@ -131,24 +131,24 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
 
     <Grid container spacing = { 2 }>
 
-      <Grid item xs>
+      <Grid item xs = { 5 } >
 
         {/** Property */}
-        <Grid container style = {{ padding: 10 }}>
+        <Grid container style = {{ padding: 20 }}>
           <PositionInputForm
             geneModel = { props.geneModel }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
 
-        <Grid container style = {{ padding: 10 }}>
+        <Grid container style = {{ padding: 20 }}>
           <ScaleInputForm
             geneModel = { props.geneModel }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
 
-        <Grid container style = {{ padding: 10 }}>
+        <Grid container style = {{ padding: 20 }}>
           <ColorInputForm
             geneModel = { props.geneModel }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
@@ -157,44 +157,50 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
 
       </Grid>
 
-    <Divider orientation="vertical" flexItem />
+      <Divider orientation="vertical" flexItem />
 
-    {/** Effect */}
-    <Grid item xs>
-      <Grid container style = {{ padding: 10 }}>
+      {/** Effect */}
+      <Grid item xs = { 5 }>
+        <Grid container style = {{ padding: 20 }}>
 
-        <Grid container spacing = { 2 }>
-          <Grid item xs = { 12 }>
-            <span> Effect: </span>
+          <Grid container spacing = { 2 }>
+            <Grid item xs = { 12 }>
+              <span> Effect: </span>
+            </Grid>
           </Grid>
-        </Grid>
 
-        {/** Effectを新規登録するフォーム */}
-        <Grid container spacing = { 2 }>
-          <Grid item xs = { 12 }>
-            <BasicModal
-              contents = {
-                <EffectGenerateForm
-                  geneModel               = { props.geneModel }
-                  updateGeneModelStorage  = { props.updateGeneModelStorage }
-                  setReqInstPlayFlg       = { props.setReqInstPlayFlg }
-                />
-              }
-              buttonTexts = "Add Effect"
-            />
+          {/** Effectを新規登録するフォーム */}
+          <Grid container spacing = { 2 }>
+            <Grid item xs = { 12 }>
+              <BasicModal
+                contents = {
+                  <EffectGenerateForm
+                    geneModel               = { props.geneModel }
+                    updateGeneModelStorage  = { props.updateGeneModelStorage }
+                    setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                  />
+                }
+                buttonTexts = "Add Effect"
+              />
+            </Grid>
           </Grid>
-        </Grid>
 
-        {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
-        { props.geneModel.effectStorage.storage.map( (geneEffect: any) => (
-          <li key = { props.geneModel.id + '_' + geneEffect.id } >
-            <span> { geneEffect.id } </span>
-            { generateEffectPropsInputForm(geneEffect) }
-          </li>
-          ))
-        }
+          {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
+          { props.geneModel.effectStorage.storage.map( (geneEffect: any) => (
+            <span key = { props.geneModel.id + '_' + geneEffect.id } >
+              <span> { geneEffect.id } </span>
+              { generateEffectPropsInputForm(geneEffect) }
+            </span>
+            ))
+          }
+        </Grid>
       </Grid>
-    </Grid>
+
+      <Divider style = { { width: '100%' } } />
+
+      <Grid item xs = { 12 }>
+        <span> Else: </span>
+      </Grid>
 
   </Grid>
 
