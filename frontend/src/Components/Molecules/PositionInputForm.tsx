@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel/GeneModel'
 import Vector from '../../Utilities/GlobalVarriables/Vector'
-import MeshStorage from "src/Utilities/Mesh/MeshStorage";
+import MeshModel from "src/Utilities/Mesh/MeshModel";
 
 interface Props{
-  geneModel: GeneModel;
-  meshStorage : MeshStorage;
+  geneModel   : GeneModel;
+  meshModel  ?: MeshModel;
   setReqInstPlayFlg(bool: boolean): void;
 }
 export const PositionInputForm: React.FC<Props> = (props: Props) => {
@@ -34,7 +34,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
     setPosition(position);
     // 3Dレンダー画面に反映
     props.geneModel.setPosition(position);
-    props.meshStorage.setPosition(props.geneModel.id, position);
+    props.meshModel?.setPosition(position);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
 

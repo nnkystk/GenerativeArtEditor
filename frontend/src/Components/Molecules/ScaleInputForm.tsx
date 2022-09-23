@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel/GeneModel'
-import MeshStorage from '../../Utilities/Mesh/MeshStorage'
+import MeshModel from '../../Utilities/Mesh/MeshModel'
 
 // Type Declaration of Props
 type Vector = {
@@ -9,8 +9,8 @@ type Vector = {
 }
 
 interface Props{
-  geneModel: GeneModel;
-  meshStorage: MeshStorage;
+  geneModel   : GeneModel;
+  meshModel  ?: MeshModel;
   setReqInstPlayFlg(bool: boolean): void;
 }
 
@@ -50,7 +50,7 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
     setScale(scale);
     // 3Dレンダー画面に反映
     props.geneModel.setScale(scale);
-    props.meshStorage.setScale(props.geneModel.id, scale);
+    props.meshModel?.setScale(scale);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
 

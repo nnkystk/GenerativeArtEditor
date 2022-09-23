@@ -6,6 +6,7 @@ import { ProjectSettingScreen } from '../Organisms/ProjectSettingScreen'
 import GeneGenerator from '../../Utilities/GeneGenerator';
 import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
 import MeshStorage from '../../Utilities/Mesh/MeshStorage';
+import MeshModel from "../../Utilities/Mesh/MeshModel";
 import GeneEffectStorage from '../../Utilities/GeneEffects/GeneEffectStorage';
 import ProjectInfo from '../../Utilities/ProjectInfo'
 
@@ -47,7 +48,8 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     const mesh            = GeneGenerator.generateMesh();
     const geneModel       = GeneGenerator.generateGeneModel(mesh.id, geneEffectStorage);
     geneModelStorage.store(geneModel);
-    meshStorage.store(mesh.id, mesh);
+    const meshModel = new MeshModel(mesh.id, mesh);
+    meshStorage.store(meshModel);
     updateGeneModelStorage();
   }
 

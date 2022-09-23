@@ -5,7 +5,7 @@ import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
 import GeneModel from '../../../Utilities/GeneModel/GeneModel'
 import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
-import MeshStorage from "src/Utilities/Mesh/MeshStorage";
+import MeshStorage from "../../../Utilities/Mesh/MeshStorage";
 import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
@@ -171,8 +171,10 @@ export class PlaybackScreen extends React.Component<Props, State>{
       * Imp: すべてのMeshをシーンに追加する
       */
       this.props.geneModelStorage.storage.forEach( (geneModel: any) => {
-        const targetMesh = this.props.meshStorage.storage[geneModel.id];
-        this.state.threeScene.add(targetMesh);
+        const targetMesh = this.props.meshStorage.getMeshById(geneModel.id);
+        if (targetMesh){
+          this.state.threeScene.add(targetMesh.mesh);
+        }
       })
     }
 
