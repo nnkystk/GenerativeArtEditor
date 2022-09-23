@@ -4,7 +4,8 @@ import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
 import GeneModel from '../../../Utilities/GeneModel/GeneModel'
-import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
+import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage'
+import MeshStorage from '../../../Utilities/Mesh/MeshStorage' 
 import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 
 /**
@@ -20,6 +21,7 @@ import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 interface Props {
   sampleProp         ?: any;
   geneModelStorage    : GeneModelStorage;
+  meshStorage         : MeshStorage;
   isPlayingFlg        : boolean;
   reqInstPlayFlg      : boolean;
   setIsPlayingFlg(bool: boolean)    : void;
@@ -112,7 +114,7 @@ export const PlaybackScreenFC: React.FC<Props> = (props: Props) => {
           
           // Effectを発火
           props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
-              GeneEffectPlayer.play(geneModel);
+              GeneEffectPlayer.play(props.meshStorage, geneModel);
           })
 
           threeRenderer.render(threeScene, threeCamera);

@@ -11,6 +11,7 @@ import { ColorInputForm }     from '../../Molecules/ColorInputForm'
 import { EffectGenerateForm } from '../../Molecules/EffectGenerateForm'
 import GeneEffectInterface    from "../../../Utilities/GeneEffects/GeneEffectInterface";
 import GeneModelStorage       from '../../../Utilities/GeneModel/GeneModelStorage';
+import MeshStorage            from '../../../Utilities/Mesh/MeshStorage';
 import GeneGenerator          from '../../../Utilities/GeneGenerator'
 import GeneEffectStorage      from "../../../Utilities/GeneEffects/GeneEffectStorage";
 import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
@@ -24,9 +25,10 @@ import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
 
 // Type Declaration of Props
 interface Props{
-  sampleProp             ?: any
-  geneModelStorage        : GeneModelStorage
-  updateGeneModelStorage  : any
+  sampleProp             ?: any;
+  geneModelStorage        : GeneModelStorage;
+  meshStorage             : MeshStorage;
+  updateGeneModelStorage  : any;
   setReqInstPlayFlg(bool: boolean): void;
 }
 
@@ -44,8 +46,9 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
   const onClickAddModelButton = () => {
     // Modelを生成・追加
     const mesh      = GeneGenerator.generateMesh();
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh, new GeneEffectStorage() );
+    const geneModel = GeneGenerator.generateGeneModel(mesh.id, new GeneEffectStorage() );
     props.geneModelStorage.store(geneModel);
+    props.meshStorage.store(mesh.id, mesh);
     props.updateGeneModelStorage();
     // 変更を視覚化するために明示的に3D描画を1フレーム分実行
     props.setReqInstPlayFlg(true);

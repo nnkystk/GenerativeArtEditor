@@ -1,9 +1,10 @@
 import GeneModel from '../GeneModel/GeneModel'
+import MeshStorage from '../Mesh/MeshStorage';
 
 
 class GeneEffectPlayer{
 
-  static play(geneModel: GeneModel){
+  static play(meshStorage: MeshStorage, geneModel: GeneModel){
 
     /**
      *  Summary: 
@@ -14,7 +15,8 @@ class GeneEffectPlayer{
      */
 
     geneModel.effectStorage.storage.map( (effect) => {
-      effect.play(geneModel.mesh);
+      const targetMesh = meshStorage.storage[geneModel.id];
+      effect.play(targetMesh);
     })
 
   }

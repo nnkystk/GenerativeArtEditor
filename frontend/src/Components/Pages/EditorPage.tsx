@@ -5,6 +5,7 @@ import { CodingScreenMaterial } from '../Organisms/CodingScreen/CodingScreenMate
 import { ProjectSettingScreen } from '../Organisms/ProjectSettingScreen'
 import GeneGenerator from '../../Utilities/GeneGenerator';
 import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
+import MeshStorage from '../../Utilities/Mesh/MeshStorage';
 import GeneEffectStorage from '../../Utilities/GeneEffects/GeneEffectStorage';
 import ProjectInfo from '../../Utilities/ProjectInfo'
 
@@ -20,6 +21,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   // ___ state ___ ___ ___ ___ ___
   const [ projectInfo,      setProjectInfo ]        = useState<ProjectInfo>(new ProjectInfo());
   const [ geneModelStorage, setGeneModelStorage ]   = useState<GeneModelStorage>(new GeneModelStorage());
+  const [ meshStorage,      setMeshStorage ]        = useState<MeshStorage>(new MeshStorage());
   const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_SAMPLE1_PANEL);  // 表示する対象パネルを指定するキー
   const [ isPlayingFlg,     setIsPlayingFlg ]       = useState<boolean>(false);
   const [ reqInstPlayFlg,   setReqInstPlayFlg ]     = useState<boolean>(false);   // 1フレームレンダーが必要であることを示すフラグ（3Dオブジェクトに生じた変更を反映する場合に使用）
@@ -43,12 +45,16 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     const geneEffectStorage = new GeneEffectStorage();
     geneEffectStorage.store(sampleEffect);
     const mesh            = GeneGenerator.generateMesh();
-    const geneModel       = GeneGenerator.generateGeneModel(mesh.id, mesh, geneEffectStorage);
+    const geneModel       = GeneGenerator.generateGeneModel(mesh.id, geneEffectStorage);
     geneModelStorage.store(geneModel);
+    meshStorage.store(mesh.id, mesh);
     updateGeneModelStorage();
   }
 
   const updateGeneModelStorage = () => {
+    /**
+     * ReactにStateの更新を検知させる処理
+     */
     const _geneModelStorage = new GeneModelStorage();
     _geneModelStorage.storage = geneModelStorage.storage;
     setGeneModelStorage(_geneModelStorage);
@@ -84,6 +90,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
       <Grid item xs = { 11 } style = { { zIndex :50 } }>
         <PlaybackScreen
           geneModelStorage  = { geneModelStorage }
+          meshStorage       = { meshStorage }
           canvasSize        = { projectInfo.canvasSize }
           isPlayingFlg      = { isPlayingFlg }
           reqInstPlayFlg    = { reqInstPlayFlg }
@@ -106,6 +113,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
         <Divider style = { { width: '100%' } } />
         <CodingScreenMaterial
           geneModelStorage        = { geneModelStorage }
+          meshStorage             = { meshStorage }
           updateGeneModelStorage  = { updateGeneModelStorage }
           setReqInstPlayFlg       = { setReqInstPlayFlg }
         />

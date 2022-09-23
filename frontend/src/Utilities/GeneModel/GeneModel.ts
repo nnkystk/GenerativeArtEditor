@@ -1,6 +1,5 @@
 import Vector from '../GlobalVarriables/Vector'
 import HexadecimalColor from '../GlobalVarriables/HexadecimalColor'
-import GeneEffectInterface from '../GeneEffects/GeneEffectInterface'
 import GeneEffectStorage from '../GeneEffects/GeneEffectStorage'
 
 type Options = {
@@ -12,16 +11,14 @@ type Coordinate = {
 class GeneModel{
 
   public id             : number;
-  public mesh           : THREE.Mesh;
   public effectStorage  : GeneEffectStorage;
   public name           : string | undefined;
   public position       : Coordinate;
   public scale          : Coordinate;
   public color          : HexadecimalColor;
 
-  constructor(id:number, mesh: THREE.Mesh, effectStorage: GeneEffectStorage, options?: Options) {
+  constructor(id:number, effectStorage: GeneEffectStorage, options?: Options) {
     this.id             = id;
-    this.mesh           = mesh;
     this.effectStorage  = effectStorage;
     this.name           = options? (options.name? options.name: "No Name"): "No Name";  // nameの指定があればそれを無ければ固定値をセット
     this.position       = { x: 0, y: 0, z: 0 };
@@ -33,14 +30,14 @@ class GeneModel{
     // UI表示用のオブジェクトに反映する
     this.position = position;
     // Meshに反映する
-    this.mesh.position.set(position.x, position.y, position.z);
+    // this.mesh.position.set(position.x, position.y, position.z);
   }
 
   setScale(scale: Vector){
     // UI表示用のオブジェクトに反映する
     this.scale = scale;
     // Meshに反映する
-    this.mesh.scale.set(scale.x, scale.y, scale.z);
+    // this.mesh.scale.set(scale.x, scale.y, scale.z);
   }
 
   setColor(color: HexadecimalColor){
@@ -48,7 +45,7 @@ class GeneModel{
     this.color = color;
     // Meshに反映する
     {/* @ts-ignore */} // meshにセットされるmaterialインスタンスがcolorプロパティを持たない可能性がありts検査エラーが発生する。
-    this.mesh.material.color.setHex("0x" + color.r + color.g + color.b);
+    // this.mesh.material.color.setHex("0x" + color.r + color.g + color.b);
   }
 
 }
