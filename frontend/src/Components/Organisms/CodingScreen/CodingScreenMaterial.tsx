@@ -97,6 +97,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
                 <GeneModelEditPanel
                   geneModel               = { geneModel}
                   geneModelStorage        = { props.geneModelStorage }
+                  meshStorage             = { props.meshStorage }
                   updateGeneModelStorage  = { props.updateGeneModelStorage }
                   setReqInstPlayFlg       = { props.setReqInstPlayFlg }
                 />
@@ -113,6 +114,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 interface PropsGeneModelEditPanel{
   geneModel               : GeneModel;
   geneModelStorage        : GeneModelStorage;
+  meshStorage             : MeshStorage;
   updateGeneModelStorage  : any;
   setReqInstPlayFlg(bool: boolean): void;
 }
@@ -137,9 +139,11 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
       <Grid item xs = { 5 } >
 
         {/** Property */}
+        {/** !!! StateにmeshStorageをセットする本仕様はパフォーマンスの低下を招く懸念がある */}
         <Grid container style = {{ padding: 20 }}>
           <PositionInputForm
             geneModel = { props.geneModel }
+            meshStorage = { props.meshStorage }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
@@ -147,6 +151,7 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
         <Grid container style = {{ padding: 20 }}>
           <ScaleInputForm
             geneModel = { props.geneModel }
+            meshStorage = { props.meshStorage }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
@@ -154,6 +159,7 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
         <Grid container style = {{ padding: 20 }}>
           <ColorInputForm
             geneModel = { props.geneModel }
+            meshStorage = { props.meshStorage }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>

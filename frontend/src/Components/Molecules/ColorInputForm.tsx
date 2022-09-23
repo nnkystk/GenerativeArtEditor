@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
 import GeneModel from '../../Utilities/GeneModel/GeneModel'
 import HexadecimalColor from '../../Utilities/GlobalVarriables/HexadecimalColor'
+import MeshStorage from "src/Utilities/Mesh/MeshStorage";
 
 // Type Declaration of Props
 interface Props{
-  geneModel: GeneModel
+  geneModel: GeneModel;
+  meshStorage: MeshStorage;
   setReqInstPlayFlg(bool: boolean): void;
 }
 
@@ -46,6 +48,7 @@ export const ColorInputForm: React.FC<Props> = (props: Props) => {
     setColor(color);
     // 3Dレンダー画面に反映
     props.geneModel.setColor(color);
+    props.meshStorage.setColor(props.geneModel.id, color);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
 
