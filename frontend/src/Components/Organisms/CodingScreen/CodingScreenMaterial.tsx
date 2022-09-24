@@ -11,6 +11,8 @@ import { ColorInputForm }     from '../../Molecules/ColorInputForm'
 import { EffectGenerateForm } from '../../Molecules/EffectGenerateForm'
 import GeneEffectInterface    from "../../../Utilities/GeneEffects/GeneEffectInterface";
 import GeneModelStorage       from '../../../Utilities/GeneModel/GeneModelStorage';
+import MeshStorage            from '../../../Utilities/Mesh/MeshStorage';
+import MeshModel              from '../../../Utilities/Mesh/MeshModel';
 import GeneGenerator          from '../../../Utilities/GeneGenerator'
 import GeneEffectStorage      from "../../../Utilities/GeneEffects/GeneEffectStorage";
 import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
@@ -24,9 +26,10 @@ import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
 
 // Type Declaration of Props
 interface Props{
-  sampleProp             ?: any
-  geneModelStorage        : GeneModelStorage
-  updateGeneModelStorage  : any
+  sampleProp             ?: any;
+  geneModelStorage        : GeneModelStorage;
+  meshStorage             : MeshStorage;
+  updateGeneModelStorage  : any;
   setReqInstPlayFlg(bool: boolean): void;
 }
 
@@ -46,8 +49,10 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
     const mesh      = GeneGenerator.generateMesh();
     const effectStorage = new GeneEffectStorage();
     effectStorage.storage.push(GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND'));
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, mesh, new GeneEffectStorage() );
+    const geneModel = GeneGenerator.generateGeneModel(mesh.id, effectStorage );
     props.geneModelStorage.store(geneModel);
+    const meshModel = new MeshModel(mesh.id, mesh);
+    props.meshStorage.store(meshModel);
     props.updateGeneModelStorage();
     // 変更を視覚化するために明示的に3D描画を1フレーム分実行
     props.setReqInstPlayFlg(true);
@@ -96,6 +101,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
                 <GeneModelEditPanel
                   geneModel               = { geneModel}
                   geneModelStorage        = { props.geneModelStorage }
+                  meshModel               = { props.meshStorage.getMeshById(geneModel.id) }
                   updateGeneModelStorage  = { props.updateGeneModelStorage }
                   setReqInstPlayFlg       = { props.setReqInstPlayFlg }
                 />
@@ -112,6 +118,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 interface PropsGeneModelEditPanel{
   geneModel               : GeneModel;
   geneModelStorage        : GeneModelStorage;
+  meshModel              ?: MeshModel;
   updateGeneModelStorage  : any;
   setReqInstPlayFlg(bool: boolean): void;
 }
@@ -136,9 +143,11 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
       <Grid item xs = { 5 } >
 
         {/** Property */}
+        {/** !!! StateにmeshStorageをセットする本仕様はパフォーマンスの低下を招く懸念がある */}
         <Grid container style = {{ padding: 20 }}>
           <PositionInputForm
             geneModel = { props.geneModel }
+            meshModel = { props.meshModel }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
@@ -146,6 +155,7 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
         <Grid container style = {{ padding: 20 }}>
           <ScaleInputForm
             geneModel = { props.geneModel }
+            meshModel = { props.meshModel }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
@@ -153,6 +163,7 @@ const GeneModelEditPanel: React.FC<PropsGeneModelEditPanel> = (props: PropsGeneM
         <Grid container style = {{ padding: 20 }}>
           <ColorInputForm
             geneModel = { props.geneModel }
+            meshModel = { props.meshModel }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>

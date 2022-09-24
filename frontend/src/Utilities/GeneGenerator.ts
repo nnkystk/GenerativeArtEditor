@@ -14,13 +14,14 @@ export class GeneGenerator{
   static generateMesh(){    // TODO: 引数に応じて異なるMeshを生成するよう変更
     const geometry  = new THREE.BoxGeometry(100, 100, 100);
     const material  = new THREE.MeshMatcapMaterial({ color: 0xffffff });
-    const mesh       = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
+    const mesh      = new THREE.Mesh(geometry, material);   // !!! 仮置きでboxメッシュを生成 !!!
     return mesh
   }
 
-  static generateGeneModel(modelID: number, mesh: THREE.Mesh, effectList: GeneEffectStorage){
+  static generateGeneModel(modelID: number, effectList: GeneEffectStorage){
+    const name        = "sample";
     const options     = { name: "sample" };
-    const geneModel   = new GeneModel(modelID, mesh, effectList, options);
+    const geneModel   = new GeneModel(modelID, effectList, options);
     return geneModel
   }
 
