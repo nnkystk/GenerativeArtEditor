@@ -47,7 +47,9 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
   const onClickAddModelButton = () => {
     // Modelを生成・追加
     const mesh      = GeneGenerator.generateMesh();
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, new GeneEffectStorage() );
+    const effectStorage = new GeneEffectStorage();
+    effectStorage.storage.push(GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND'));
+    const geneModel = GeneGenerator.generateGeneModel(mesh.id, effectStorage );
     props.geneModelStorage.store(geneModel);
     const meshModel = new MeshModel(mesh.id, mesh);
     props.meshStorage.store(meshModel);

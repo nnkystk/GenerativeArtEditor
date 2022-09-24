@@ -20,7 +20,8 @@ export class GeneGenerator{
 
   static generateGeneModel(modelID: number, effectList: GeneEffectStorage){
     const name        = "sample";
-    const geneModel   = new GeneModel(modelID, effectList, { name: name });
+    const options     = { name: "sample" };
+    const geneModel   = new GeneModel(modelID, effectList, options);
     return geneModel
   }
 

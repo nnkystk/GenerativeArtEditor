@@ -29,6 +29,13 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
     // 変更をUIに反映
     updateUI(_position);
   }
+  const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
+    const _position = { ...position } 
+    const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
+    _position.z     = newVal;
+    // 変更をUIに反映
+    updateUI(_position);
+  }
   const updateUI = (position: Vector) => {
     // UIに反映
     setPosition(position);
@@ -49,7 +56,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
 
       <Grid container alignItems ="center" spacing = { 2 }>
 
-        <Grid item xs = { 5 }>
+        <Grid item xs = { 12 } md = { 4 }>
           <TextField
             variant   = "outlined"
             type      = "number"
@@ -66,13 +73,30 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
           />
         </Grid>
         
-        <Grid item xs = { 5 }>
+        <Grid item xs = { 12 } md = { 4 }>
           <TextField
             variant   = "outlined"
             type      = "number"
             label     = "Y"
             value     = { position.y }
             onChange  = { handleChangeY }
+            size      = "small"
+            inputProps = {{
+              step: "10"
+            }}
+            InputLabelProps = {{
+              shrink: true,
+            }}
+          />
+        </Grid>
+
+        <Grid item xs = { 12 } md = { 4 }>
+          <TextField
+            variant   = "outlined"
+            type      = "number"
+            label     = "Z"
+            value     = { position.z }
+            onChange  = { handleChangeZ }
             size      = "small"
             inputProps = {{
               step: "10"
