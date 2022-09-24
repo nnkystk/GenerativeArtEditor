@@ -16,13 +16,11 @@ class GeneReflectOnBound implements GeneEffectInterface{
     this.parameter = parameter;
   }
 
-  play(mesh: THREE.Mesh){
-    if(this.parameter.vector){
-      mesh.position.x += this.parameter.vector.x;
-      mesh.position.y += this.parameter.vector.y;
-      mesh.position.z += this.parameter.vector.z;
-    }
-    return mesh
+  calculate(parameter: GeneEffectParameter): GeneEffectParameter{
+    parameter.vector.x = this.parameter.vector.x;
+    parameter.vector.y = this.parameter.vector.y;
+    parameter.vector.z = this.parameter.vector.z;
+    return parameter
   }
  
 }

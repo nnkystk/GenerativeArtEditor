@@ -16,7 +16,7 @@ interface Props {
   meshStorage         : MeshStorage;
   canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
-  reqInstPlayFlg      : boolean;
+  reqInstPlayFlg      : boolean;    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにするフラグ
   setIsPlayingFlg(bool: boolean)    : void;
   setReqInstPlayFlg(bool: boolean)  :void;
 }

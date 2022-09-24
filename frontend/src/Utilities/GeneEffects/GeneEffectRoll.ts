@@ -13,13 +13,11 @@ class GeneEffectRoll implements GeneEffectInterface{
     this.parameter = parameter;
   }
 
-  play(mesh: THREE.Mesh){
-    if(this.parameter.vector){
-      mesh.rotation.x += this.parameter.vector.x;
-      mesh.rotation.y += this.parameter.vector.y;
-      mesh.rotation.z += this.parameter.vector.z;
-    }
-    return mesh
+  calculate(parameter: GeneEffectParameter): GeneEffectParameter{
+    parameter.rotation.x += this.parameter.rotation.x;
+    parameter.rotation.y += this.parameter.rotation.y;
+    parameter.rotation.z += this.parameter.rotation.z;
+    return parameter
   }
  
 }

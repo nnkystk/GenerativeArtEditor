@@ -7,7 +7,7 @@ interface GeneEffectInterface{
   id        : EffectID;
   uid       : number;
   parameter : GeneEffectParameter;  // Effectの強さや方向等を調整するためのパラメータ
-  play(mesh: THREE.Mesh): THREE.Mesh;
+  calculate(parameter: GeneEffectParameter): GeneEffectParameter;   // Effect適用後のパラメータを産出するメソッド
 
   instructions  ?: Array<string>;        // Effectの説明テキスト
   // parameterType?: "NUMBER";          // パラメータのタイプを識別するテキスト UIの自動生成時に利用する

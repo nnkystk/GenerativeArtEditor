@@ -13,13 +13,12 @@ class GeneEffectMove implements GeneEffectInterface{
     this.parameter = parameter;
   }
 
-  play(mesh: THREE.Mesh){
-    if(this.parameter.vector){
-      mesh.position.x += this.parameter.vector.x;
-      mesh.position.y += this.parameter.vector.y;
-      mesh.position.z += this.parameter.vector.z;
-    }
-    return mesh
+  calculate(parameter: GeneEffectParameter): GeneEffectParameter{
+    // 移動方向を産出するため、positionではなくvectorを使用する点に注意
+    parameter.vector.x += this.parameter.vector.x;
+    parameter.vector.y += this.parameter.vector.y;
+    parameter.vector.z += this.parameter.vector.z;
+    return parameter
   }
  
 }

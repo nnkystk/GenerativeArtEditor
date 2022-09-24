@@ -21,8 +21,8 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ projectInfo,      setProjectInfo ]        = useState<ProjectInfo>(new ProjectInfo());
-  const [ geneModelStorage, setGeneModelStorage ]   = useState<GeneModelStorage>(new GeneModelStorage());
-  const [ meshStorage,      setMeshStorage ]        = useState<MeshStorage>(new MeshStorage());
+  const [ geneModelStorage, setGeneModelStorage ]   = useState<GeneModelStorage>(new GeneModelStorage());   // 描画する3Dモデルの定義情報（再生開始時の状態）をまとめたオブジェクト
+  const [ meshStorage,      setMeshStorage ]        = useState<MeshStorage>(new MeshStorage());             // 描画中の3Dモデル（Mesh）をまとめたオブジェクト
   const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_SAMPLE1_PANEL);  // 表示する対象パネルを指定するキー
   const [ isPlayingFlg,     setIsPlayingFlg ]       = useState<boolean>(false);
   const [ reqInstPlayFlg,   setReqInstPlayFlg ]     = useState<boolean>(false);   // 1フレームレンダーが必要であることを示すフラグ（3Dオブジェクトに生じた変更を反映する場合に使用）
@@ -41,9 +41,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
   const initializeThree = () => {
     // サンプル表示用の3Dモデルを生成
+    // !!! 暫定の実装。JSONによる外部からの作品情報入力が可能になったら本サンプル表示処理は不要 !!!
     const sampleEffect1   = GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND');
     const sampleEffect2   = GeneGenerator.generateGeneEffect('ROLL');
-    sampleEffect2.parameter.vector = { x: 0.01, y: 0.01, z:0 };
+    sampleEffect2.parameter.rotation = { x: 0.01, y: 0.01, z:0 };
     const geneEffectStorage = new GeneEffectStorage();
     geneEffectStorage.store(sampleEffect1);
     geneEffectStorage.store(sampleEffect2);

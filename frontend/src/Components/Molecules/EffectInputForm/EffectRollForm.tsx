@@ -17,19 +17,19 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
   const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _parameters     = { ...parameter } 
     const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.vector.x  = newVal
+    _parameters.rotation.x  = newVal
     setParameter(_parameters);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _parameters     = { ...parameter } 
     const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.vector.y  = newVal
+    _parameters.rotation.y  = newVal
     setParameter(_parameters);
   }
   const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _parameters     = { ...parameter } 
     const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.vector.z  = newVal
+    _parameters.rotation.z  = newVal
     setParameter(_parameters);
     props.geneEffect.parameter = _parameters;
   }
@@ -44,7 +44,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
           variant   = "outlined"
           type      = "number"
           label     = "X"
-          value     = { parameter.vector.x  }
+          value     = { parameter.rotation.x  }
           onChange  = { handleChangeX }
           size      = "small"
           inputProps = {{
@@ -61,7 +61,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
           variant   = "outlined"
           type      = "number"
           label     = "Y"
-          value     = { parameter.vector.y  }
+          value     = { parameter.rotation.y  }
           onChange  = { handleChangeY }
           size      = "small"
           inputProps = {{
@@ -78,7 +78,7 @@ export const EffectRollForm: React.FC<Props> = (props: Props) => {
           variant   = "outlined"
           type      = "number"
           label     = "Z"
-          value     = { parameter.vector.z  }
+          value     = { parameter.rotation.z  }
           onChange  = { handleChangeZ }
           size      = "small"
           inputProps = {{

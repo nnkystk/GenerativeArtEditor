@@ -29,7 +29,7 @@ interface Props{
   sampleProp             ?: any;
   geneModelStorage        : GeneModelStorage;
   meshStorage             : MeshStorage;
-  updateGeneModelStorage  : any;
+  updateGeneModelStorage(): void;
   setReqInstPlayFlg(bool: boolean): void;
 }
 
@@ -45,15 +45,21 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
   const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
   };
   const onClickAddModelButton = () => {
+    
     // Modelを生成・追加
     const mesh      = GeneGenerator.generateMesh();
-    const effectStorage = new GeneEffectStorage();
-    effectStorage.storage.push(GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND'));
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, effectStorage );
-    props.geneModelStorage.store(geneModel);
+
     const meshModel = new MeshModel(mesh.id, mesh);
     props.meshStorage.store(meshModel);
+
+    const effectStorage = new GeneEffectStorage();
+    const sampleEffect = GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND');
+    effectStorage.storage.push(sampleEffect);
+
+    const geneModel = GeneGenerator.generateGeneModel(mesh.id, effectStorage);
+    props.geneModelStorage.store(geneModel);
     props.updateGeneModelStorage();
+
     // 変更を視覚化するために明示的に3D描画を1フレーム分実行
     props.setReqInstPlayFlg(true);
   }
