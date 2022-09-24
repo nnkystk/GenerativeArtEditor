@@ -42,12 +42,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   const initializeThree = () => {
     // サンプル表示用の3Dモデルを生成
     // !!! 暫定の実装。JSONによる外部からの作品情報入力が可能になったら本サンプル表示処理は不要 !!!
-    const sampleEffect1   = GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND');
-    const sampleEffect2   = GeneGenerator.generateGeneEffect('ROLL');
-    sampleEffect2.parameter.rotation = { x: 0.01, y: 0.01, z:0 };
+    const sampleEffect   = GeneGenerator.generateGeneEffect('ROLL');
+    sampleEffect.parameter.rotation = { x: 0.01, y: 0.01, z:0 };
     const geneEffectStorage = new GeneEffectStorage();
-    geneEffectStorage.store(sampleEffect1);
-    geneEffectStorage.store(sampleEffect2);
+    geneEffectStorage.store(sampleEffect);
     const mesh            = GeneGenerator.generateMesh();
     const geneModel       = GeneGenerator.generateGeneModel(mesh.id, geneEffectStorage);
     geneModelStorage.store(geneModel);

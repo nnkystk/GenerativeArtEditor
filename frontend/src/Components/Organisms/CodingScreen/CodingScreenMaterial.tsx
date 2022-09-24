@@ -53,8 +53,6 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
     props.meshStorage.store(meshModel);
 
     const effectStorage = new GeneEffectStorage();
-    const sampleEffect = GeneGenerator.generateGeneEffect('REFLECT_ON_BOUND');
-    effectStorage.storage.push(sampleEffect);
 
     const geneModel = GeneGenerator.generateGeneModel(mesh.id, effectStorage);
     props.geneModelStorage.store(geneModel);
