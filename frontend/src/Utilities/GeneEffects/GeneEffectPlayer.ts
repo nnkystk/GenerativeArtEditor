@@ -16,33 +16,41 @@ class GeneEffectPlayer{
 
     // Effect適用対象のMeshを取得
     const targetMeshModel = meshStorage.getMeshById(geneModel.id);
-    const targetMesh      = targetMeshModel?.mesh;
 
-    if(targetMesh){
+    if(targetMeshModel){
+      const targetMesh = targetMeshModel.mesh;
 
-      // 表示中の3Dオブジェクトの各種プロパティを取得
-      let parameter: GeneEffectParameter = new GeneEffectParameter();
-      parameter.position  = { x: targetMesh.position.x, y: targetMesh.position.y, z: targetMesh.position.z };
+      if(targetMesh){
 
-      // Effect適用後のプロパティを産出
-      // TODO: アニメーションの発火順序を優先度づける
-      geneModel.effectStorage.storage.map( (effect) => {
-        parameter = effect.calculate(parameter);
-      })
+        // 表示中の3Dオブジェクトの各種プロパティを取得
+        let parameter: GeneEffectParameter = { ...targetMeshModel.parameter };
 
-      // TODO: 境界判定など特殊なEffectを実装する
+        // !!! 仮置き 現在のMeshの座標をpositionにセットする !!!
+        parameter.position  = { x: targetMesh.position.x, y: targetMesh.position.y, z: targetMesh.position.z };
 
-      /** Meshに全Effect適用後のプロパティを反映  */
-      // TODO: 色
-      // TODO: スケール
-      // 移動後の位置
-      targetMesh.position.x += parameter.vector.x;
-      targetMesh.position.y += parameter.vector.y;
-      targetMesh.position.z += parameter.vector.z;
-      // 回転
-      targetMesh.rotation.x += parameter.rotation.x;
-      targetMesh.rotation.y += parameter.rotation.y;
-      targetMesh.rotation.z += parameter.rotation.z;
+        // Effect適用後のプロパティを産出
+        // TODO: アニメーションの発火順序を優先度づける
+        geneModel.effectStorage.storage.map( (effect) => {
+          parameter = effect.calculate(parameter);
+        })
+
+        // TODO: 境界判定など特殊なEffectを実装する
+        parameter = geneModel.effectStorage.effectAtBoundary.calculate(parameter);
+
+        /** Meshに全Effect適用後のプロパティを反映  */
+        // TODO: 色
+        // TODO: スケール
+        // 移動後の位置
+        targetMesh.position.x += parameter.vector.x;
+        targetMesh.position.y += parameter.vector.y;
+        targetMesh.position.z += parameter.vector.z;
+        // 回転
+        targetMesh.rotation.x += parameter.rotation.x;
+        targetMesh.rotation.y += parameter.rotation.y;
+        targetMesh.rotation.z += parameter.rotation.z;
+
+        targetMeshModel.parameter = parameter;
+      }
     }
 
   }

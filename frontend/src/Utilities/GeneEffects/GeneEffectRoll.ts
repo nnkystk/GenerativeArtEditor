@@ -14,9 +14,9 @@ class GeneEffectRoll implements GeneEffectInterface{
   }
 
   calculate(parameter: GeneEffectParameter): GeneEffectParameter{
-    parameter.rotation.x += this.parameter.rotation.x;
-    parameter.rotation.y += this.parameter.rotation.y;
-    parameter.rotation.z += this.parameter.rotation.z;
+    parameter.rotation.x = this.parameter.rotation.x;
+    parameter.rotation.y = this.parameter.rotation.y;
+    parameter.rotation.z = this.parameter.rotation.z;
     return parameter
   }
  

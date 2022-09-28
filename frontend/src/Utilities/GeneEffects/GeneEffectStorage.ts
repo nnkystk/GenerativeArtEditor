@@ -1,11 +1,17 @@
 import GeneEffectInterface from './GeneEffectInterface'
+import GeneEffectParameter from './GeneEffectParameter';
+import ReflectAtBoundary from './Special/ReflectAtBoundary';
+import AtBoundaryInterface from './Special/AtBoundaryInterface';
 import { EffectID } from '../GlobalVarriables/EffectCatalog';
 
 class GeneEffectStorage{
 
   public storage: Array<GeneEffectInterface> = [];
+  public effectAtBoundary: AtBoundaryInterface;   // 3Dオブジェクトの表示位置が境界を超えた際に実行するアニメーション
 
   constructor(){
+    /// !!! 仮置き !!!
+    this.effectAtBoundary = new ReflectAtBoundary(new GeneEffectParameter(), { x: 500, y: 500, z: 500 });
   }
 
   store(geneEffect: GeneEffectInterface){
