@@ -6,10 +6,12 @@ export class GeneEffectParameter{
 
   // WARN: 任意実装とすると、呼び出し側で逐一nullチェックを行う必要がでてくるため実装必須としている
 
+  // 移動速度
   vector    : Vector = { x: 0, y: 0, z: 0 };
   vectorSub1: Vector = { x: 0, y: 0, z: 0 };
   vectorSub2: Vector = { x: 0, y: 0, z: 0 };
 
+  // 回転速度
   rotation    : Vector = { x: 0, y: 0, z: 0 };
   rotationSub1: Vector = { x: 0, y: 0, z: 0 };
   rotationSub2: Vector = { x: 0, y: 0, z: 0 };

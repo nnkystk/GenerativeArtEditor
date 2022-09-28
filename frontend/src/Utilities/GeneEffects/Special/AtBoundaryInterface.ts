@@ -1,4 +1,5 @@
 import GeneEffectParameter from '../GeneEffectParameter'
+import Coordinate from '../../GlobalVarriables/Corrdinate'
 
 interface AtBoundaryInterface{
 
@@ -14,11 +15,12 @@ interface AtBoundaryInterface{
   /** Summary:
    *    - Effect適用後のパラメータを産出するメソッド
    *  Args:
-   *    - parameter: Effect適用前のパラメータ
+   *    - parameter : Effect適用前のパラメータ
+   *    - position  : 境界を越えているか判定する際の基準点
    *  Returns:
    *    - parameterReturm: Effect適用後のパラメータ
   */
-  calculate(parameter: GeneEffectParameter): GeneEffectParameter;
+  calculate(parameter: GeneEffectParameter, position: Coordinate): GeneEffectParameter;
 
   instructions  ?: Array<string>;                   // Effectの説明テキスト
 }

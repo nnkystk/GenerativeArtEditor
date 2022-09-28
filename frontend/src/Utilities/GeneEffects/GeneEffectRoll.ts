@@ -13,10 +13,17 @@ class GeneEffectRoll implements GeneEffectInterface{
     this.parameter = parameter;
   }
 
+  /**
+   * Summary:
+   *  本インスタンスにセットされた回転速度をもとに、3Dオブジェクトを回転させた場合の回転速度を算出する
+   * @param parameter 
+   * @returns 
+   */
   calculate(parameter: GeneEffectParameter): GeneEffectParameter{
-    parameter.rotation.x = this.parameter.rotation.x;
-    parameter.rotation.y = this.parameter.rotation.y;
-    parameter.rotation.z = this.parameter.rotation.z;
+    const rotation = this.parameter.rotation;
+    parameter.rotation.x = rotation.x;
+    parameter.rotation.y = rotation.y;
+    parameter.rotation.z = rotation.z;
     return parameter
   }
  

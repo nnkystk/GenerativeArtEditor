@@ -13,17 +13,18 @@ class GeneEffectMove implements GeneEffectInterface{
     this.parameter = parameter;
   }
 
+  /**
+   * Summary:
+   *  本インスタンスにセットされた移動速度をもとに、3Dオブジェクトを平行移動させた場合の移動速度を算出する
+   * @param parameter
+   * @returns 
+   */
   calculate(parameter: GeneEffectParameter): GeneEffectParameter{
+    const vector = this.parameter.vector;
     // 移動方向を産出するため、positionではなくvectorを使用する点に注意
-    parameter.vector.x += this.parameter.vector.x;
-    parameter.vector.y += this.parameter.vector.y;
-    parameter.vector.z += this.parameter.vector.z;
-
-    // !!! 仮置き 移動後のポジションの座標を算出する !!!
-    parameter.position.x += this.parameter.vector.x;
-    parameter.position.y += this.parameter.vector.y;
-    parameter.position.z += this.parameter.vector.z;
-    
+    parameter.vector.x = vector.x;
+    parameter.vector.y = vector.y;
+    parameter.vector.z = vector.z;
     return parameter
   }
  
