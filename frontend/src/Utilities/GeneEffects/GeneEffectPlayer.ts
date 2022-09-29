@@ -12,8 +12,7 @@ class GeneEffectPlayer{
      *    GeneModelに登録されたEffectを発火させる。
      *    その後、任意でEffectによる変更をStateに反映させる。
      *  Implementation:
-     *    - 3Dオブジェクトのプロパティをもとに、通常Effectを適用した場合のプロパティを算出する
-     *    - Effect適用後のプロパティをもとに、特別Effectを適用した場合のプロパティを算出する
+     *    - 3Dオブジェクトのプロパティをもとに、通常Effectおよび特別Effectを適用した場合のプロパティを算出する
      *      - 特別Effectとは、実行優先順位が高い特殊なEffect
      *    - 全Effect適用後のプロパティをもとに、表示中の3Dオブジェクト（Mesh）に変更を加える
      * @param   { GeneModel } geneModel: Effectを発火する対象オブジェクト
@@ -30,9 +29,6 @@ class GeneEffectPlayer{
 
         // 表示中の3Dオブジェクトの各種プロパティを取得
         let parameter: GeneEffectParameter = { ...targetMeshModel.parameter };
-        console.log(parameter.vector.x)
-
-        // !!! 仮置き 現在のMeshの座標をpositionにセットする !!!
 
         /** Effect適用後のプロパティを産出 */
         // TODO: アニメーションの発火順序を優先度づける
@@ -50,7 +46,6 @@ class GeneEffectPlayer{
         // TODO: スケール
 
         // 移動後の位置
-        // console.log(parameter.vector.x)
         targetMesh.position.x += parameter.vector.x;
         targetMesh.position.y += parameter.vector.y;
         targetMesh.position.z += parameter.vector.z;

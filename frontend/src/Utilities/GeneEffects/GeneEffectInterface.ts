@@ -7,10 +7,10 @@ interface GeneEffectInterface{
   uid       : number;
   parameter : GeneEffectParameter;  // Effectの強さや方向等を調整するためのパラメータ
 
-    /** Summary:
+  /** Summary:
    *    - Effect適用後のパラメータを産出するメソッド
    *  Args:
-   *    - parameter: Effect適用前のパラメータ
+   *    - parameter: Effect適用前のパラメータ。描画されている3Dオブジェクトのパラメータ
    *  Returns:
    *    - parameterReturm: Effect適用後のパラメータ
   */

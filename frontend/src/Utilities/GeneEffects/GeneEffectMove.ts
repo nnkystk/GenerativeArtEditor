@@ -8,6 +8,11 @@ class GeneEffectMove implements GeneEffectInterface{
   uid: number;
   parameter: GeneEffectParameter;
 
+  /**
+   * 
+   * @param uid 
+   * @param parameter.vector : 移動方向のベクトル
+   */
   constructor(uid: number, parameter: GeneEffectParameter){
     this.uid = uid;
     this.parameter = parameter;
@@ -15,17 +20,19 @@ class GeneEffectMove implements GeneEffectInterface{
 
   /**
    * Summary:
-   *  本インスタンスにセットされた移動速度をもとに、3Dオブジェクトを平行移動させた場合の移動速度を算出する
+   *  - 本インスタンスにセットされた移動速度をもとに、3Dオブジェクトを平行移動させた場合の移動速度を算出する
+   * Implementation:
+   *  - 3Dオブジェクトが現在移動している方向に対して移動速度を加算する。移動方向がマイナスの場合はマイナス方向に加算する。
    * @param parameter
    * @returns 
    */
   calculate(parameter: GeneEffectParameter): GeneEffectParameter{
     const vector = this.parameter.vector;
-    // 移動方向を産出するため、positionではなくvectorを使用する点に注意
-    parameter.vector.x = vector.x;
-    parameter.vector.y = vector.y;
-    parameter.vector.z = vector.z;
+    parameter.vector.x = (parameter.vector.x >= 0) ? Math.abs(vector.x) : - (Math.abs(vector.x));
+    parameter.vector.y = (parameter.vector.y >= 0) ? Math.abs(vector.y) : - (Math.abs(vector.y));
+    parameter.vector.z = (parameter.vector.z >= 0) ? Math.abs(vector.z) : - (Math.abs(vector.z));
     return parameter
+
   }
  
 }

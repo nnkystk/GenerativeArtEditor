@@ -190,8 +190,8 @@ export class PlaybackScreen extends React.Component<Props, State>{
          const tick = () => {
            
            // Effectを発火
-           this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
-               GeneEffectPlayer.play(this.props.meshStorage, geneModel);
+            this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
+              GeneEffectPlayer.play(this.props.meshStorage, geneModel);
            })
  
            this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
