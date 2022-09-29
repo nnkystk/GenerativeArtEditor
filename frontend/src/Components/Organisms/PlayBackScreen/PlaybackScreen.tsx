@@ -5,6 +5,7 @@ import { PauseCircleOutlineOutlined } from '@mui/icons-material';
 import * as THREE from 'three';
 import GeneModel from '../../../Utilities/GeneModel/GeneModel'
 import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
+import MeshStorage from "../../../Utilities/Mesh/MeshStorage";
 import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
@@ -12,9 +13,10 @@ import { Vector2 } from "three";
 
 interface Props {
   geneModelStorage    : GeneModelStorage;
+  meshStorage         : MeshStorage;
   canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
-  reqInstPlayFlg      : boolean;
+  reqInstPlayFlg      : boolean;    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにするフラグ
   setIsPlayingFlg(bool: boolean)    : void;
   setReqInstPlayFlg(bool: boolean)  :void;
 }
@@ -169,10 +171,13 @@ export class PlaybackScreen extends React.Component<Props, State>{
       * Imp: すべてのMeshをシーンに追加する
       */
       this.props.geneModelStorage.storage.forEach( (geneModel: any) => {
-        this.state.threeScene.add(geneModel.mesh);
+        const targetMesh = this.props.meshStorage.getMeshById(geneModel.id);
+        if (targetMesh){
+          this.state.threeScene.add(targetMesh.mesh);
+        }
       })
     }
-
+    //a
  
   playBackThree = () => {
      /**
@@ -185,8 +190,8 @@ export class PlaybackScreen extends React.Component<Props, State>{
          const tick = () => {
            
            // Effectを発火
-           this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
-               GeneEffectPlayer.play(geneModel);
+            this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
+              GeneEffectPlayer.play(this.props.meshStorage, geneModel);
            })
  
            this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
