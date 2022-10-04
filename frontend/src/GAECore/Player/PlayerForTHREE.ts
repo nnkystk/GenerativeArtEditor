@@ -45,6 +45,7 @@ class PlayerForTHREE{
       const mesh = meshModel.tdObj;
       this.scene.add(mesh);
     });
+    this.render();
   }
 
 
@@ -119,6 +120,7 @@ class PlayerForTHREE{
       mesh.rotation.z += property.rotation.z;
 
       meshModel.property = property;
+      this.render();
     })
 
   }

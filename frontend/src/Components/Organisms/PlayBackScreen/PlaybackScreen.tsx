@@ -91,6 +91,8 @@ export class PlaybackScreen extends React.Component<Props, State>{
             </Grid>
           </Grid>
 
+          <button onClick = {this.test}>test</button>
+
         </Grid>
 
       </div>
@@ -127,6 +129,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
 	// ___ イベントハンドラ ___ ___ ___ ___ ___
 
   test(){
+    console.log(this.state.playerForTHREE)
   }
 
   // ___ メソッド ___ ___ ___ ___ ___

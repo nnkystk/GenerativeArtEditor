@@ -4,7 +4,13 @@ import EffectParameter from './EffectParameter'
 interface EffectModel{
 
   parameter: EffectParameter;
-  calculate(property: TDModelProperty): TDModelProperty;
+
+  /**
+   * 3Dモデルのプロパティをもとに、Effectを適用した後のプロパティを算出するメソッド
+   * @param property 
+   * @param parameter : 任意で設定可能なオプション。設定しなければインスタンスのparameterを用いるが、設定した場合は本parameterを用いる
+   */
+  calculate(property: TDModelProperty, parameter?: EffectParameter): TDModelProperty;
 
 }
 
