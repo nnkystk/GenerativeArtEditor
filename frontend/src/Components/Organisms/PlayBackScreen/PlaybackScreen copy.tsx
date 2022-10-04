@@ -10,7 +10,6 @@ import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
 import { Vector2 } from "three";
-import PlayerForTHREE from '../../../GAECore/Player/PlayerForTHREE'
 
 interface Props {
   geneModelStorage    : GeneModelStorage;
@@ -22,8 +21,10 @@ interface Props {
   setReqInstPlayFlg(bool: boolean)  :void;
 }
 interface State{
-  playerForTHREE?: PlayerForTHREE;
-  reqAnmIdRef: any;
+  threeRenderer: any;
+  threeScene: any;
+  threeCamera: any;
+  reqAnmIdRef: any
 };
 export class PlaybackScreen extends React.Component<Props, State>{
 /**
@@ -44,7 +45,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
     super(props)
     this.state = {
       // optional second annotation for better type inference
-      playerForTHREE: undefined,
+      threeRenderer : new THREE.WebGLRenderer(),
+      threeScene    : new THREE.Scene(),
+      threeCamera   : new THREE.PerspectiveCamera(),
       reqAnmIdRef   : ""
     };
 
@@ -107,7 +110,6 @@ export class PlaybackScreen extends React.Component<Props, State>{
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
     // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
-    /**
     const canvasSize = this.state.threeRenderer.getSize(new Vector2());
     if(canvasSize.x != this.props.canvasSize.width || canvasSize.y != this.props.canvasSize.height ){
       this.resizeCanvasSize();
@@ -115,7 +117,6 @@ export class PlaybackScreen extends React.Component<Props, State>{
     this.updateSceneThree();
     this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
     this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
-   */
   }
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
@@ -134,16 +135,27 @@ export class PlaybackScreen extends React.Component<Props, State>{
     /**
      * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
      */
-      const canvas: HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement;
-      const playerForTHREE = new PlayerForTHREE(canvas);
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector("#canvas") as HTMLCanvasElement
+      });
+      const scene   = new THREE.Scene();
+      const camera  = new THREE.PerspectiveCamera(this.FOV, this.props.canvasSize.width / this.props.canvasSize.height);
+      camera.position.set(0, 0, +1000);
+      // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+      // scene.add(light);
+
+      // レンダラーをセットアップする
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
 
       // シーンをセットアップする
       this.updateSceneThree();
 
-      this.setState({ playerForTHREE: playerForTHREE });
+      this.setState({ threeRenderer: renderer });
+      this.setState({ threeScene: scene })
+      this.setState({ threeCamera: camera })
    };
 
-   /**
    resizeCanvasSize = () => {
     // カメラを更新
     this.state.threeCamera.aspect = this.props.canvasSize.width / this.props.canvasSize.height
@@ -152,15 +164,20 @@ export class PlaybackScreen extends React.Component<Props, State>{
     this.state.threeRenderer.setPixelRatio(window.devicePixelRatio);
     this.state.threeRenderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
    }
-    */
  
    updateSceneThree = () => {
       /**
       * Summary: シーンを更新する
       * Imp: すべてのMeshをシーンに追加する
       */
-    this.state.playerForTHREE?.updateScene();
-  }
+      this.props.geneModelStorage.storage.forEach( (geneModel: any) => {
+        const targetMesh = this.props.meshStorage.getMeshById(geneModel.id);
+        if (targetMesh){
+          this.state.threeScene.add(targetMesh.mesh);
+        }
+      })
+    }
+    //a
  
   playBackThree = () => {
      /**
@@ -171,9 +188,14 @@ export class PlaybackScreen extends React.Component<Props, State>{
        if(this.props.isPlayingFlg == false){
  
          const tick = () => {
-
-          this.state.playerForTHREE?.play();
-          this.setState({ reqAnmIdRef: requestAnimationFrame(tick) });
+           
+           // Effectを発火
+            this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
+              GeneEffectPlayer.play(this.props.meshStorage, geneModel);
+           })
+ 
+           this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
+           this.setState({reqAnmIdRef: requestAnimationFrame(tick)});
          }
  
          tick();

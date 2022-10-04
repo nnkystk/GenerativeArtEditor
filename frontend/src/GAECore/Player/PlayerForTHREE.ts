@@ -3,17 +3,33 @@ import TDModelStorage from '../Object/TDModelStorage';
 import MeshModel from '../Object/MeshModel';
 import EffectRoll from '../Object/Effects/Roll/EffectRoll';
 import EffectModelStorage from '../Object/EffectModelStorage';
+import TDModelProperty from '../Object/TDModelProperty';
+import CanvasSize from 'src/Utilities/GlobalVarriables/CanvasSize';
 
 class PlayerForTHREE{
 
+  FOV: number = 50;
+  canvasSize: CanvasSize = { width: 500, height:500 };
+
+  private tdModelStorage: TDModelStorage;
   private renderer : THREE.WebGLRenderer;
   private scene    : THREE.Scene;
   private camera   : THREE.PerspectiveCamera;
 
-  constructor(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.PerspectiveCamera){
+  constructor(canvas: HTMLCanvasElement, tdModelStorage?: TDModelStorage){
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+    const scene   = new THREE.Scene();
+    const camera  = new THREE.PerspectiveCamera(this.FOV, this.canvasSize.width / this.canvasSize.height);
+    camera.position.set(0, 0, +1000);
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(this.canvasSize.width, this.canvasSize.height);
+
     this.renderer = renderer;
     this.scene    = scene;
     this.camera   = camera;
+    this.tdModelStorage = this.generateSample();
   }
 
   test(){
@@ -22,6 +38,13 @@ class PlayerForTHREE{
 
   render(){
     this.renderer.render(this.scene, this.camera);
+  }
+
+  updateScene(){
+    this.tdModelStorage.storage.forEach( (meshModel) => {
+      const mesh = meshModel.tdObj;
+      this.scene.add(mesh);
+    });
   }
 
 
@@ -45,10 +68,10 @@ class PlayerForTHREE{
     tdModelStorage.storage.push(tdModel);
 
     return tdModelStorage
-    
+
   }
 
-  play(tdModelStorage: TDModelStorage){
+  play(){
 
     /**
      *  Summary: 
@@ -62,17 +85,41 @@ class PlayerForTHREE{
      * @return  void
      */
 
-    const sample = this.generateSample();
+    // !!! Dev !!!
+    // const tdModelStorage = this.tdModelStorage;
+    const tdModelStorage = this.tdModelStorage;
 
     // 各3Dモデルに対してEffectを適用
+    tdModelStorage.storage.forEach( (meshModel) => {
 
-      // 各Effectを適用した後の3Dモデルのプロパティを算出
+      /** 各Effectを適用した後の3Dモデルのプロパティを算出 */
+      let property: TDModelProperty = { ...meshModel.property };
 
-          // 通常Effect
+      // 通常Effect
+      meshModel.effectStorage.storage.forEach( (effectModel) => {
+        property = effectModel.calculate(property);
+      })
+      // TODO: 特別Effect
 
-          // 特別Effect
+      /** Meshに全Effect適用後のプロパティを反映  */
+      const mesh = meshModel.tdObj;
 
-      // 3DモデルのプロパティをEffect適用後のものに変更
+      // TODO: 色
+
+      // TODO: スケール
+
+      // 移動後の位置
+      mesh.position.x += property.vector.x;
+      mesh.position.y += property.vector.y;
+      mesh.position.z += property.vector.z;
+
+      // 回転
+      mesh.rotation.x += property.rotation.x;
+      mesh.rotation.y += property.rotation.y;
+      mesh.rotation.z += property.rotation.z;
+
+      meshModel.property = property;
+    })
 
   }
 
