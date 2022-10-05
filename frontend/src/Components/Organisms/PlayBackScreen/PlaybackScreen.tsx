@@ -109,15 +109,10 @@ export class PlaybackScreen extends React.Component<Props, State>{
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
     // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
-    /**
-    const canvasSize = this.state.threeRenderer.getSize(new Vector2());
-    if(canvasSize.x != this.props.canvasSize.width || canvasSize.y != this.props.canvasSize.height ){
-      this.resizeCanvasSize();
-    }
+    this.state.playerForTHREE?.updateCanvasSize(this.props.canvasSize);
     this.updateSceneThree();
-    this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
+    this.state.playerForTHREE?.render();
     this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
-   */
   }
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド

@@ -5,6 +5,7 @@ import EffectRoll from '../Object/Effects/Roll/EffectRoll';
 import EffectModelStorage from '../Object/EffectModelStorage';
 import TDModelProperty from '../Object/TDModelProperty';
 import CanvasSize from 'src/Utilities/GlobalVarriables/CanvasSize';
+import { Vector2 } from "three";
 
 class PlayerForTHREE{
 
@@ -123,6 +124,18 @@ class PlayerForTHREE{
       this.render();
     })
 
+  }
+
+  updateCanvasSize(requestedCanvasSize: CanvasSize){
+    const canvasSize = this.renderer.getSize(new Vector2());
+    if(canvasSize.x != requestedCanvasSize.width || canvasSize.y != requestedCanvasSize.height ){
+      // カメラを更新
+      this.camera.aspect = requestedCanvasSize.width / requestedCanvasSize.height
+      this.camera.updateProjectionMatrix();
+      // レンダラーを更新
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.setSize(requestedCanvasSize.width, requestedCanvasSize.height);
+    }
   }
 
 
