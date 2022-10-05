@@ -19,6 +19,9 @@ class PlayerForTHREE{
 
   constructor(canvas: HTMLCanvasElement, tdModelStorage?: TDModelStorage){
 
+    /**
+     * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
+     */
     const renderer = new THREE.WebGLRenderer({ canvas: canvas });
     const scene   = new THREE.Scene();
     const camera  = new THREE.PerspectiveCamera(this.FOV, this.canvasSize.width / this.canvasSize.height);
@@ -46,10 +49,29 @@ class PlayerForTHREE{
       const mesh = meshModel.tdObj;
       this.scene.add(mesh);
     });
-    this.render();
   }
 
+  /**
+   * 現在描画されているCanvas要素のサイズを変更するメソッド
+   * 併せて、アスペクト比の調整なども実行する
+   * なおサイズ変更の必要性を本処理内で判断している
+   * @param requestedCanvasSize 
+   */
+  updateCanvasSize(requestedCanvasSize: CanvasSize){
+    const canvasSize = this.renderer.getSize(new Vector2());
+    // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
+    if(canvasSize.x != requestedCanvasSize.width || canvasSize.y != requestedCanvasSize.height){
+      // カメラを更新
+      this.camera.aspect = requestedCanvasSize.width / requestedCanvasSize.height
+      this.camera.updateProjectionMatrix();
+      // レンダラーを更新
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.setSize(requestedCanvasSize.width, requestedCanvasSize.height);
 
+      this.updateScene();
+      this.render();
+    }
+  }
 
   generateSample(){
 
@@ -126,17 +148,6 @@ class PlayerForTHREE{
 
   }
 
-  updateCanvasSize(requestedCanvasSize: CanvasSize){
-    const canvasSize = this.renderer.getSize(new Vector2());
-    if(canvasSize.x != requestedCanvasSize.width || canvasSize.y != requestedCanvasSize.height ){
-      // カメラを更新
-      this.camera.aspect = requestedCanvasSize.width / requestedCanvasSize.height
-      this.camera.updateProjectionMatrix();
-      // レンダラーを更新
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-      this.renderer.setSize(requestedCanvasSize.width, requestedCanvasSize.height);
-    }
-  }
 
 
 }

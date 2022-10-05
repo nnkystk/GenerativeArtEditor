@@ -108,10 +108,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
-    // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
     this.state.playerForTHREE?.updateCanvasSize(this.props.canvasSize);
-    this.updateSceneThree();
-    this.state.playerForTHREE?.render();
     this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
   }
   
@@ -129,36 +126,16 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
   // ___ メソッド ___ ___ ___ ___ ___
   initializeThree = () => {
-    /**
-     * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
-     */
-      const canvas: HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement;
-      const playerForTHREE = new PlayerForTHREE(canvas);
 
-      // シーンをセットアップする
-      this.updateSceneThree();
+    // Playerを生成および初期化する
+    const canvas: HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement;
+    const playerForTHREE = new PlayerForTHREE(canvas);
 
-      this.setState({ playerForTHREE: playerForTHREE });
+    // シーンをセットアップする
+    playerForTHREE.updateScene();
+
+    this.setState({ playerForTHREE: playerForTHREE });
    };
-
-   /**
-   resizeCanvasSize = () => {
-    // カメラを更新
-    this.state.threeCamera.aspect = this.props.canvasSize.width / this.props.canvasSize.height
-    this.state.threeCamera.updateProjectionMatrix();
-    // レンダラーを更新
-    this.state.threeRenderer.setPixelRatio(window.devicePixelRatio);
-    this.state.threeRenderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
-   }
-    */
- 
-   updateSceneThree = () => {
-      /**
-      * Summary: シーンを更新する
-      * Imp: すべてのMeshをシーンに追加する
-      */
-    this.state.playerForTHREE?.updateScene();
-  }
  
   playBackThree = () => {
      /**
@@ -190,8 +167,8 @@ export class PlaybackScreen extends React.Component<Props, State>{
      if(this.props.isPlayingFlg == true){
        this.stopThree();
      }else{
-       this.updateSceneThree();   // シーンにメッシュが追加されていることを保証
-       this.playBackThree();
+      this.state.playerForTHREE?.updateScene();
+      this.playBackThree();
      }
    }
 }
