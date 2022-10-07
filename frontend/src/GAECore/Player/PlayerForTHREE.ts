@@ -88,7 +88,7 @@ class PlayerForTHREE{
 
     const tdModelStorage = new TDModelStorage();
     const mesh = genereteSampleMesh();
-    const tdModel   = new MeshModel(mesh, effectModelStorage);
+    const tdModel   = new MeshModel(1, mesh, effectModelStorage);   // !!! 仮 !!!
     tdModelStorage.storage.push(tdModel);
 
     return tdModelStorage
