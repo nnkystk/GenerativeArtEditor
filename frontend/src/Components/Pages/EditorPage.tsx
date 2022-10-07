@@ -3,12 +3,15 @@ import { Grid, Divider } from "@material-ui/core";
 import { PlaybackScreen } from '../Organisms/PlaybackScreen/PlaybackScreen';
 import { CodingScreenMaterial } from '../Organisms/CodingScreen/CodingScreenMaterial';
 import { ProjectSettingScreen } from '../Organisms/ProjectSettingScreen'
-import GeneGenerator from '../../Utilities/GeneGenerator';
-import GeneModelStorage from '../../Utilities/GeneModel/GeneModelStorage';
+
 import MeshStorage from '../../Utilities/Mesh/MeshStorage';
-import MeshModel from "../../Utilities/Mesh/MeshModel";
-import GeneEffectStorage from '../../Utilities/GeneEffects/GeneEffectStorage';
 import ProjectInfo from '../../Utilities/ProjectInfo'
+
+import TDModelSourceStorage from '../../GAECore/Source/TDModelSourceStorage'
+import TDModelSource from '../../GAECore/Source/TDModelSource'
+import EffectRollSource from "../../GAECore/Source/Effects/Roll/EffectRollSource";
+
+import { cloneDeep } from 'lodash'
 
 type Props = {
   sampleProp ?: any;
@@ -21,14 +24,14 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ projectInfo,      setProjectInfo ]        = useState<ProjectInfo>(new ProjectInfo());
-  const [ geneModelStorage, setGeneModelStorage ]   = useState<GeneModelStorage>(new GeneModelStorage());   // 描画する3Dモデルの定義情報（再生開始時の状態）をまとめたオブジェクト
   const [ meshStorage,      setMeshStorage ]        = useState<MeshStorage>(new MeshStorage());             // 描画中の3Dモデル（Mesh）をまとめたオブジェクト
   const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_SAMPLE1_PANEL);  // 表示する対象パネルを指定するキー
   const [ isPlayingFlg,     setIsPlayingFlg ]       = useState<boolean>(false);
   const [ reqInstPlayFlg,   setReqInstPlayFlg ]     = useState<boolean>(false);   // 1フレームレンダーが必要であることを示すフラグ（3Dオブジェクトに生じた変更を反映する場合に使用）
+  const [ tdModelSourceStorage, setTDModelSourceStorage ] = useState<TDModelSourceStorage>(new TDModelSourceStorage());   // 描画する3Dモデルの定義情報（再生開始時の状態）をまとめたオブジェクト
 
   // ___ use effect ___ ___ ___ ___ ___
-  useEffect( () => { initializeThree() },         []);
+  useEffect( () => { initialize() },         []);
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -39,28 +42,24 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     console.log('test');
   }
 
-  const initializeThree = () => {
+  const initialize = () => {
     // サンプル表示用の3Dモデルを生成
     // !!! 暫定の実装。JSONによる外部からの作品情報入力が可能になったら本サンプル表示処理は不要 !!!
-    const sampleEffect   = GeneGenerator.generateGeneEffect('ROLL');
-    sampleEffect.parameter.rotation = { x: 0.01, y: 0.01, z:0 };
-    const geneEffectStorage = new GeneEffectStorage();
-    geneEffectStorage.store(sampleEffect);
-    const mesh            = GeneGenerator.generateMesh();
-    const geneModel       = GeneGenerator.generateGeneModel(mesh.id, geneEffectStorage);
-    geneModelStorage.store(geneModel);
-    const meshModel = new MeshModel(mesh.id, mesh);
-    meshStorage.store(meshModel);
-    updateGeneModelStorage();
+    const tdModelSourceStorage  = new TDModelSourceStorage();
+    const tdModelSource         = new TDModelSource(1);   // !!! 仮 !!!
+    const effectRollSource      = new EffectRollSource();
+    tdModelSource.effectModelSourceStorage.storage.push(effectRollSource);
+    tdModelSourceStorage.store(tdModelSource);
+    
+    setTDModelSourceStorage(tdModelSourceStorage);
   }
 
-  const updateGeneModelStorage = () => {
+  const updateTDModelSourceStorage = () => {
     /**
      * ReactにStateの更新を検知させる処理
      */
-    const _geneModelStorage = new GeneModelStorage();
-    _geneModelStorage.storage = geneModelStorage.storage;
-    setGeneModelStorage(_geneModelStorage);
+    const _tdModelSourceStorage: TDModelSourceStorage = cloneDeep(tdModelSourceStorage);
+    setTDModelSourceStorage(_tdModelSourceStorage);
   }
 
   const decideGuidePanelToShow = (index: string) =>{
@@ -92,8 +91,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
       <Grid item xs = { 11 } style = { { zIndex :50 } }>
         <PlaybackScreen
-          geneModelStorage  = { geneModelStorage }
-          meshStorage       = { meshStorage }
           canvasSize        = { projectInfo.canvasSize }
           isPlayingFlg      = { isPlayingFlg }
           reqInstPlayFlg    = { reqInstPlayFlg }
@@ -115,10 +112,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
       <Grid item xs = { 12 }>
         <Divider style = { { width: '100%' } } />
         <CodingScreenMaterial
-          geneModelStorage        = { geneModelStorage }
-          meshStorage             = { meshStorage }
-          updateGeneModelStorage  = { updateGeneModelStorage }
-          setReqInstPlayFlg       = { setReqInstPlayFlg }
+          tdModelSourceStorage          = { tdModelSourceStorage }
+          meshStorage                   = { meshStorage }
+          updateTDModelSourceStorage    = { updateTDModelSourceStorage }
+          setReqInstPlayFlg             = { setReqInstPlayFlg }
         />
       </Grid>
 

@@ -8,9 +8,9 @@ import { ScaleInputForm }     from '../../Molecules/ScaleInputForm'
 import { ColorInputForm }     from '../../Molecules/ColorInputForm'
 import { EffectGenerateForm } from '../../Molecules/EffectGenerateForm'
 import GeneEffectInterface    from "../../../Utilities/GeneEffects/GeneEffectInterface";
-import GeneModelStorage       from '../../../Utilities/GeneModel/GeneModelStorage';
-import MeshModel              from '../../../Utilities/Mesh/MeshModel';
-import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
+import TDModelSource from "src/GAECore/Source/TDModelSource";
+import TDModelSourceStorage from "src/GAECore/Source/TDModelSourceStorage";
+import EffectModelSource from "src/GAECore/Source/Effects/EffectModelSource";
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -21,23 +21,26 @@ import GeneModel              from '../../../Utilities/GeneModel/GeneModel';
 
 // Type Declaration of Props
 interface Props{
-  geneModel               : GeneModel;
-  geneModelStorage        : GeneModelStorage;
-  meshModel              ?: MeshModel;
-  updateGeneModelStorage  : any;
+  tdModelSource           : TDModelSource;
+  tdModelSourceStorage    : TDModelSourceStorage;
+  updateTDModelSourceStorage: any;
   setReqInstPlayFlg(bool: boolean): void;
 }
-const GeneModelEditPanel: React.FC<Props> = (props: Props) => {
+const TDModelEditPanel: React.FC<Props> = (props: Props) => {
 
-  const generateEffectPropsInputForm = (geneEffect: GeneEffectInterface) => {
+  const generateEffectPropsInputForm = (effectModelSource: EffectModelSource) => {
     /**
      * Summary: EffectのIDに応じたコンポーネントを返すメソッド
      */
-    if(geneEffect.id == "ROLL"){
-      return <EffectRollForm geneEffect = { geneEffect } />
-    }else if(geneEffect.id == "MOVE"){
-      return <EffectMoveForm geneEffect = { geneEffect } />
+    {/**
+    if(effectModelSource.id == "ROLL"){
+      return <EffectRollForm effectModelSource = { effectModelSource } />
     }
+    else if(effectModelSource.id == "MOVE"){
+      return <EffectMoveForm effectModelSource = { effectModelSource } />
+    }
+     */}
+     return <span></span>
   }
 
   return(
@@ -50,11 +53,13 @@ const GeneModelEditPanel: React.FC<Props> = (props: Props) => {
         {/** !!! StateにmeshStorageをセットする本仕様はパフォーマンスの低下を招く懸念がある */}
         <Grid container style = {{ padding: 20 }}>
           <PositionInputForm
-            geneModel = { props.geneModel }
-            meshModel = { props.meshModel }
+            property          = { props.tdModelSource.property }
+            updateTDModelSourceStorage = { props.updateTDModelSourceStorage }
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
+
+        {/**
 
         <Grid container style = {{ padding: 20 }}>
           <ScaleInputForm
@@ -71,6 +76,7 @@ const GeneModelEditPanel: React.FC<Props> = (props: Props) => {
             setReqInstPlayFlg = { props.setReqInstPlayFlg }
           />
         </Grid>
+         */}
 
       </Grid>
 
@@ -87,6 +93,7 @@ const GeneModelEditPanel: React.FC<Props> = (props: Props) => {
           </Grid>
 
           {/** Effectを新規登録するフォーム */}
+          {/**
           <Grid container spacing = { 2 }>
             <Grid item xs = { 12 }>
               <BasicModal
@@ -101,12 +108,13 @@ const GeneModelEditPanel: React.FC<Props> = (props: Props) => {
               />
             </Grid>
           </Grid>
+           */}
 
           {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
-          { props.geneModel.effectStorage.storage.map( (geneEffect: any) => (
-            <span key = { props.geneModel.id + '_' + geneEffect.id } >
-              <span> { geneEffect.id } </span>
-              { generateEffectPropsInputForm(geneEffect) }
+          { props.tdModelSource.effectModelSourceStorage.storage.map( (effectModelSource: any) => (
+            <span key = { props.tdModelSource.id + '_' + effectModelSource.id } >
+              <span> { effectModelSource.id } </span>
+              { generateEffectPropsInputForm(effectModelSource) }
             </span>
             ))
           }
@@ -124,4 +132,4 @@ const GeneModelEditPanel: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default GeneModelEditPanel
+export default TDModelEditPanel

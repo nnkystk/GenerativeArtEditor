@@ -6,6 +6,11 @@ class TDModelSourceStorage{
 
   constructor(){
   }
+
+  store(tdModelSource: TDModelSource){
+    this.storage.push(tdModelSource);
+  }
+  
 }
 
 export default TDModelSourceStorage

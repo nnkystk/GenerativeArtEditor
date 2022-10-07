@@ -7,10 +7,9 @@ import MeshStorage from "../../../Utilities/Mesh/MeshStorage";
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
 import PlayerForTHREE from '../../../GAECore/Player/PlayerForTHREE'
+import TDModelSourceStorage from "src/GAECore/Source/TDModelSourceStorage";
 
 interface Props {
-  geneModelStorage    : GeneModelStorage;
-  meshStorage         : MeshStorage;
   canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
   reqInstPlayFlg      : boolean;    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにするフラグ

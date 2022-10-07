@@ -1,47 +1,46 @@
 import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
-import GeneModel from '../../Utilities/GeneModel/GeneModel'
 import Vector from '../../Utilities/GlobalVarriables/Vector'
-import MeshModel from "src/Utilities/Mesh/MeshModel";
+import TDModelSourceProperty from "src/GAECore/Source/TDModelSourceProperty";
 
 interface Props{
-  geneModel   : GeneModel;
-  meshModel  ?: MeshModel;
+  property: TDModelSourceProperty;
+  updateTDModelSourceStorage(): void;
   setReqInstPlayFlg(bool: boolean): void;
 }
 export const PositionInputForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ position, setPosition ] = useState<Vector>(props.geneModel.position);
+  const [ position, setPosition ] = useState<Vector>(props.property.position);
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.x     = newVal;
-    // 変更をUIに反映
+    // 変更を反映
     updateUI(_position);
   }
   const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.y     = newVal;
-    // 変更をUIに反映
+    // 変更を反映
     updateUI(_position);
   }
   const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
     const _position = { ...position } 
     const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
     _position.z     = newVal;
-    // 変更をUIに反映
+    // 変更を反映
     updateUI(_position);
   }
   const updateUI = (position: Vector) => {
-    // UIに反映
+    // オブジェクトに反映
     setPosition(position);
+    // UIに反映
+    props.updateTDModelSourceStorage();
     // 3Dレンダー画面に反映
-    props.geneModel.setPosition(position);
-    props.meshModel?.setPosition(position);
     props.setReqInstPlayFlg(true);    // 変更内容を反映するために1フレーム再生する
   }
 
