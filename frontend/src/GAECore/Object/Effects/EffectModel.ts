@@ -1,9 +1,11 @@
 import TDModelProperty from '../TDModelProperty';
 import EffectParameter from './EffectParameter'
+import { EffectID } from '../../../Utilities/GlobalVarriables/EffectCatalog'
 
 interface EffectModel{
 
-  parameter: EffectParameter;
+  id        : EffectID;
+  parameter : EffectParameter;
 
   /**
    * 3Dモデルのプロパティをもとに、Effectを適用した後のプロパティを算出するメソッド

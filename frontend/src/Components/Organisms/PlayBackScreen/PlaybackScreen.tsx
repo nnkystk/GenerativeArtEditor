@@ -2,14 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import { Grid, Tooltip, Paper } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
-import * as THREE from 'three';
-import GeneModel from '../../../Utilities/GeneModel/GeneModel'
 import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
 import MeshStorage from "../../../Utilities/Mesh/MeshStorage";
-import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
-import { Vector2 } from "three";
 import PlayerForTHREE from '../../../GAECore/Player/PlayerForTHREE'
 
 interface Props {
