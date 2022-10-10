@@ -20,7 +20,6 @@ interface Props{
   tdModelSourceStorage    : TDModelSourceStorage;
   meshStorage             : MeshStorage;
   updateTDModelSourceStorage(): void;
-  setReqInstPlayFlg(bool: boolean): void;
 }
 
 export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
@@ -42,8 +41,6 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
     // UIを更新
     props.updateTDModelSourceStorage();
-    // 3D描画を1フレーム分実行 変更を視覚化する
-    props.setReqInstPlayFlg(true);
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -78,7 +75,6 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
                   tdModelSource               = { tdModelSource }
                   tdModelSourceStorage        = { props.tdModelSourceStorage }
                   updateTDModelSourceStorage  = { props.updateTDModelSourceStorage }
-                  setReqInstPlayFlg           = { props.setReqInstPlayFlg }
                 />
               }
             />

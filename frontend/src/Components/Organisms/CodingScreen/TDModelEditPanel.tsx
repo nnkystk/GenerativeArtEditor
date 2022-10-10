@@ -23,8 +23,7 @@ import EffectModelSource from "src/GAECore/Source/Effects/EffectModelSource";
 interface Props{
   tdModelSource           : TDModelSource;
   tdModelSourceStorage    : TDModelSourceStorage;
-  updateTDModelSourceStorage: any;
-  setReqInstPlayFlg(bool: boolean): void;
+  updateTDModelSourceStorage(): void;
 }
 const TDModelEditPanel: React.FC<Props> = (props: Props) => {
 
@@ -50,12 +49,11 @@ const TDModelEditPanel: React.FC<Props> = (props: Props) => {
       <Grid item xs = { 5 } >
 
         {/** Property */}
-        {/** !!! StateにmeshStorageをセットする本仕様はパフォーマンスの低下を招く懸念がある */}
+        {/** !!! WARN: StateにmeshStorageをセットする本仕様はパフォーマンスの低下を招く懸念がある */}
         <Grid container style = {{ padding: 20 }}>
           <PositionInputForm
             property          = { props.tdModelSource.property }
-            updateTDModelSourceStorage = { props.updateTDModelSourceStorage }
-            setReqInstPlayFlg = { props.setReqInstPlayFlg }
+            updateParentState = { props.updateTDModelSourceStorage }
           />
         </Grid>
 

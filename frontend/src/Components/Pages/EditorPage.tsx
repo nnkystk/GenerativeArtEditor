@@ -57,6 +57,9 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   const updateTDModelSourceStorage = () => {
     /**
      * ReactにStateの更新を検知させる処理
+     * 本来、本ComponentのStateを更新する関数を子Componentに移譲して実行させるべきであるが、複雑化を防ぐために本実装とした。
+     * 子コンポーネントはTDModelSourceStorageの各プロパティを直接変更した上で、本処理を実行すること。
+     * !!! ToDo: 先述の仕様をコーディング規則に落とし込むこと !!!
      */
     const _tdModelSourceStorage: TDModelSourceStorage = cloneDeep(tdModelSourceStorage);
     setTDModelSourceStorage(_tdModelSourceStorage);
@@ -115,7 +118,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
           tdModelSourceStorage          = { tdModelSourceStorage }
           meshStorage                   = { meshStorage }
           updateTDModelSourceStorage    = { updateTDModelSourceStorage }
-          setReqInstPlayFlg             = { setReqInstPlayFlg }
         />
       </Grid>
 
