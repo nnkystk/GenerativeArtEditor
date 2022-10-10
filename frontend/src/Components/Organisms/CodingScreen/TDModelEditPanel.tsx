@@ -65,12 +65,10 @@ const TDModelEditPanel: React.FC<Props> = (props: Props) => {
         </Grid>
 
         {/**
-
         <Grid container style = {{ padding: 20 }}>
           <ColorInputForm
-            geneModel = { props.geneModel }
-            meshModel = { props.meshModel }
-            setReqInstPlayFlg = { props.setReqInstPlayFlg }
+            color             = { props.tdModelSource.property.color }
+            updateParentState = { props.updateTDModelSourceStorage }
           />
         </Grid>
          */}

@@ -32,9 +32,10 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         <Grid item xs = { 12 } md = { 4 }>
           <NumberInputForm
             value = { position.x }
-            step  = { 10 }
-            type  = { 'number' }
             label = { 'X' }
+            inputProps = {{
+              step  : '10',
+            }}
             updateParentState = { (newVal) => {
               props.position.x = newVal;
               props.updateParentState();
@@ -45,9 +46,10 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         <Grid item xs = { 12 } md = { 4 }>
           <NumberInputForm
             value = { position.y }
-            step  = { 10 }
-            type  = { 'number' }
             label = { 'Y' }
+            inputProps = {{
+              step  : '10',
+            }}
             updateParentState = { (newVal) => {
               props.position.y = newVal;
               props.updateParentState();
@@ -58,9 +60,10 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
         <Grid item xs = { 12 } md = { 4 }>
           <NumberInputForm
               value = { position.z }
-              step  = { 10 }
-              type  = { 'number' }
               label = { 'Z' }
+              inputProps = {{
+                step  : '10',
+              }}
               updateParentState = { (newVal) => {
                 props.position.z = newVal;
                 props.updateParentState();

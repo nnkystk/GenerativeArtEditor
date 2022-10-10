@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { TextField } from "@material-ui/core";
 
 interface Props{
-  value : number;
+  value : string;
   label : string;
   inputProps : any;
-  updateParentState(newVal: number): void;
+  updateParentState(newVal: string): void;
 }
 
-export const NumberInputForm: React.FC<Props> = (props: Props) => {
+export const TextInputForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ value, setValue ] = useState<string | number>(props.value);
 
   // ___ event handler ___ ___ ___ ___ ___
   const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const newVal    = event.target.valueAsNumber? event.target.valueAsNumber: 0;
+    const newVal    = event.target.valueAsNumber? String(event.target.valueAsNumber): '0';
     // UIに変更を反映
     setValue(newVal);
     // 親ComponentのStateに変更を反映
@@ -29,7 +29,7 @@ export const NumberInputForm: React.FC<Props> = (props: Props) => {
       onChange  = { handleChange }
       label     = { props.label }
       inputProps = { props.inputProps }
-      type      = { 'number' }
+      type      = { 'string' }
       variant   = "outlined"
       size      = "small"
       InputLabelProps = {{
@@ -41,4 +41,4 @@ export const NumberInputForm: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default NumberInputForm
+export default TextInputForm

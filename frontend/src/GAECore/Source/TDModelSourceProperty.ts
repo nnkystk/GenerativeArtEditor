@@ -1,4 +1,6 @@
+import HexadecimalColor from "src/Utilities/GlobalVarriables/HexadecimalColor";
 import Vector from "src/Utilities/GlobalVarriables/Vector";
+
 
 class TDModelSourceProperty{
   
@@ -6,7 +8,7 @@ class TDModelSourceProperty{
   scale   : Vector = { x: 0, y: 0, z: 0 };
   vector  : Vector = { x: 0, y: 0, z: 0 };
   rotation: Vector = { x: 0, y: 0, z: 0 };
-  color   : { r: number, g: number, b: number } = { r: 0, g: 0, b: 0 };
+  color   : HexadecimalColor = { r: '0', g: '0', b: '0' };
 
   setPosition(position: { x: number, y: number, z: number } ){
     this.position = position;
@@ -20,7 +22,7 @@ class TDModelSourceProperty{
     this.rotation = rotation;
   }
 
-  setColor(color: { r: number, g: number, b: number }){
+  setColor(color: HexadecimalColor){
     this.color = color
   }
 

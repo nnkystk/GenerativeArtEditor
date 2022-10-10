@@ -32,9 +32,10 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
         <Grid item xs = { 12 } md = { 4 }>
           <NumberInputForm
             value = { scale.x }
-            step  = { 0.05 }
-            type  = { 'number' }
             label = { 'X' }
+            inputProps = {{
+              step  : '0.05',
+            }}
             updateParentState = { (newVal) => {
               props.scale.x = newVal;
               props.updateParentState();
@@ -45,9 +46,10 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
         <Grid item xs = { 12 } md = { 4 }>
           <NumberInputForm
             value = { scale.y }
-            step  = { 0.05 }
-            type  = { 'number' }
             label = { 'Y' }
+            inputProps = {{
+              step  : '0.05',
+            }}
             updateParentState = { (newVal) => {
               props.scale.y = newVal;
               props.updateParentState();
@@ -58,9 +60,10 @@ export const ScaleInputForm: React.FC<Props> = (props: Props) => {
         <Grid item xs = { 12 } md = { 4 }>
           <NumberInputForm
               value = { scale.z }
-              step  = { 0.05 }
-              type  = { 'number' }
               label = { 'Z' }
+              inputProps = {{
+                step  : '0.05',
+              }}
               updateParentState = { (newVal) => {
                 props.scale.z = newVal;
                 props.updateParentState();
