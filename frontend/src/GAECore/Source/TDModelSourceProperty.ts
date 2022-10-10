@@ -1,8 +1,11 @@
+import Vector from "src/Utilities/GlobalVarriables/Vector";
+
 class TDModelSourceProperty{
   
-  position: { x: number, y: number, z: number } = { x: 0, y: 0, z: 0 };
-  vector  : { x: number, y: number, z: number } = { x: 0, y: 0, z: 0 };
-  rotation: { x: number, y: number, z: number } = { x: 0, y: 0, z: 0 };
+  position: Vector = { x: 0, y: 0, z: 0 };
+  scale   : Vector = { x: 0, y: 0, z: 0 };
+  vector  : Vector = { x: 0, y: 0, z: 0 };
+  rotation: Vector = { x: 0, y: 0, z: 0 };
   color   : { r: number, g: number, b: number } = { r: 0, g: 0, b: 0 };
 
   setPosition(position: { x: number, y: number, z: number } ){

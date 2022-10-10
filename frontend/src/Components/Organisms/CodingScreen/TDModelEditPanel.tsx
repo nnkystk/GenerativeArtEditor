@@ -52,20 +52,19 @@ const TDModelEditPanel: React.FC<Props> = (props: Props) => {
         {/** !!! WARN: StateにmeshStorageをセットする本仕様はパフォーマンスの低下を招く懸念がある */}
         <Grid container style = {{ padding: 20 }}>
           <PositionInputForm
-            property          = { props.tdModelSource.property }
+            position          = { props.tdModelSource.property.position }
+            updateParentState = { props.updateTDModelSourceStorage }
+          />
+        </Grid>
+
+        <Grid container style = {{ padding: 20 }}>
+          <ScaleInputForm
+            scale             = { props.tdModelSource.property.scale }
             updateParentState = { props.updateTDModelSourceStorage }
           />
         </Grid>
 
         {/**
-
-        <Grid container style = {{ padding: 20 }}>
-          <ScaleInputForm
-            geneModel = { props.geneModel }
-            meshModel = { props.meshModel }
-            setReqInstPlayFlg = { props.setReqInstPlayFlg }
-          />
-        </Grid>
 
         <Grid container style = {{ padding: 20 }}>
           <ColorInputForm

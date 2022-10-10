@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Grid, TextField } from "@material-ui/core";
-import Vector from '../../Utilities/GlobalVarriables/Vector'
-import TDModelSourceProperty from "src/GAECore/Source/TDModelSourceProperty";
+import { Grid } from "@material-ui/core";
 import { NumberInputForm } from './NumberInputForm'
+import Vector from '../../Utilities/GlobalVarriables/Vector'
+
 
 interface Props{
-  property: TDModelSourceProperty;
+  position: Vector;
   updateParentState(...args: any): void;
 }
+
+
 export const PositionInputForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ position, setPosition ] = useState<Vector>(props.property.position);
+  const [ position, setPosition ] = useState<Vector>(props.position);
 
   // ___ event handler ___ ___ ___ ___ ___
 
@@ -34,7 +36,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
             type  = { 'number' }
             label = { 'X' }
             updateParentState = { (newVal) => {
-              props.property.position.x = newVal;
+              props.position.x = newVal;
               props.updateParentState();
             } }
           />
@@ -47,7 +49,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
             type  = { 'number' }
             label = { 'Y' }
             updateParentState = { (newVal) => {
-              props.property.position.y = newVal;
+              props.position.y = newVal;
               props.updateParentState();
             } }
           />
@@ -60,7 +62,7 @@ export const PositionInputForm: React.FC<Props> = (props: Props) => {
               type  = { 'number' }
               label = { 'Z' }
               updateParentState = { (newVal) => {
-                props.property.position.z = newVal;
+                props.position.z = newVal;
                 props.updateParentState();
               } }
             />

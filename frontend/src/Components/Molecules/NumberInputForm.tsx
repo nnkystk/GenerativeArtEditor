@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Grid, TextField } from "@material-ui/core";
-import Vector from '../../Utilities/GlobalVarriables/Vector'
-import TDModelSourceProperty from "src/GAECore/Source/TDModelSourceProperty";
+import { TextField } from "@material-ui/core";
 
 interface Props{
   value : number;
@@ -10,6 +8,7 @@ interface Props{
   label : string;
   updateParentState(newVal: number): void;
 }
+
 export const NumberInputForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
