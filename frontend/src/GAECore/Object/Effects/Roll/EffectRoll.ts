@@ -1,14 +1,18 @@
 import { EffectID } from 'src/Utilities/GlobalVarriables/EffectCatalog';
 import TDModelProperty from '../../TDModelProperty';
 import EffectModel from '../EffectModel';
-import ParamRoll from './ParamRoll'
+import EffectParameter from '../EffectParameter';
 
 class EffectRoll implements EffectModel{
 
   id        : EffectID = 'ROLL';
-  parameter : ParamRoll = new ParamRoll();
+  parameter : EffectParameter;
 
-  calculate(property: TDModelProperty, parameter?: ParamRoll){
+  constructor(parameter: EffectParameter){
+    this.parameter = parameter? parameter: new EffectParameter();
+  }
+
+  calculate(property: TDModelProperty, parameter?: EffectParameter){
 
     const _property = {...property};
 

@@ -3,7 +3,6 @@ import { Grid, Paper, Tooltip, Divider } from "@material-ui/core";
 import { AddCircleOutline }   from '@mui/icons-material';
 import { BasicAccordion }     from '../../Atoms/BasicAccordion'
 import TDModelEditPanel     from './TDModelEditPanel';
-import MeshStorage            from '../../../Utilities/Mesh/MeshStorage';
 import TDModelSourceStorage from '../../../GAECore/Source/TDModelSourceStorage'
 import TDModelSource from '../../../GAECore/Source/TDModelSource'
 
@@ -18,7 +17,6 @@ import TDModelSource from '../../../GAECore/Source/TDModelSource'
 interface Props{
   sampleProp             ?: any;
   tdModelSourceStorage    : TDModelSourceStorage;
-  meshStorage             : MeshStorage;
   updateTDModelSourceStorage(): void;
 }
 

@@ -106,8 +106,6 @@ const TDModelEditPanel: React.FC<Props> = (props: Props) => {
             </Grid>
           </Grid>
 
-
-
           {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
           { props.tdModelSource.effectModelSourceStorage.storage.map( (effectModelSource: any) => (
             <span key = { props.tdModelSource.id + '_' + effectModelSource.id } >

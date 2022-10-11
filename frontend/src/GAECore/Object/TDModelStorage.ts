@@ -4,8 +4,11 @@ class TDModelStorage{
 
   public storage: Array<TDModel> = [];
 
-  constructor(){
+  store(tdModel: TDModel){
+    this.storage.push(tdModel);
   }
+
+
 }
 
 export default TDModelStorage

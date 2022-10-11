@@ -5,15 +5,15 @@ import TDModelProperty from './TDModelProperty';
 import TDModelID from '../GlobalVar/TDModelID';
 
 class MeshModel implements TDModel{
+
   id            : TDModelID;   
   tdObj         : THREE.Mesh;
-  effectStorage : EffectModelStorage = new EffectModelStorage();
-  property      : TDModelProperty = new TDModelProperty();
+  effectStorage : EffectModelStorage  = new EffectModelStorage();
+  property      : TDModelProperty     = new TDModelProperty();
 
-  constructor(id: TDModelID, tdObj: THREE.Mesh, effectStorage: EffectModelStorage){
+  constructor(id: TDModelID, tdObj: THREE.Mesh){
     this.id    = id;
     this.tdObj = tdObj;
-    this.effectStorage = effectStorage;
   }
 
 }

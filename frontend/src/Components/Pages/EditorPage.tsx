@@ -9,6 +9,8 @@ import ProjectInfo from '../../Utilities/ProjectInfo'
 import TDModelSourceStorage from '../../GAECore/Source/TDModelSourceStorage'
 import TDModelSource from '../../GAECore/Source/TDModelSource'
 import EffectRollSource from "../../GAECore/Source/Effects/Roll/EffectRollSource";
+import ConverterForTHREE from '../../GAECore/Converter/ConverterForTHREE'
+import TDModelStorage from '../../GAECore/Object/TDModelStorage'
 
 type Props = {
   sampleProp ?: any;
@@ -21,11 +23,11 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ projectInfo,      setProjectInfo ]        = useState<ProjectInfo>(new ProjectInfo());
-  const [ meshStorage,      setMeshStorage ]        = useState<MeshStorage>(new MeshStorage());             // 描画中の3Dモデル（Mesh）をまとめたオブジェクト
   const [ panelToShowIndex, setPanelToShowIndex ]   = useState<string>(INDEX_SAMPLE1_PANEL);  // 表示する対象パネルを指定するキー
   const [ isPlayingFlg,     setIsPlayingFlg ]       = useState<boolean>(false);
   const [ reqInstPlayFlg,   setReqInstPlayFlg ]     = useState<boolean>(false);   // 1フレームレンダーが必要であることを示すフラグ（3Dオブジェクトに生じた変更を反映する場合に使用）
   const [ tdModelSourceStorage, setTDModelSourceStorage ] = useState<TDModelSourceStorage>(new TDModelSourceStorage());   // 描画する3Dモデルの定義情報（再生開始時の状態）をまとめたオブジェクト
+  const [ tdModelStorage,       setTDModelStorage]        = useState<TDModelStorage>(new TDModelStorage());
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { initialize() },         []);
@@ -40,15 +42,6 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   }
 
   const initialize = () => {
-    // サンプル表示用の3Dモデルを生成
-    // !!! 暫定の実装。JSONによる外部からの作品情報入力が可能になったら本サンプル表示処理は不要 !!!
-    const tdModelSourceStorage  = new TDModelSourceStorage();
-    const tdModelSource         = new TDModelSource(0);   // !!! 仮 !!!
-    const effectRollSource      = new EffectRollSource();
-    tdModelSource.effectModelSourceStorage.storage.push(effectRollSource);
-    tdModelSourceStorage.store(tdModelSource);
-    
-    setTDModelSourceStorage(tdModelSourceStorage);
   }
 
   const updateTDModelSourceStorage = () => {
@@ -78,6 +71,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
   const onClickSample2Button = () => {
     setPanelToShowIndex(INDEX_SAMPLE2_PANEL);
   }
+  const onClickConvertButton = () => {
+    const tdModelStorage = ConverterForTHREE.convert(tdModelSourceStorage);
+    setTDModelStorage(tdModelStorage);
+  }
 
   return(
     <Grid container spacing = { 2 }>
@@ -91,11 +88,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
 
       <Grid item xs = { 11 } style = { { zIndex :50 } }>
         <PlaybackScreen
+          tdModelStorage    = { tdModelStorage }
           canvasSize        = { projectInfo.canvasSize }
           isPlayingFlg      = { isPlayingFlg }
-          reqInstPlayFlg    = { reqInstPlayFlg }
           setIsPlayingFlg   = { setIsPlayingFlg }
-          setReqInstPlayFlg = { setReqInstPlayFlg }
         />
       </Grid>
 
@@ -112,10 +108,10 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
       <Grid item xs = { 12 }>
         <Divider style = { { width: '100%' } } />
         <CodingScreenMaterial
-          tdModelSourceStorage          = { tdModelSourceStorage }
-          meshStorage                   = { meshStorage }
-          updateTDModelSourceStorage    = { updateTDModelSourceStorage }
+          tdModelSourceStorage        = { tdModelSourceStorage }
+          updateTDModelSourceStorage  = { updateTDModelSourceStorage }
         />
+        <button onClick={ onClickConvertButton }> Convert </button>
       </Grid>
 
       <Grid item xs = { 12 }>

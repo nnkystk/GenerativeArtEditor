@@ -8,13 +8,14 @@ import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
 import PlayerForTHREE from '../../../GAECore/Player/PlayerForTHREE'
 import TDModelSourceStorage from "src/GAECore/Source/TDModelSourceStorage";
+import TDModelStorage from "src/GAECore/Object/TDModelStorage";
+
 
 interface Props {
+  tdModelStorage      : TDModelStorage;
   canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
-  reqInstPlayFlg      : boolean;    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにするフラグ
   setIsPlayingFlg(bool: boolean)    : void;
-  setReqInstPlayFlg(bool: boolean)  :void;
 }
 interface State{
   playerForTHREE?: PlayerForTHREE;
@@ -86,8 +87,6 @@ export class PlaybackScreen extends React.Component<Props, State>{
             </Grid>
           </Grid>
 
-          <button onClick = {this.test}>test</button>
-
         </Grid>
 
       </div>
@@ -104,7 +103,8 @@ export class PlaybackScreen extends React.Component<Props, State>{
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
     this.state.playerForTHREE?.updateCanvasSize(this.props.canvasSize);
-    this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
+    this.state.playerForTHREE?.updateScene(this.props.tdModelStorage);
+    this.state.playerForTHREE?.render();
   }
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
@@ -125,9 +125,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
     // Playerを生成および初期化する
     const canvas: HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement;
     const playerForTHREE = new PlayerForTHREE(canvas);
-
+    
     // シーンをセットアップする
-    playerForTHREE.updateScene();
+    playerForTHREE.updateScene(this.props.tdModelStorage);
 
     this.setState({ playerForTHREE: playerForTHREE });
    };
@@ -142,8 +142,8 @@ export class PlaybackScreen extends React.Component<Props, State>{
  
          const tick = () => {
 
-          this.state.playerForTHREE?.play();
-          this.setState({ reqAnmIdRef: requestAnimationFrame(tick) });
+          this.state.playerForTHREE?.play(this.props.tdModelStorage);
+          this.setState({ reqAnmIdRef: requestAnimationFrame(tick) });    // WARN: 必要以上にレンダリングを実行させてしまっている 
          }
  
          tick();
@@ -162,7 +162,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
      if(this.props.isPlayingFlg == true){
        this.stopThree();
      }else{
-      this.state.playerForTHREE?.updateScene();
+      this.state.playerForTHREE?.updateScene(this.props.tdModelStorage);
       this.playBackThree();
      }
    }

@@ -12,12 +12,11 @@ class PlayerForTHREE{
   FOV: number = 50;
   canvasSize: CanvasSize = { width: 500, height:500 };
 
-  private tdModelStorage: TDModelStorage;
   private renderer : THREE.WebGLRenderer;
   private scene    : THREE.Scene;
   private camera   : THREE.PerspectiveCamera;
 
-  constructor(canvas: HTMLCanvasElement, tdModelStorage?: TDModelStorage){
+  constructor(canvas: HTMLCanvasElement){
 
     /**
      * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
@@ -33,7 +32,6 @@ class PlayerForTHREE{
     this.renderer = renderer;
     this.scene    = scene;
     this.camera   = camera;
-    this.tdModelStorage = this.generateSample();
   }
 
   test(){
@@ -44,11 +42,14 @@ class PlayerForTHREE{
     this.renderer.render(this.scene, this.camera);
   }
 
-  updateScene(){
-    this.tdModelStorage.storage.forEach( (meshModel) => {
+  updateScene(tdModelStorage: TDModelStorage){
+    const scene = new THREE.Scene();
+    tdModelStorage.storage.forEach( (meshModel) => {
       const mesh = meshModel.tdObj;
-      this.scene.add(mesh);
+      scene.add(mesh);
     });
+    this.scene = scene;
+
   }
 
   /**
@@ -68,11 +69,11 @@ class PlayerForTHREE{
       this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.setSize(requestedCanvasSize.width, requestedCanvasSize.height);
 
-      this.updateScene();
       this.render();
     }
   }
 
+  /**
   generateSample(){
 
     const genereteSampleMesh = () => {
@@ -82,20 +83,20 @@ class PlayerForTHREE{
       return mesh
     }
 
-    const effectModelStorage  = new EffectModelStorage();
-    const effectRoll          = new EffectRoll();
-    effectModelStorage.storage.push(effectRoll);
-
     const tdModelStorage = new TDModelStorage();
     const mesh = genereteSampleMesh();
-    const tdModel   = new MeshModel(1, mesh, effectModelStorage);   // !!! 仮 !!!
-    tdModelStorage.storage.push(tdModel);
+    const tdModel   = new MeshModel(1, mesh);   // !!! 仮 !!!
+    const effectRoll          = new EffectRoll();
+    tdModel.effectStorage.store(effectRoll);
+
+    tdModelStorage.store(tdModel);
 
     return tdModelStorage
 
   }
+   */
 
-  play(){
+  play(tdModelStorage: TDModelStorage){
 
     /**
      *  Summary: 
@@ -109,9 +110,6 @@ class PlayerForTHREE{
      * @return  void
      */
 
-    // !!! Dev !!!
-    // const tdModelStorage = this.tdModelStorage;
-    const tdModelStorage = this.tdModelStorage;
 
     // 各3Dモデルに対してEffectを適用
     tdModelStorage.storage.forEach( (meshModel) => {
