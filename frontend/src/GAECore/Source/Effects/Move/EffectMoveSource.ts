@@ -1,11 +1,11 @@
 import { EFFECT_ID } from '../../../../GAECore/GlobalVar/EffectCatalog';
 import EffectModelSource from '../EffectModelSource';
-import ParamMoveSource from './ParamMoveSource';
+import EffectParameterSource from '../EffectParameterSource'
 
 class EffectMoveSource implements EffectModelSource{
 
-  id        : EFFECT_ID        = 'MOVE';
-  parameter : ParamMoveSource = new ParamMoveSource();
+  id        : EFFECT_ID             = 'MOVE';
+  parameter : EffectParameterSource = new EffectParameterSource();
 
 }
 

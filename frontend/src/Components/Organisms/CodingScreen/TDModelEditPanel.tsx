@@ -30,14 +30,18 @@ const TDModelEditPanel: React.FC<Props> = (props: Props) => {
     /**
      * Summary: EffectのIDに応じたコンポーネントを返すメソッド
      */
-    {/**
     if(effectModelSource.id == "ROLL"){
-      return <EffectRollForm effectModelSource = { effectModelSource } />
+      return <EffectRollForm
+        parameter         = { effectModelSource.parameter }
+        updateParentState = { props.updateTDModelSourceStorage }
+      />
     }
     else if(effectModelSource.id == "MOVE"){
-      return <EffectMoveForm effectModelSource = { effectModelSource } />
+      return <EffectMoveForm
+        parameter         = { effectModelSource.parameter }
+        updateParentState = { props.updateTDModelSourceStorage }
+      />
     }
-     */}
      return <span></span>
   }
 

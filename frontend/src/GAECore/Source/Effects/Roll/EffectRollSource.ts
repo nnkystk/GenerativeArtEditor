@@ -1,11 +1,11 @@
-import { EffectID } from 'src/Utilities/GlobalVarriables/EffectCatalog';
+import { EFFECT_ID } from 'src/GAECore/GlobalVar/EffectCatalog';
 import EffectModelSource from '../EffectModelSource';
-import ParamRollSource from './ParamRollSource';
+import EffectParameterSource from '../EffectParameterSource';
 
 class EffectRollSource implements EffectModelSource{
 
-  id        : EffectID        = 'ROLL';
-  parameter : ParamRollSource = new ParamRollSource();
+  id        : EFFECT_ID              = 'ROLL';
+  parameter : EffectParameterSource = new EffectParameterSource();
 
 }
 

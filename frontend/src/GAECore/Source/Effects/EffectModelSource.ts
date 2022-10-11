@@ -1,10 +1,9 @@
-import TDModelProperty from '../TDModelSourceProperty';
 import EffectParameterSource from './EffectParameterSource'
-import { EffectID } from '../../../Utilities/GlobalVarriables/EffectCatalog'
+import { EFFECT_ID } from 'src/GAECore/GlobalVar/EffectCatalog';
 
 interface EffectModelSource{
 
-  id        : EffectID;
+  id        : EFFECT_ID;
   parameter : EffectParameterSource;
 
 }
