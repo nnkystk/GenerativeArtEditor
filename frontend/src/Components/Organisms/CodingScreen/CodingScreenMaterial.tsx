@@ -26,6 +26,7 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
+  const [ count, setCount ] = useState<number>(1);  // !!! 仮 !!!
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
@@ -36,11 +37,13 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
   const onClickAddModelButton = () => {
     
     // Modelを生成・追加
-    const newTDModelSource = new TDModelSource(1);    // !!! 仮 !!!
+    const newTDModelSource = new TDModelSource(count);    // !!! 仮 !!!
     props.tdModelSourceStorage.store(newTDModelSource);
 
     // UIを更新
     props.updateTDModelSourceStorage();
+
+    setCount((count) => { return count + 1});
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -73,7 +76,6 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
               contents  = {
                 <TDModelEditPanel
                   tdModelSource               = { tdModelSource }
-                  tdModelSourceStorage        = { props.tdModelSourceStorage }
                   updateTDModelSourceStorage  = { props.updateTDModelSourceStorage }
                 />
               }

@@ -22,7 +22,6 @@ import EffectModelSource from "src/GAECore/Source/Effects/EffectModelSource";
 // Type Declaration of Props
 interface Props{
   tdModelSource           : TDModelSource;
-  tdModelSourceStorage    : TDModelSourceStorage;
   updateTDModelSourceStorage(): void;
 }
 const TDModelEditPanel: React.FC<Props> = (props: Props) => {
@@ -88,22 +87,22 @@ const TDModelEditPanel: React.FC<Props> = (props: Props) => {
           </Grid>
 
           {/** Effectを新規登録するフォーム */}
-          {/**
           <Grid container spacing = { 2 }>
             <Grid item xs = { 12 }>
               <BasicModal
                 contents = {
                   <EffectGenerateForm
-                    geneModel               = { props.geneModel }
-                    updateGeneModelStorage  = { props.updateGeneModelStorage }
-                    setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                    tdModelSourceID           = { props.tdModelSource.id }
+                    effectModelSourceStorage  = { props.tdModelSource.effectModelSourceStorage }
+                    updateParentState         = { props.updateTDModelSourceStorage }
                   />
                 }
                 buttonTexts = "Add Effect"
               />
             </Grid>
           </Grid>
-           */}
+
+
 
           {/** 登録されているEffectの一覧および、そのPropsを編集するフォーム */}
           { props.tdModelSource.effectModelSourceStorage.storage.map( (effectModelSource: any) => (

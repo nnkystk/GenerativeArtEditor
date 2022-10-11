@@ -1,17 +1,14 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { Grid, Divider } from "@material-ui/core";
+import { cloneDeep } from 'lodash'
 import { PlaybackScreen } from '../Organisms/PlaybackScreen/PlaybackScreen';
 import { CodingScreenMaterial } from '../Organisms/CodingScreen/CodingScreenMaterial';
 import { ProjectSettingScreen } from '../Organisms/ProjectSettingScreen'
-
 import MeshStorage from '../../Utilities/Mesh/MeshStorage';
 import ProjectInfo from '../../Utilities/ProjectInfo'
-
 import TDModelSourceStorage from '../../GAECore/Source/TDModelSourceStorage'
 import TDModelSource from '../../GAECore/Source/TDModelSource'
 import EffectRollSource from "../../GAECore/Source/Effects/Roll/EffectRollSource";
-
-import { cloneDeep } from 'lodash'
 
 type Props = {
   sampleProp ?: any;
@@ -46,7 +43,7 @@ export const EditorPage : React.FC<Props> = (props: Props) => {
     // サンプル表示用の3Dモデルを生成
     // !!! 暫定の実装。JSONによる外部からの作品情報入力が可能になったら本サンプル表示処理は不要 !!!
     const tdModelSourceStorage  = new TDModelSourceStorage();
-    const tdModelSource         = new TDModelSource(1);   // !!! 仮 !!!
+    const tdModelSource         = new TDModelSource(0);   // !!! 仮 !!!
     const effectRollSource      = new EffectRollSource();
     tdModelSource.effectModelSourceStorage.storage.push(effectRollSource);
     tdModelSourceStorage.store(tdModelSource);

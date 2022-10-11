@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Tooltip, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { AddCircleOutline } from '@mui/icons-material';
-import GeneModel from '../../Utilities/GeneModel/GeneModel';
 import GeneGenerator from '../../Utilities/GeneGenerator'
 import { EffectID } from '../../Utilities/GlobalVarriables/EffectCatalog'
 import { EFFECT_CATALOG } from '../../Utilities/GlobalVarriables/EffectCatalog'
+import TDModelSource from "src/GAECore/Source/TDModelSource";
+import EffectModelSourceStorage from "../../GAECore/Source/EffectModelSourceStorage";
+import SourceGenerator from '../../GAECore/Source/SourceGenerator';
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -15,15 +17,15 @@ import { EFFECT_CATALOG } from '../../Utilities/GlobalVarriables/EffectCatalog'
 
 // Type Declaration of Props
 interface Props{
-  geneModel               : GeneModel;
-  updateGeneModelStorage  : any;
-  setReqInstPlayFlg(bool: boolean): void;
+  tdModelSourceID         : number;
+  effectModelSourceStorage: EffectModelSourceStorage;
+  updateParentState(...args: any) : void;
 }
 
 export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ generateTargetID, setGenerateTargetID ] = useState<EffectID>('ROLL');   // 新規追加するEffectのID
+  const [ targetIDToGenerate, setTargetIDToGenerate ] = useState<EffectID>('ROLL');   // 新規追加するEffectのID
 
   // ___ use effect ___ ___ ___ ___ ___
 
@@ -33,11 +35,9 @@ export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
 
   const onClickAddEffectButton = () => {
     // 指定されたEffectを生成・追加
-    const effect = GeneGenerator.generateGeneEffect(generateTargetID);
-    props.geneModel.effectStorage.store(effect);
-    props.updateGeneModelStorage();
-    // 変更を視覚化するために明示的に3D描画を1フレーム分実行
-    props.setReqInstPlayFlg(true);
+    const effectModelSource = SourceGenerator.generateEffectModelSource(targetIDToGenerate);
+    props.effectModelSourceStorage.store(effectModelSource);
+    props.updateParentState();
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -56,10 +56,12 @@ export const EffectGenerateForm: React.FC<Props> = (props: Props) => {
             <InputLabel>Effect To Add</InputLabel>
 
             {/** @ts-ignore */}
-            <Select value = { generateTargetID } label = "Effect" onChange = { (event: React.ChangeEvent<HTMLInputElement>) => { setGenerateTargetID(event.target.value) } }>
-              { EFFECT_CATALOG.map( (obj) => {
+            <Select value = { targetIDToGenerate } label = "Effect" onChange = { (event: React.ChangeEvent<HTMLInputElement>) => { setTargetIDToGenerate(event.target.value) } }>
+              { EFFECT_CATALOG.map( (effect) => {
                 return(
-                  <MenuItem key = { props.geneModel.id + obj.id } value = { obj.id }> { obj.id } </MenuItem>
+                  <MenuItem key = { props.tdModelSourceID + effect.id } value = { effect.id }>
+                    { effect.id }
+                  </MenuItem>
                 )
               })}
             </Select>

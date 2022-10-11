@@ -4,7 +4,7 @@ import ParamRollSource from './ParamRollSource';
 
 class EffectRollSource implements EffectModelSource{
 
-  id        : EffectID        = 'ROLL';   
+  id        : EffectID        = 'ROLL';
   parameter : ParamRollSource = new ParamRollSource();
 
 }
