@@ -2,29 +2,21 @@ import React, { useEffect, useState, useRef } from "react";
 import { Grid, Tooltip, Paper } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
-import * as THREE from 'three';
-import GeneModel from '../../../Utilities/GeneModel/GeneModel'
-import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
-import MeshStorage from "../../../Utilities/Mesh/MeshStorage";
-import GeneEffectPlayer from '../../../Utilities/GeneEffects/GeneEffectPlayer'
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
-import { Vector2 } from "three";
+import PlayerForTHREE from '../../../GAECore/Player/PlayerForTHREE'
+import TDModelStorage from "src/GAECore/Object/TDModelStorage";
+
 
 interface Props {
-  geneModelStorage    : GeneModelStorage;
-  meshStorage         : MeshStorage;
+  tdModelStorage      : TDModelStorage;
   canvasSize          : CanvasSize;
   isPlayingFlg        : boolean;
-  reqInstPlayFlg      : boolean;    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにするフラグ
   setIsPlayingFlg(bool: boolean)    : void;
-  setReqInstPlayFlg(bool: boolean)  :void;
 }
 interface State{
-  threeRenderer: any;
-  threeScene: any;
-  threeCamera: any;
-  reqAnmIdRef: any
+  playerForTHREE?: PlayerForTHREE;
+  reqAnmIdRef: any;
 };
 export class PlaybackScreen extends React.Component<Props, State>{
 /**
@@ -45,9 +37,7 @@ export class PlaybackScreen extends React.Component<Props, State>{
     super(props)
     this.state = {
       // optional second annotation for better type inference
-      threeRenderer : new THREE.WebGLRenderer(),
-      threeScene    : new THREE.Scene(),
-      threeCamera   : new THREE.PerspectiveCamera(),
+      playerForTHREE: undefined,
       reqAnmIdRef   : ""
     };
 
@@ -109,14 +99,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
 
   // コンポーネントが再描画されたタイミングで呼び出されるメソッド
   componentDidUpdate(){
-    // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
-    const canvasSize = this.state.threeRenderer.getSize(new Vector2());
-    if(canvasSize.x != this.props.canvasSize.width || canvasSize.y != this.props.canvasSize.height ){
-      this.resizeCanvasSize();
-    }
-    this.updateSceneThree();
-    this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
-    this.props.setReqInstPlayFlg(false);    // 明示的に他コンポーネントからレンダーを起こしたい場合にtrueにする
+    this.state.playerForTHREE?.updateCanvasSize(this.props.canvasSize);
+    this.state.playerForTHREE?.updateScene(this.props.tdModelStorage);
+    this.state.playerForTHREE?.render();
   }
   
   // コンポーネントが破棄(アンマウント)される前に実行されるメソッド
@@ -128,94 +113,45 @@ export class PlaybackScreen extends React.Component<Props, State>{
 	// ___ イベントハンドラ ___ ___ ___ ___ ___
 
   test(){
+    console.log(this.state.playerForTHREE)
   }
 
   // ___ メソッド ___ ___ ___ ___ ___
   initializeThree = () => {
-    /**
-     * Threeオブジェクト（レンダラー・カメラ・シーン）を初期化する
-     */
-      const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector("#canvas") as HTMLCanvasElement
-      });
-      const scene   = new THREE.Scene();
-      const camera  = new THREE.PerspectiveCamera(this.FOV, this.props.canvasSize.width / this.props.canvasSize.height);
-      camera.position.set(0, 0, +1000);
-      // const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-      // scene.add(light);
 
-      // レンダラーをセットアップする
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
+    // Playerを生成および初期化する
+    const canvas: HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement;
+    const playerForTHREE = new PlayerForTHREE(canvas);
+    
+    // シーンをセットアップする
+    playerForTHREE.updateScene(this.props.tdModelStorage);
 
-      // シーンをセットアップする
-      this.updateSceneThree();
-
-      this.setState({ threeRenderer: renderer });
-      this.setState({ threeScene: scene })
-      this.setState({ threeCamera: camera })
+    this.setState({ playerForTHREE: playerForTHREE });
    };
-
-   resizeCanvasSize = () => {
-    // カメラを更新
-    this.state.threeCamera.aspect = this.props.canvasSize.width / this.props.canvasSize.height
-    this.state.threeCamera.updateProjectionMatrix();
-    // レンダラーを更新
-    this.state.threeRenderer.setPixelRatio(window.devicePixelRatio);
-    this.state.threeRenderer.setSize(this.props.canvasSize.width, this.props.canvasSize.height);
-   }
- 
-   updateSceneThree = () => {
-      /**
-      * Summary: シーンを更新する
-      * Imp: すべてのMeshをシーンに追加する
-      */
-      this.props.geneModelStorage.storage.forEach( (geneModel: any) => {
-        const targetMesh = this.props.meshStorage.getMeshById(geneModel.id);
-        if (targetMesh){
-          this.state.threeScene.add(targetMesh.mesh);
-        }
-      })
-    }
-    //a
  
   playBackThree = () => {
-     /**
+    /**
      * ジェネラティブアート作品を再生する
      * @param arg
      * @return 
      */
-       if(this.props.isPlayingFlg == false){
- 
-         const tick = () => {
-           
-           // Effectを発火
-            this.props.geneModelStorage.storage.forEach( (geneModel: GeneModel) => {
-              GeneEffectPlayer.play(this.props.meshStorage, geneModel);
-           })
- 
-           this.state.threeRenderer.render(this.state.threeScene, this.state.threeCamera);
-           this.setState({reqAnmIdRef: requestAnimationFrame(tick)});
-         }
- 
-         tick();
-         this.props.setIsPlayingFlg(true);
-       }
-     }
- 
+    if(this.props.isPlayingFlg == false){
+      this.state.playerForTHREE?.play(this.props.tdModelStorage);
+      this.props.setIsPlayingFlg(true);
+    }
+  }
  
   stopThree = () => {
-     cancelAnimationFrame(this.state.reqAnmIdRef);
-     this.props.setIsPlayingFlg(false);
-   }
- 
-   
+    this.state.playerForTHREE?.stop();
+    this.props.setIsPlayingFlg(false);
+  }
+
   onClickCanvas = () => {
      if(this.props.isPlayingFlg == true){
        this.stopThree();
      }else{
-       this.updateSceneThree();   // シーンにメッシュが追加されていることを保証
-       this.playBackThree();
+      this.state.playerForTHREE?.updateScene(this.props.tdModelStorage);
+      this.playBackThree();
      }
    }
 }

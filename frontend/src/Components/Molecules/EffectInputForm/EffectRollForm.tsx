@@ -1,92 +1,64 @@
 import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
-import GeneEffectInterface from "src/Utilities/GeneEffects/GeneEffectInterface";
-import GeneEffectRoll from '../../../Utilities/GeneEffects/GeneEffectRoll';
 import GeneEffectParameter from  '../../../Utilities/GeneEffects/GeneEffectParameter'
+import NumberInputForm from '../NumberInputForm'
+import EffectParameterSource from "src/GAECore/Source/Effects/EffectParameterSource";
 
 interface Props{
-  geneEffect: GeneEffectRoll | GeneEffectInterface
+  parameter: EffectParameterSource
+  updateParentState(...args: any): void;
 }
 
 export const EffectRollForm: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
-  const [ parameter, setParameter ] = useState<GeneEffectParameter>(props.geneEffect.parameter);
+  const [ parameter, setParameter ] = useState<EffectParameterSource>(props.parameter);
 
   // ___ event handler ___ ___ ___ ___ ___
-  const handleChangeX = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const _parameters     = { ...parameter } 
-    const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.rotation.x  = newVal
-    setParameter(_parameters);
-  }
-  const handleChangeY = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const _parameters     = { ...parameter } 
-    const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.rotation.y  = newVal
-    setParameter(_parameters);
-  }
-  const handleChangeZ = (event : React.ChangeEvent<HTMLInputElement>) => {
-    const _parameters     = { ...parameter } 
-    const newVal          = event.target.valueAsNumber? event.target.valueAsNumber: 0;
-    _parameters.rotation.z  = newVal
-    setParameter(_parameters);
-    props.geneEffect.parameter = _parameters;
-  }
-
 
   return(
 
     <Grid container alignItems ="center" spacing = { 2 }>
 
       <Grid item xs = { 12 } md = { 4 }>
-        <TextField
-          variant   = "outlined"
-          type      = "number"
-          label     = "X"
-          value     = { parameter.rotation.x  }
-          onChange  = { handleChangeX }
-          size      = "small"
+        <NumberInputForm
+          value = { parameter.rotation.x }
+          label = { 'X' }
           inputProps = {{
-            step  : "0.001",
+            step  : '0.001',
           }}
-          InputLabelProps = {{
-            shrink: true,
-          }}
+          updateParentState = { (newVal) => {
+            props.parameter.rotation.x = newVal;
+            props.updateParentState();
+          } }
         />
       </Grid>
 
       <Grid item xs = { 12 } md = { 4 }>
-        <TextField
-          variant   = "outlined"
-          type      = "number"
-          label     = "Y"
-          value     = { parameter.rotation.y  }
-          onChange  = { handleChangeY }
-          size      = "small"
-          inputProps = {{
-            step  : "0.001",
-          }}
-          InputLabelProps = {{
-            shrink: true,
-          }}
-        />
+        <NumberInputForm
+            value = { parameter.rotation.y }
+            label = { 'Y' }
+            inputProps = {{
+              step  : '0.001',
+            }}
+            updateParentState = { (newVal) => {
+              props.parameter.rotation.y = newVal;
+              props.updateParentState();
+            } }
+          />
       </Grid>
 
       <Grid item xs = { 12 } md = { 4 }>
-        <TextField
-          variant   = "outlined"
-          type      = "number"
-          label     = "Z"
-          value     = { parameter.rotation.z  }
-          onChange  = { handleChangeZ }
-          size      = "small"
+      <NumberInputForm
+          value = { parameter.rotation.z }
+          label = { 'Z' }
           inputProps = {{
-            step  : "0.001",
+            step  : '0.001',
           }}
-          InputLabelProps = {{
-            shrink: true,
-          }}
+          updateParentState = { (newVal) => {
+            props.parameter.rotation.z = newVal;
+            props.updateParentState();
+          } }
         />
       </Grid>
 

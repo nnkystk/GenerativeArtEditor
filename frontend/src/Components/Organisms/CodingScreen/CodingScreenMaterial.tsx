@@ -2,16 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Grid, Paper, Tooltip, Divider } from "@material-ui/core";
 import { AddCircleOutline }   from '@mui/icons-material';
 import { BasicAccordion }     from '../../Atoms/BasicAccordion'
-import { EffectRollForm }     from '../../Molecules/EffectInputForm/EffectRollForm';
-import { EffectMoveForm }     from '../../Molecules/EffectInputForm/EffectMoveForm';
-import GeneModelEditPanel     from './GeneModelEditPanel';
-import GeneEffectInterface    from "../../../Utilities/GeneEffects/GeneEffectInterface";
-import GeneModelStorage       from '../../../Utilities/GeneModel/GeneModelStorage';
-import MeshStorage            from '../../../Utilities/Mesh/MeshStorage';
-import MeshModel              from '../../../Utilities/Mesh/MeshModel';
-import GeneGenerator          from '../../../Utilities/GeneGenerator';
-import GeneEffectStorage      from "../../../Utilities/GeneEffects/GeneEffectStorage";
-
+import TDModelEditPanel     from './TDModelEditPanel';
+import TDModelSourceStorage from '../../../GAECore/Source/TDModelSourceStorage'
+import TDModelSource from '../../../GAECore/Source/TDModelSource'
 
 /**
  * Summary	: ジェネラティブアート作品を編集するComponent
@@ -23,16 +16,15 @@ import GeneEffectStorage      from "../../../Utilities/GeneEffects/GeneEffectSto
 // Type Declaration of Props
 interface Props{
   sampleProp             ?: any;
-  geneModelStorage        : GeneModelStorage;
-  meshStorage             : MeshStorage;
-  updateGeneModelStorage(): void;
-  setReqInstPlayFlg(bool: boolean): void;
+  tdModelSourceStorage    : TDModelSourceStorage;
+  updateTDModelSourceStorage(): void;
 }
 
 export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
 
   // ___ state ___ ___ ___ ___ ___
   const [ sampleState, setSampleState ] = useState<string>('This is SampleState');
+  const [ count, setCount ] = useState<number>(1);  // !!! 仮 !!!
 
   // ___ use effect ___ ___ ___ ___ ___
   useEffect( () => { console.log(sampleState) }, [ sampleState ] );
@@ -43,19 +35,13 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
   const onClickAddModelButton = () => {
     
     // Modelを生成・追加
-    const mesh      = GeneGenerator.generateMesh();
+    const newTDModelSource = new TDModelSource(count);    // !!! 仮 !!!
+    props.tdModelSourceStorage.store(newTDModelSource);
 
-    const meshModel = new MeshModel(mesh.id, mesh);
-    props.meshStorage.store(meshModel);
+    // UIを更新
+    props.updateTDModelSourceStorage();
 
-    const effectStorage = new GeneEffectStorage();
-
-    const geneModel = GeneGenerator.generateGeneModel(mesh.id, effectStorage);
-    props.geneModelStorage.store(geneModel);
-    props.updateGeneModelStorage();
-
-    // 変更を視覚化するために明示的に3D描画を1フレーム分実行
-    props.setReqInstPlayFlg(true);
+    setCount((count) => { return count + 1});
   }
 
   // ___ method ___ ___ ___ ___ ___
@@ -79,19 +65,16 @@ export const CodingScreenMaterial: React.FC<Props> = (props: Props) => {
           </Tooltip>
         </Grid>
 
-        {/** GeneModel */}
-        { props.geneModelStorage.storage.map( (geneModel) => (
-          <Grid key = { geneModel.id } item xs = { 12 } xl = { 6 }>
+        {/** TDModel */}
+        { props.tdModelSourceStorage.storage.map( (tdModelSource) => (
+          <Grid key = { tdModelSource.id } item xs = { 12 } xl = { 6 }>
 
             <BasicAccordion
-              label     = { geneModel.id }
+              label     = { tdModelSource.id }
               contents  = {
-                <GeneModelEditPanel
-                  geneModel               = { geneModel}
-                  geneModelStorage        = { props.geneModelStorage }
-                  meshModel               = { props.meshStorage.getMeshById(geneModel.id) }
-                  updateGeneModelStorage  = { props.updateGeneModelStorage }
-                  setReqInstPlayFlg       = { props.setReqInstPlayFlg }
+                <TDModelEditPanel
+                  tdModelSource               = { tdModelSource }
+                  updateTDModelSourceStorage  = { props.updateTDModelSourceStorage }
                 />
               }
             />
