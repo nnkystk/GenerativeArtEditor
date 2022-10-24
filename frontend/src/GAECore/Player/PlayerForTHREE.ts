@@ -39,8 +39,6 @@ class PlayerForTHREE{
     this.render();
   }
 
-
-
   play(tdModelStorage: TDModelStorage){
 
     const tick = () => {
@@ -50,6 +48,10 @@ class PlayerForTHREE{
     }
     tick();
 
+  }
+
+  stop(){
+    cancelAnimationFrame(this.reqAnmId);
   }
 
   render(){
@@ -77,7 +79,7 @@ class PlayerForTHREE{
 
     // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
     if(canvasSize.x != requestedCanvasSize.width || canvasSize.y != requestedCanvasSize.height){
-      
+
       // カメラを更新
       this.camera.aspect = requestedCanvasSize.width / requestedCanvasSize.height
       this.camera.updateProjectionMatrix();

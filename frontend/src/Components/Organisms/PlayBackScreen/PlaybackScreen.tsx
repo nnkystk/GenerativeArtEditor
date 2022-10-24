@@ -130,25 +130,22 @@ export class PlaybackScreen extends React.Component<Props, State>{
    };
  
   playBackThree = () => {
-     /**
+    /**
      * ジェネラティブアート作品を再生する
      * @param arg
      * @return 
      */
-       if(this.props.isPlayingFlg == false){
- 
-        this.state.playerForTHREE?.play(this.props.tdModelStorage);
-        this.props.setIsPlayingFlg(true);
-      }
-     }
- 
+    if(this.props.isPlayingFlg == false){
+      this.state.playerForTHREE?.play(this.props.tdModelStorage);
+      this.props.setIsPlayingFlg(true);
+    }
+  }
  
   stopThree = () => {
-     cancelAnimationFrame(this.state.reqAnmIdRef);
-     this.props.setIsPlayingFlg(false);
-   }
- 
-   
+    this.state.playerForTHREE?.stop();
+    this.props.setIsPlayingFlg(false);
+  }
+
   onClickCanvas = () => {
      if(this.props.isPlayingFlg == true){
        this.stopThree();
