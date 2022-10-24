@@ -15,6 +15,7 @@ class PlayerForTHREE{
   private renderer : THREE.WebGLRenderer;
   private scene    : THREE.Scene;
   private camera   : THREE.PerspectiveCamera;
+  private reqAnmId : any;
 
   constructor(canvas: HTMLCanvasElement){
 
@@ -38,6 +39,19 @@ class PlayerForTHREE{
     this.render();
   }
 
+
+
+  play(tdModelStorage: TDModelStorage){
+
+    const tick = () => {
+      this.activateEffect(tdModelStorage);
+      const reqAnmId = requestAnimationFrame(tick);   // 本処理をフレーム更新時に実行するよう登録
+      this.reqAnmId = reqAnmId;                       // 本処理の実行IDをプロパティに格納 このIDは再生停止時等に使用する
+    }
+    tick();
+
+  }
+
   render(){
     this.renderer.render(this.scene, this.camera);
   }
@@ -49,7 +63,6 @@ class PlayerForTHREE{
       scene.add(mesh);
     });
     this.scene = scene;
-
   }
 
   /**
@@ -59,9 +72,12 @@ class PlayerForTHREE{
    * @param requestedCanvasSize 
    */
   updateCanvasSize(requestedCanvasSize: CanvasSize){
+
     const canvasSize = this.renderer.getSize(new Vector2());
+
     // 設定されているキャンバスサイズが、現在レンダー中のキャンバスサイズと異なる場合、リサイズを行う
     if(canvasSize.x != requestedCanvasSize.width || canvasSize.y != requestedCanvasSize.height){
+      
       // カメラを更新
       this.camera.aspect = requestedCanvasSize.width / requestedCanvasSize.height
       this.camera.updateProjectionMatrix();
@@ -73,30 +89,7 @@ class PlayerForTHREE{
     }
   }
 
-  /**
-  generateSample(){
-
-    const genereteSampleMesh = () => {
-      const geometry  = new THREE.BoxGeometry(100, 100, 100);
-      const material  = new THREE.MeshMatcapMaterial({ color: 0xffffff });
-      const mesh      = new THREE.Mesh(geometry, material);
-      return mesh
-    }
-
-    const tdModelStorage = new TDModelStorage();
-    const mesh = genereteSampleMesh();
-    const tdModel   = new MeshModel(1, mesh);   // !!! 仮 !!!
-    const effectRoll          = new EffectRoll();
-    tdModel.effectStorage.store(effectRoll);
-
-    tdModelStorage.store(tdModel);
-
-    return tdModelStorage
-
-  }
-   */
-
-  play(tdModelStorage: TDModelStorage){
+  activateEffect(tdModelStorage: TDModelStorage){
 
     /**
      *  Summary: 

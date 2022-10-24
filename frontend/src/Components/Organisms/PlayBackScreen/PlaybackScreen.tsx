@@ -2,12 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { Grid, Tooltip, Paper } from "@material-ui/core";
 import { PlayCircleFilledWhiteOutlined } from '@mui/icons-material';
 import { PauseCircleOutlineOutlined } from '@mui/icons-material';
-import GeneModelStorage from '../../../Utilities/GeneModel/GeneModelStorage' 
-import MeshStorage from "../../../Utilities/Mesh/MeshStorage";
 import Recorder from '../Recorder'
 import CanvasSize from '../../../Utilities/GlobalVarriables/CanvasSize'
 import PlayerForTHREE from '../../../GAECore/Player/PlayerForTHREE'
-import TDModelSourceStorage from "src/GAECore/Source/TDModelSourceStorage";
 import TDModelStorage from "src/GAECore/Object/TDModelStorage";
 
 
@@ -140,15 +137,9 @@ export class PlaybackScreen extends React.Component<Props, State>{
      */
        if(this.props.isPlayingFlg == false){
  
-         const tick = () => {
-
-          this.state.playerForTHREE?.play(this.props.tdModelStorage);
-          this.setState({ reqAnmIdRef: requestAnimationFrame(tick) });    // WARN: 必要以上にレンダリングを実行させてしまっている 
-         }
- 
-         tick();
-         this.props.setIsPlayingFlg(true);
-       }
+        this.state.playerForTHREE?.play(this.props.tdModelStorage);
+        this.props.setIsPlayingFlg(true);
+      }
      }
  
  
